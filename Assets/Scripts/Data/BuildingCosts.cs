@@ -1,9 +1,10 @@
 using System;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Data {
     [Serializable]
-    public struct BuildingCosts {
+    public struct BuildingCosts : IComponentData {
         /// <summary>
         /// The amount of wood needed to build this building
         /// </summary>

@@ -5,8 +5,14 @@ namespace Manager {
     using Unity.Transforms;
     using UnityEngine;
     using Unity.Physics;
+    using Data;
 
     public class InputManager : IManager, IManagerUpdateable {
+        public enum InputMode {
+            SpawnBuilding
+        }
+
+        private BuildingType currentBuilding = BuildingType.gatherer;
 
         private static readonly InputManager inputManager = new InputManager();
 
@@ -56,14 +62,15 @@ namespace Manager {
 
                 if (collisionWorld.CastRay(rayInput, out Unity.Physics.RaycastHit hit)) {
                     Debug.Log($"Hit: Entity:{hit.Entity}  Pos:{hit.Position} ColKey:{hit.ColliderKey}");
-                    Entity entityPrefab = DataManager.Instance.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
-                    Entity newEntity = entityManager.Instantiate(entityPrefab);
-                    LocalTransform newTransform = new LocalTransform {
-                        Position = hit.Position,
-                        Rotation = quaternion.EulerXYZ(new float3(0f, math.radians(45f), 0f)),
-                        Scale = 1f
-                    };
-                    entityManager.SetComponentData(newEntity, newTransform);
+                    Entity newEntity = BuildingManager.Instance.SpawnBuilding(currentBuilding, hit.Position);
+                    //Entity entityPrefab = DataManager.Instance.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
+                    //Entity newEntity = entityManager.Instantiate(entityPrefab);
+                    //LocalTransform newTransform = new LocalTransform {
+                    //    Position = hit.Position,
+                    //    Rotation = quaternion.EulerXYZ(new float3(0f, math.radians(45f), 0f)),
+                    //    Scale = 1f
+                    //};
+                    //entityManager.SetComponentData(newEntity, newTransform);
 
                     //EntityPrefabs entityPrefabs = prefabSingletonQuery.GetSingleton<EntityPrefabs>();
                     //Assert.IsTrue(entityPrefabs.treePrefab != Entity.Null);

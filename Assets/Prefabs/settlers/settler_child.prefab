@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2451204814770041281}
+  - component: {fileID: 9157913234690961800}
   m_Layer: 0
-  m_Name: settler_default
+  m_Name: settler_child
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +33,22 @@ Transform:
   - {fileID: 6939003278752111724}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9157913234690961800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191340089547567576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888bb586819486f4e8a25bc2eb828b34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::SettlerAuthoring
+  walkSpeed: 0.5
+  workSpeed: 0.5
+  settlerType: 0
+  acceptJobs: 2
 --- !u!1001 &7477932283626208135
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40,6 +57,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2451204814770041281}
     m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 350499b623aa18d4b918f4eed4214a6c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 79.99
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 350499b623aa18d4b918f4eed4214a6c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 79.99
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 350499b623aa18d4b918f4eed4214a6c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 79.99
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 350499b623aa18d4b918f4eed4214a6c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -79,6 +108,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 350499b623aa18d4b918f4eed4214a6c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 350499b623aa18d4b918f4eed4214a6c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 350499b623aa18d4b918f4eed4214a6c, type: 3}
       propertyPath: m_Name

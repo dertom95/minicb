@@ -1,0 +1,95 @@
+using Components;
+using Components.Tags;
+using Unity.Collections;
+using Unity.Entities;
+
+namespace Systems {
+    /// <summary>
+    /// System to iterate over all open jobs and try to assign free settlers to the jobs
+    /// </summary>
+    public partial struct JobDistributionSystem : ISystem {
+        private EntityQuery jobQuery;
+        private EntityQuery settlerQuery;
+
+        public void OnCreate(ref SystemState state) {
+            jobQuery = state.GetEntityQuery(
+                ComponentType.ReadWrite<JobComponent>(),
+                ComponentType.Exclude<TagWorking>());
+
+            settlerQuery = state.GetEntityQuery(
+                ComponentType.ReadWrite<SettlerComponent>(),
+                ComponentType.Exclude<TagWorking>());
+        }
+
+        public void OnUpdate(ref SystemState state) {
+            EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
+
+            // Get NativeArrays of entities and components
+            NativeArray<Entity> jobEntities = jobQuery.ToEntityArray(Allocator.Temp);
+            NativeArray<JobComponent> jobComponents = jobQuery.ToComponentDataArray<JobComponent>(Allocator.Temp);
+
+            NativeArray<Entity> settlerEntities = settlerQuery.ToEntityArray(Allocator.Temp);
+            NativeArray<SettlerComponent> settlerComponents = settlerQuery.ToComponentDataArray<SettlerComponent>(Allocator.Temp);
+
+            // Track settlers assigned this update to avoid multiple assignments
+            NativeHashSet<Entity> assignedSettlers = new NativeHashSet<Entity>(settlerEntities.Length, Allocator.Temp);
+
+            int settlerIndex = 0;
+
+            for (int jobIndex = 0; jobIndex < jobEntities.Length; ++jobIndex) {
+                Entity jobEntity = jobEntities[jobIndex];
+                JobComponent job = jobComponents[jobIndex];
+
+                bool assigned = false;
+
+                // Find next settler that accepts this job type and is not assigned yet
+                while (settlerIndex < settlerEntities.Length) {
+                    Entity settlerEntity = settlerEntities[settlerIndex];
+                    SettlerComponent settler = settlerComponents[settlerIndex];
+                    settlerIndex++;
+
+                    if (assignedSettlers.Contains(settlerEntity)) {
+                        continue; // Already assigned this update
+                    }
+
+                    // Check bitmask compatibility
+                    if ((settler.acceptJobs & job.jobType) != 0) {
+                        // Assign job to settler and settler to job
+                        job.jobWorker = settlerEntity;
+                        job.jobState = Data.JobState.MovingToTarget;
+                        settler.currentJob = jobEntity;
+                        settler.settlerState = Data.SettlerState.Working;
+
+                        // Update components via ECB
+                        ecb.SetComponent(jobEntity, job);
+                        ecb.SetComponent(settlerEntity, settler);
+
+                        // Add TagWorking to mark busy
+                        ecb.SetComponentEnabled<TagWorking>(jobEntity, true);
+                        ecb.SetComponentEnabled<TagWorking>(settlerEntity, true);
+
+                        assignedSettlers.Add(settlerEntity);
+                        assigned = true;
+                        break;
+                    }
+                }
+
+                if (!assigned) {
+                    // No suitable settler found for this job, continue to next job
+                    continue;
+                }
+            }
+
+            // Playback all structural changes
+            ecb.Playback(state.EntityManager);
+            ecb.Dispose();
+
+            // Dispose NativeArrays and NativeHashSet
+            jobEntities.Dispose();
+            jobComponents.Dispose();
+            settlerEntities.Dispose();
+            settlerComponents.Dispose();
+            assignedSettlers.Dispose();
+        }
+    }
+}

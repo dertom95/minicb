@@ -1,3 +1,5 @@
+using System;
+
 namespace Data {
     /// <summary>
     /// ResourceTypes. 
@@ -28,8 +30,63 @@ namespace Data {
     /// </summary>
     public enum SettlerState : byte { 
         Idle,
-        Moving,
         Working
+    }
+
+    /// <summary>
+    /// SettlerTypes
+    /// </summary>
+    public enum SettlerType : byte {
+        Child,
+        Worker,
+        Warrior
+    }
+
+    /// <summary>
+    /// JobTypes that can be executed by settlers
+    /// </summary>
+    [Flags]
+    public enum JobType : byte {
+        Construction        = 1 << 0,
+        CollectFood         = 1 << 1,
+        ConvertResource     = 1 << 2,
+        SpawnEntity         = 1 << 3,
+        Attack              = 1 << 4
+    }
+
+    /// <summary>
+    /// JobState
+    /// </summary>
+    public enum JobState : byte {
+        /// <summary>
+        /// not assigned to settler
+        /// </summary>
+        free,
+        /// <summary>
+        /// settler is moving to target
+        /// </summary>
+        MovingToTarget,
+        /// <summary>
+        /// TransitionState after reaching the Target
+        /// </summary>
+        ReachedTarget,
+        /// <summary>
+        /// settler is doing the work
+        /// </summary>
+        Working,
+        /// <summary>
+        /// TransitionState after finished Working
+        /// </summary>
+        FinishedWorking,
+        /// <summary>
+        /// settler is moving back to owner (if needed)
+        /// </summary>
+        MovingToOwner,
+        /// <summary>
+        /// TransitionState after MovingToOwner finished
+        /// </summary>
+        ReachedMovingToOwner
+
     }
 
     /// <summary>

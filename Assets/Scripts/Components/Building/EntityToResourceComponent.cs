@@ -10,5 +10,10 @@ namespace Components {
         /// The resource type this entity is looking for in its FieldOfInfluence
         /// </summary>
         public ResourceType searchResourceType; // byte
+        
+        /// <summary>
+        /// The amount of time that is needed to do the job
+        /// </summary>
+        public byte workTimeInSeconds;
     }
 }

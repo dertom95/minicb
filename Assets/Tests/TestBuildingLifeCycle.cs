@@ -1,4 +1,6 @@
 using System.Collections;
+using Components;
+using Data;
 using Manager;
 using NUnit.Framework;
 using Unity.Collections;
@@ -30,6 +32,11 @@ public class TestBuildingLifeCycle : TestHelper
         }
 
         Entity gathererEntity = BuildingManager.Instance.SpawnBuilding(Data.BuildingType.gatherer, float3.zero);
+
+        BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(gathererEntity);
+        Assert.AreEqual(BuildingState.UnderConstruction, buildingComponent.currentState);
+
+
 
         NativeArray<ComponentType> components = entityManager.GetComponentTypes(gathererEntity);
         int a = 0; 
