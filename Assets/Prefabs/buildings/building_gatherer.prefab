@@ -9,6 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8661493210980727669}
+  - component: {fileID: 742227057199870322}
+  - component: {fileID: 2356010207413593046}
+  - component: {fileID: 3620972586419767031}
+  - component: {fileID: 3811270770579458073}
   m_Layer: 0
   m_Name: building_gatherer
   m_TagString: Untagged
@@ -32,6 +36,64 @@ Transform:
   - {fileID: 6376308779734019813}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &742227057199870322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052800053472007847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bea615c27b965847b237e8220abfea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingComponentAuthoring
+  buildingType: 0
+  buildingCosts:
+    wood: 7
+    stone: 3
+    timeInSeconds: 20
+--- !u!114 &2356010207413593046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052800053472007847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8c7cc47f9903e41bc1d83eaccbe9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FieldOfInfluenceAuthoring
+  radius: 20
+--- !u!114 &3620972586419767031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052800053472007847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4f27a892e8c9348a7f69d249a159e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorkTimerComponentAuthoring
+  workTimeIntervalInSecs: 15
+--- !u!114 &3811270770579458073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052800053472007847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a6adb0e30d34a9478382c296615042a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityToResourceComponentAuthoring
+  data:
+    searchResourceType: 2
+    resourceAmountPerIteration: 0
 --- !u!1001 &6915147967246453006
 PrefabInstance:
   m_ObjectHideFlags: 0

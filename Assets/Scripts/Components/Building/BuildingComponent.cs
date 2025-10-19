@@ -1,0 +1,29 @@
+using UnityEngine;
+using Unity.Collections;
+using Unity.Entities;
+using Data;
+using System;
+
+
+namespace Components {
+    /// <summary>
+    /// ResourceComponent
+    /// </summary>
+    [Serializable]
+    public struct BuildingComponent : IComponentData {
+        /// <summary>
+        /// The buildingtype (stored as byte, see enum-signature)
+        /// </summary>
+        public Data.BuildingType buildingType; // byte
+
+        /// <summary>
+        /// The state this building is working at the moment
+        /// </summary>
+        public Data.BuildingState currentState; // byte
+
+        /// <summary>
+        /// The amount of collect iterations left until that resource will be destroyed
+        /// </summary>
+        public BuildingCosts buildingCosts; // ushort
+    }
+}
