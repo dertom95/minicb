@@ -14,7 +14,7 @@ namespace Manager {
     ///         in DataOriented-Scenarios that can have an impact for CPU-Data-Caching. Keeping components (that do use the key) as compact as possible
     ///         can benefit the performance.
     /// </summary>
-    public class DataManager {
+    public class DataManager : IManager {
         private ushort currentId;
         private Dictionary<ushort, object> dataStore;
         private Dictionary<BuildingType, Entity> buildingEntityPrefabs;
@@ -28,15 +28,18 @@ namespace Manager {
         public static DataManager Instance => instance;
 
         private DataManager() {
-            InitData();
         }
 
-        public void InitData() {
+        public void Init() {
             currentId = 1000;
             dataStore = new Dictionary<ushort, object>();
             buildingEntityPrefabs = new Dictionary<BuildingType, Entity>();
             resourceEntityPrefabs = new Dictionary<ResourceType, Entity>();
         }
+
+        public void Dispose() {
+        }
+
 
         /// <summary>
         /// Stores Data in the data store and returns a lookup-handle
@@ -92,6 +95,7 @@ namespace Manager {
 
             return buildingEntityPrefabs[buildingType];
         }
+
 
     }
 

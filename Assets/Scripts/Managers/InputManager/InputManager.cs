@@ -6,20 +6,27 @@ namespace Manager {
     using UnityEngine;
     using Unity.Physics;
 
-    public class InputManager : IManager {
+    public class InputManager : IManager, IManagerUpdateable {
+
+        private static readonly InputManager inputManager = new InputManager();
+
+        public static InputManager Instance => inputManager;
 
         EntityManager entityManager;
         EntityQuery physicsWorldSingletonQuery;
 
-        public InputManager() {
-            Init();
+        private InputManager() {
         }
+
 
         public void Init() {
             var world = World.DefaultGameObjectInjectionWorld;
             entityManager = world.EntityManager;
 
             physicsWorldSingletonQuery = entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
+        }
+
+        public void Dispose() {
         }
 
         public void Update(float dt) {
