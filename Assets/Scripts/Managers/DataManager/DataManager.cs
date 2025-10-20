@@ -23,6 +23,9 @@ namespace Manager {
         private Dictionary<BuildingType, Entity> buildingEntityPrefabs;
         private Dictionary<ResourceType, Entity> resourceEntityPrefabs;
 
+        /// temporary global inventory handling
+        private InventoryComponent globalInventory;
+
         private static DataManager instance = new DataManager();
 
         /// <summary>
@@ -118,7 +121,7 @@ namespace Manager {
                         if (resourceComponent.resourceType == resourceType && resourceComponent.iterationsLeft > 0) {
                             if (decreaseIterations) {
                                 resourceComponent.iterationsLeft--;
-                                resourceComponent.pendingJobs++;
+                                resourceComponent.pendingJobs++; // TODO: This needs to be handled somewhere else!
                                 em.SetComponentData(entity, resourceComponent);
                             }
                             return true;
@@ -128,6 +131,32 @@ namespace Manager {
                 }
             );
             return entity;
+        }
+
+        /// <summary>
+        /// temporary global inventory handling
+        /// </summary>
+        /// <param name="inventoryComponent"></param>
+        /// <returns></returns>
+        public InventoryComponent AddToGlobalInventory(InventoryComponent inventoryComponent) {
+            globalInventory.food += inventoryComponent.food;
+            globalInventory.wood += inventoryComponent.wood;
+            globalInventory.stone += inventoryComponent.stone;
+            return globalInventory;
+        }
+
+        public InventoryComponent GetGlobalInventory() {
+            return globalInventory;
+        }
+
+        /// <summary>
+        /// Check if all building costs are in the global inventory
+        /// </summary>
+        /// <param name="bcosts"></param>
+        /// <returns></returns>
+        public bool HasBuildingCostsInInventory(BuildingCosts bcosts) {
+            bool result = globalInventory.stone >= bcosts.stone && globalInventory.wood >= bcosts.wood;
+            return result;
         }
 
 

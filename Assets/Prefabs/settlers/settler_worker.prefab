@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888bb586819486f4e8a25bc2eb828b34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MiniCB::SettlerAuthoring
-  walkSpeed: 1
+  walkSpeed: 3
   workSpeed: 1
   settlerType: 1
   acceptJobs: 15

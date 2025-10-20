@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8061179148054495980}
+  - component: {fileID: 8745227476165698035}
+  - component: {fileID: 8054139952498123757}
   m_Layer: 0
   m_Name: building_tree_nursery
   m_TagString: Untagged
@@ -32,6 +34,38 @@ Transform:
   - {fileID: 5863697940265934259}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8745227476165698035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448284749141492630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
+--- !u!114 &8054139952498123757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448284749141492630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bea615c27b965847b237e8220abfea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::BuildingComponentAuthoring
+  buildingType: 0
+  buildingCosts:
+    wood: 0
+    stone: 0
+    timeInSeconds: 0
+  maxJobs: 0
+  jobType: 0
+  jobDurationInSeconds: 0
 --- !u!1001 &6263015357406050904
 PrefabInstance:
   m_ObjectHideFlags: 0

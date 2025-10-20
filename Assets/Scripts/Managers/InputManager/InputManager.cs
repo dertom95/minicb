@@ -14,7 +14,7 @@ namespace Manager {
             SpawnBuilding
         }
 
-        private BuildingType currentBuilding = BuildingType.gatherer;
+        private BuildingType currentBuilding = BuildingType.woodcutter;
 
         private static readonly InputManager inputManager = new InputManager();
 
@@ -38,10 +38,25 @@ namespace Manager {
         }
 
         public void Update(float dt) {
-            InstantiateTreeOnLeftClick();
+            HandleKeyboard();
+            InstantiateBuildingOnLeftClick();
         }
 
-        private void InstantiateTreeOnLeftClick() {
+        private void HandleKeyboard() {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                currentBuilding = BuildingType.gatherer;
+                Debug.Log("Selected gatherer");
+            } 
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                currentBuilding = BuildingType.woodcutter;
+                Debug.Log("Selected woodcutter");
+            } else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                currentBuilding = BuildingType.mason;
+                Debug.Log("Selected mason");
+            }
+        }
+
+        private void InstantiateBuildingOnLeftClick() {
             if (Input.GetMouseButtonDown(0)) {
                 PhysicsWorldSingleton physicsWorld = physicsWorldSingletonQuery.GetSingleton<PhysicsWorldSingleton>();
 
@@ -67,6 +82,12 @@ namespace Manager {
                     Debug.Log($"Hit: Entity:{hit.Entity}  Pos:{hit.Position} ColKey:{hit.ColliderKey}");
                      
                     Entity newEntity = BuildingManager.Instance.SpawnBuilding(currentBuilding, hit.Position);
+
+                    if (currentBuilding == BuildingType.gatherer) {
+                        currentBuilding = BuildingType.woodcutter;
+                    } else {
+                        currentBuilding = BuildingType.gatherer;
+                    }
                     //Entity entityPrefab = DataManager.Instance.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
                     //Entity newEntity = entityManager.Instantiate(entityPrefab);
                     //LocalTransform newTransform = new LocalTransform {

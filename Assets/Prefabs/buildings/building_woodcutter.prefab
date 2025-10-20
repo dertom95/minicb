@@ -9,6 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 498514485974902432}
+  - component: {fileID: -6111650518271091348}
+  - component: {fileID: -1899739034047136513}
+  - component: {fileID: 2274104338921588686}
+  - component: {fileID: -4262531927080908284}
   m_Layer: 0
   m_Name: building_woodcutter
   m_TagString: Untagged
@@ -32,6 +36,64 @@ Transform:
   - {fileID: 7934572318822613725}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6111650518271091348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108672939339955757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
+--- !u!114 &-1899739034047136513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108672939339955757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bea615c27b965847b237e8220abfea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::BuildingComponentAuthoring
+  buildingType: 0
+  buildingCosts:
+    wood: 2
+    stone: 2
+    timeInSeconds: 10
+  maxJobs: 2
+  jobType: 2
+  jobDurationInSeconds: 5
+--- !u!114 &2274104338921588686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108672939339955757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8c7cc47f9903e41bc1d83eaccbe9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::FieldOfInfluenceAuthoring
+  radius: 25
+--- !u!114 &-4262531927080908284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108672939339955757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a6adb0e30d34a9478382c296615042a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::EntityToResourceComponentAuthoring
+  searchResourceType: 0
 --- !u!1001 &7608824979323135286
 PrefabInstance:
   m_ObjectHideFlags: 0

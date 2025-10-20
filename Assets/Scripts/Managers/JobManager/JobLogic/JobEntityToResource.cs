@@ -50,6 +50,10 @@ public class JobEntityToResource : JobLogicBase {
         EntityManager em = state.EntityManager;
         Assert.IsTrue(em.HasComponent<InventoryComponent>(job.jobSettler),"Settler finished 'EntityToResource'-Job, but got no InventoryComponent");
         InventoryComponent invComp = em.GetComponentData<InventoryComponent>(job.jobSettler);
+        InventoryComponent globalInvComp = DataManager.Instance.AddToGlobalInventory(invComp);
+
+        Debug.Log($"Collected: Wood:{invComp.wood} Stone:{invComp.stone} Food:{invComp.food}!");
+        Debug.Log($"=> New Global Inventory: Wood:{globalInvComp.wood} Stone:{globalInvComp.stone} Food:{globalInvComp.food}!");
         ecb.RemoveComponent<InventoryComponent>(job.jobSettler);
         // TODO add inventory to global inventory
     }

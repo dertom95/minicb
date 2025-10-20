@@ -14,7 +14,7 @@ using Unity.Transforms;
 
 namespace Systems {
     public partial struct JobLifeCycleSystem : ISystem {
-        private const float SQRDISTANCE_TO_FINISH_MOVEMENT = 8;
+        private const float SQRDISTANCE_TO_FINISH_MOVEMENT = 1f;
 
         private EntityQuery activeJobsQuery;
         private EntityManager entityManager;

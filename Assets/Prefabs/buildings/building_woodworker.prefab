@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9036349345337154456}
+  - component: {fileID: -767275755699375607}
+  - component: {fileID: -601040873147426798}
   m_Layer: 0
   m_Name: building_woodworker
   m_TagString: Untagged
@@ -32,6 +34,38 @@ Transform:
   - {fileID: 1451802992171947555}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-767275755699375607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7445733671717823309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
+--- !u!114 &-601040873147426798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7445733671717823309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bea615c27b965847b237e8220abfea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::BuildingComponentAuthoring
+  buildingType: 0
+  buildingCosts:
+    wood: 0
+    stone: 0
+    timeInSeconds: 0
+  maxJobs: 0
+  jobType: 0
+  jobDurationInSeconds: 0
 --- !u!1001 &1418473750654841288
 PrefabInstance:
   m_ObjectHideFlags: 0
