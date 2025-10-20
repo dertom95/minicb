@@ -13,7 +13,12 @@ Use left-click to build — there are no restrictions yet.
 You’ll see some feedback in the console when selecting buildings and upon job completion.  
 
 Camera movement is not implemented at this point.  
-Everything is very basic, including the models (though it was actually pretty fun to do some modeling again!).  
+Everything is very basic.
+No map generation, or spawning of settlers, yet.
+There are going to be three different types of building:
+- Entity To Resource-Converter - Find a specific resource entity in the buildings radius and collect its resource  
+- Convert Input Resources to Output Resource - converts a defined amount of input-resources to a defined amout of output-resource **TO BE DONE**
+- Spawn Entity - Spawn specific prefabs in the buildings radius **TO BE DONE**
 
 **Key Elements:**
 
@@ -33,6 +38,8 @@ Everything is very basic, including the models (though it was actually pretty fu
 Jobs are used to manipulate the world. 
 E.g. instructing a building-construction will result in a construction-job, or creating jobs to
 move to a resource-entity and collect e.g. wood.
+
+
 
 The job system will distribute jobs to settlers that are idle at the moment. 
 
