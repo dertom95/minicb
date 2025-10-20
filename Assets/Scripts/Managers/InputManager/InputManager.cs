@@ -1,11 +1,13 @@
 namespace Manager {
+    using Components;
+    using Data;
+    using Mono.Cecil;
     using NUnit.Framework;
     using Unity.Entities;
     using Unity.Mathematics;
+    using Unity.Physics;
     using Unity.Transforms;
     using UnityEngine;
-    using Unity.Physics;
-    using Data;
 
     public class InputManager : IManager, IManagerUpdateable {
         public enum InputMode {
@@ -60,8 +62,10 @@ namespace Manager {
                     Filter = CollisionFilter.Default
                 };
 
+
                 if (collisionWorld.CastRay(rayInput, out Unity.Physics.RaycastHit hit)) {
                     Debug.Log($"Hit: Entity:{hit.Entity}  Pos:{hit.Position} ColKey:{hit.ColliderKey}");
+                     
                     Entity newEntity = BuildingManager.Instance.SpawnBuilding(currentBuilding, hit.Position);
                     //Entity entityPrefab = DataManager.Instance.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
                     //Entity newEntity = entityManager.Instantiate(entityPrefab);

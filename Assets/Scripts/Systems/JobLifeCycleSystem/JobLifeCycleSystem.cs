@@ -1,4 +1,5 @@
-﻿using Components;
+﻿using BuildingLogic;
+using Components;
 using Components.Tags;
 using Data;
 using Manager;
@@ -14,16 +15,16 @@ using Unity.Transforms;
 namespace Systems {
     public partial struct JobLifeCycleSystem : ISystem {
         private const float SQRDISTANCE_TO_FINISH_MOVEMENT = 12;
-        private static HashSet<JobType> finishedAfterWorkState;
+        //private static HashSet<JobType> finishedAfterWorkState;
 
         private EntityQuery activeJobsQuery;
         private EntityManager entityManager;
 
         public void OnCreate(ref SystemState state) {
-            finishedAfterWorkState = new HashSet<JobType>();
-            finishedAfterWorkState.Add(JobType.Construction);
-            finishedAfterWorkState.Add(JobType.Attack);
-            finishedAfterWorkState.Add(JobType.ConvertResource);
+            //finishedAfterWorkState = new HashSet<JobType>();
+            //finishedAfterWorkState.Add(JobType.Construction);
+            //finishedAfterWorkState.Add(JobType.Attack);
+            //finishedAfterWorkState.Add(JobType.ConvertResource);
 
             activeJobsQuery = state.GetEntityQuery(
                 ComponentType.ReadOnly<JobComponent>(),
@@ -62,6 +63,7 @@ namespace Systems {
             Assert.IsTrue(job.jobWorker != Entity.Null);
             Assert.IsTrue(SystemAPI.HasComponent<SettlerComponent>(job.jobWorker));
 
+            IJobLogic jobLogic = JobManager.Instance.GetJobLogic(job.jobType);
 
             //█▀▄▀█ █▀█ █░█ █ █▄░█ █▀▀   ▀█▀ █▀█   ▀█▀ ▄▀█ █▀█ █▀▀ █▀▀ ▀█▀
             //█░▀░█ █▄█ ▀▄▀ █ █░▀█ █▄█   ░█░ █▄█   ░█░ █▀█ █▀▄ █▄█ ██▄ ░█░            
@@ -92,6 +94,8 @@ namespace Systems {
             //█▀█ █▀▀ ▄▀█ █▀▀ █░█ █▀▀ █▀▄   ▀█▀ ▄▀█ █▀█ █▀▀ █▀▀ ▀█▀
             //█▀▄ ██▄ █▀█ █▄▄ █▀█ ██▄ █▄▀   ░█░ █▀█ █▀▄ █▄█ ██▄ ░█░    
             else if (job.jobState == Data.JobState.ReachedTarget) {
+                jobLogic.OnReachedTarget(ref ecb, ref jobEntity, ref state, ref job, dt);
+
                 RefRW<WorkTimerComponent> settlerWorkTimerComponent = SystemAPI.GetComponentRW<WorkTimerComponent>(job.jobWorker);
                 
                 settlerWorkTimerComponent.ValueRW.currentTime = 0;
@@ -113,18 +117,15 @@ namespace Systems {
                 } else {
                     settlerWorkTimerComponent.ValueRW.currentTime = newTime;
                     float progress = newTime / settlerWorkTimerComponent.ValueRO.workTimeTotal;
-                    
+
                     // specific progress-logic
-                    if (job.jobType == Data.JobType.Construction) {
-                        RefRW<LocalTransform> settlerTransform = SystemAPI.GetComponentRW<LocalTransform>(job.jobOwner);
-                        settlerTransform.ValueRW.Scale = math.max(BuildingManager.BUILDING_CONSTRUCTIONSITE_SCALE, progress);
-                    }
+                    jobLogic.OnWorking(ref ecb, ref jobEntity, ref state, ref job, dt, progress);
                 }
             }
             //█▀▀ █ █▄░█ █ █▀ █░█ █▀▀ █▀▄   █░█░█ █▀█ █▀█ █▄▀ █ █▄░█ █▀▀
             //█▀░ █ █░▀█ █ ▄█ █▀█ ██▄ █▄▀   ▀▄▀▄▀ █▄█ █▀▄ █░█ █ █░▀█ █▄█
             else if (job.jobState == Data.JobState.FinishedWorking) {
-                bool isJobFinished = finishedAfterWorkState.Contains(job.jobType);
+                bool isJobFinished = !jobLogic.NeedsToGoBackToOwner();
                 if (isJobFinished) {
                     // remove job reference in settler and make settler available
                     ecb.SetComponentEnabled<TagWorking>(job.jobWorker, false);
@@ -152,9 +153,6 @@ namespace Systems {
                     // reached target
                     job.jobState = Data.JobState.ReachedTarget;
                     ecb.SetComponent(jobEntity, job);
-                    // TODO: Do I want to make the last step? Or keep some distance to not walk into the building? :thinking:
-                    float3 newPosition = settlerTransform.ValueRO.Position + direction * math.sqrt(distanceSq);
-                    settlerTransform.ValueRW.Position = newPosition;
                 } else {
                     // still moving
                     float3 newPosition = settlerTransform.ValueRO.Position + direction * maxStep;
@@ -167,6 +165,13 @@ namespace Systems {
                 RefRW<SettlerComponent> settlerComponent = SystemAPI.GetComponentRW<SettlerComponent>(job.jobWorker);
                 settlerComponent.ValueRW.currentJob = Entity.Null;
                 ecb.DestroyEntity(jobEntity);
+            }
+        }
+
+        private void OnJobFinished(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt, float progress) {
+            if (job.jobType == Data.JobType.Construction) {
+                RefRW<LocalTransform> settlerTransform = SystemAPI.GetComponentRW<LocalTransform>(job.jobOwner);
+                settlerTransform.ValueRW.Scale = math.max(BuildingManager.BUILDING_CONSTRUCTIONSITE_SCALE, progress);
             }
         }
     }

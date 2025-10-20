@@ -1,8 +1,11 @@
+using Components;
 using Data;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 namespace Manager {
 
@@ -94,6 +97,34 @@ namespace Manager {
             Assert.IsTrue(buildingEntityPrefabs.ContainsKey(buildingType));
 
             return buildingEntityPrefabs[buildingType];
+        }
+
+        /// <summary>
+        /// Get resource entity in radius
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="radius"></param>
+        /// <param name="resourceType"></param>
+        /// <returns></returns>
+        public Entity GetResourceEntityInRadius(float3 position, float radius, ResourceType resourceType) {
+            Entity entity = PhysicsUtils.FindFirstEntityInRadius(
+                World.DefaultGameObjectInjectionWorld, 
+                position, 
+                radius, 
+                Config.LAYER_RESOURCE, 
+                (em, entity) => {
+                    if (em.HasComponent<ResourceComponent>(entity)) {
+                        ResourceComponent resourceComponent = em.GetComponentData<ResourceComponent>(entity);
+                        if (resourceComponent.resourceType == resourceType) {
+                            return true;
+                        }
+                        Assert.Greater(0, resourceComponent.iterationsLeft);
+                    }
+                    var comps = em.GetComponentTypes(entity);
+                    return false;
+                }
+            );
+            return entity;
         }
 
 

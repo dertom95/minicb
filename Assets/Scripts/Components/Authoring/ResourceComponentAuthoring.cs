@@ -1,6 +1,7 @@
 using Components;
 using Data;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 public class ResourceComponentAuthoring : MonoBehaviour
@@ -31,6 +32,7 @@ public class ResourceComponentAuthoring : MonoBehaviour
                 iterationsLeft = authoring.iterations,
                 resourceAmountPerIteration = authoring.resourceAmountPerIteration
             });
+            
         }
     }
 }

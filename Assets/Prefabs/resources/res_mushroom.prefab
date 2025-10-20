@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 558686452313451401}
   - component: {fileID: 1752789141665399729}
-  m_Layer: 0
+  - component: {fileID: 6574946444110939787}
+  m_Layer: 3
   m_Name: res_mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,6 +49,27 @@ MonoBehaviour:
   resourceType: 2
   iterations: 1
   resourceAmountPerIteration: 5
+--- !u!135 &6574946444110939787
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7049932333954273347}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.26
+  m_Center: {x: -0, y: 0.23, z: 0.04}
 --- !u!1001 &7183497555152986244
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98,7 +120,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 60ff0555459f22c47868e632c5e416f8, type: 3}
       propertyPath: m_Name
-      value: res_mushroom
+      value: res_mushroom_vis
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 60ff0555459f22c47868e632c5e416f8, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
