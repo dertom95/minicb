@@ -12,6 +12,8 @@ Currently, you can select the following buildings using the keyboard:
 Use left-click to build — there are no restrictions yet.  
 You’ll see some feedback in the console when selecting buildings and upon job completion.  
 
+CurrentVersion: [https://github.com/dertom95/minicb/releases/download/0.01/minicb.zip]
+
 Camera movement is not implemented at this point.  
 Everything is very basic.
 No map generation, or spawning of settlers, yet.
