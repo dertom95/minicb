@@ -21,5 +21,10 @@ namespace Components {
         /// The amount of resources added to the inventory per iteration
         /// </summary>
         public byte resourceAmountPerIteration;
+
+        /// <summary>
+        /// The amount of jobs that are still depending on the this resource-entity
+        /// </summary>
+        public byte pendingJobs;
     }
 }

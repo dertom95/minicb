@@ -8,8 +8,8 @@ namespace Components {
     /// Stores resource amount (hardcoded), limited to [0..65535]
     /// </summary>
     public struct InventoryComponent : IComponentData {
-        ushort wood;
-        ushort stone;
-        ushort food;
+        public ushort wood;
+        public ushort stone;
+        public ushort food;
     }
 }

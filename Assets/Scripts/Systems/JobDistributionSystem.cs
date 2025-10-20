@@ -55,7 +55,7 @@ namespace Systems {
                     // Check bitmask compatibility
                     if ((settler.acceptJobs & job.jobType) != 0) {
                         // Assign job to settler and settler to job
-                        job.jobWorker = settlerEntity;
+                        job.jobSettler = settlerEntity;
                         job.jobState = Data.JobState.MovingToTarget;
                         settler.currentJob = jobEntity;
                         settler.settlerState = Data.SettlerState.Working;

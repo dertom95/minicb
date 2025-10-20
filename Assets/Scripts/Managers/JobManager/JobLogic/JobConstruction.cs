@@ -9,7 +9,6 @@ using Unity.Transforms;
 using UnityEngine;
 
 public class JobConstruction : JobLogicBase {
-    public override JobType JobType => JobType.Construction;
 
     public override bool NeedsToGoBackToOwner() {
         return false;
@@ -18,14 +17,15 @@ public class JobConstruction : JobLogicBase {
     public override void OnWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt, float progress) {
         EntityManager em = state.EntityManager;
         LocalTransform settlerTransform = em.GetComponentData<LocalTransform>(job.jobOwner);
-        settlerTransform.Scale = math.max(BuildingManager.BUILDING_CONSTRUCTIONSITE_SCALE, progress);
+        settlerTransform.Scale = math.lerp(BuildingManager.BUILDING_CONSTRUCTIONSITE_SCALE, 1.0f, progress);
         ecb.SetComponent(job.jobOwner, settlerTransform);
     }
 
     public override void OnFinishedWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        ecb.RemoveComponent<TagUnderConstruction>(job.jobOwner);
         ecb.AddComponent<TagBuilt>(job.jobOwner);
-        ecb.SetComponentEnabled<TagUnderConstruction>(job.jobOwner,false);
         ecb.AddComponent<TagWorking>(job.jobOwner);
+        ecb.AddComponent<TagCreateJobs>(job.jobOwner);
     }
 
 }

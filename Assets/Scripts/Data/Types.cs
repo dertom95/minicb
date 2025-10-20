@@ -48,7 +48,7 @@ namespace Data {
     [Flags]
     public enum JobType : byte {
         Construction        = 1 << 0,
-        CollectFood         = 1 << 1,
+        EntityToResource = 1 << 1,
         ConvertResource     = 1 << 2,
         SpawnEntity         = 1 << 3,
         Attack              = 1 << 4

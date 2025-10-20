@@ -106,7 +106,7 @@ namespace Manager {
         /// <param name="radius"></param>
         /// <param name="resourceType"></param>
         /// <returns></returns>
-        public Entity GetResourceEntityInRadius(float3 position, float radius, ResourceType resourceType) {
+        public Entity GetResourceEntityInRadius(float3 position, float radius, ResourceType resourceType, bool decreaseIterations = false) {
             Entity entity = PhysicsUtils.FindFirstEntityInRadius(
                 World.DefaultGameObjectInjectionWorld, 
                 position, 
@@ -115,12 +115,15 @@ namespace Manager {
                 (em, entity) => {
                     if (em.HasComponent<ResourceComponent>(entity)) {
                         ResourceComponent resourceComponent = em.GetComponentData<ResourceComponent>(entity);
-                        if (resourceComponent.resourceType == resourceType) {
+                        if (resourceComponent.resourceType == resourceType && resourceComponent.iterationsLeft > 0) {
+                            if (decreaseIterations) {
+                                resourceComponent.iterationsLeft--;
+                                resourceComponent.pendingJobs++;
+                                em.SetComponentData(entity, resourceComponent);
+                            }
                             return true;
                         }
-                        Assert.Greater(0, resourceComponent.iterationsLeft);
                     }
-                    var comps = em.GetComponentTypes(entity);
                     return false;
                 }
             );

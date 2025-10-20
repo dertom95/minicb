@@ -15,4 +15,9 @@ namespace Components.Tags {
     /// Generic Tag to flag entities to be built and able to work as intended
     /// </summary>
     public struct TagBuilt : IComponentData, IEnableableComponent { }
+
+    /// <summary>
+    /// Tag to indicate that a building needs to spawn jobs
+    /// </summary>
+    public struct TagCreateJobs : IComponentData, IEnableableComponent { }
 }

@@ -5,7 +5,6 @@ using Unity.Entities;
 using UnityEngine;
 
 public abstract class JobLogicBase : IJobLogic {
-    public abstract JobType JobType { get; }
 
     public abstract bool NeedsToGoBackToOwner();
 

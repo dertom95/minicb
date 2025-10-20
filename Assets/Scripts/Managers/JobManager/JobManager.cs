@@ -44,6 +44,7 @@ namespace Manager {
         private void InitJobLogic() {
             jobLogicLookup = new Dictionary<JobType, IJobLogic>();
             jobLogicLookup.Add(JobType.Construction, new JobConstruction());
+            jobLogicLookup.Add(JobType.EntityToResource, new JobEntityToResource());
         }
 
         private void InitJobSpawner() {
@@ -62,23 +63,16 @@ namespace Manager {
         public Entity CreateConstructionJob(Entity owner) {
             Assert.AreNotEqual(Entity.Null, owner);
 
-            Entity jobEntity = entityManager.CreateEntity();
-
-            LocalTransform localTransform = entityManager.GetComponentData<LocalTransform>(owner);
             BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(owner);
 
-            entityManager.AddComponentData(jobEntity, new JobComponent { 
-                jobOwner = owner,
-                jobPosition = localTransform.Position,
-                jobType = JobType.Construction,
-                jobState = JobState.MovingToTarget,
-                jobDuration = buildingComponent.buildingCosts.timeInSeconds
-            });
+            Entity constructionJob = CreateGenericJob(
+                owner, 
+                owner, 
+                JobType.Construction, 
+                buildingComponent.buildingCosts.timeInSeconds
+            );
 
-            entityManager.AddComponent<TagWorking>(jobEntity);
-            entityManager.SetComponentEnabled<TagWorking>(jobEntity, false);
-
-            return jobEntity;
+            return constructionJob;
         }
 
         /// <summary>
@@ -86,24 +80,39 @@ namespace Manager {
         /// </summary>
         /// <param name="owner"></param>
         /// <returns></returns>
-        public Entity CreateEntityToResourceJob(Entity owner) {
+        public Entity CreateGenericJob(Entity owner, Entity jobTarget, JobType jobType, float duration, EntityCommandBuffer? ecb=null) {
             Assert.AreNotEqual(Entity.Null, owner);
 
             Entity jobEntity = entityManager.CreateEntity();
 
-            LocalTransform localTransform = entityManager.GetComponentData<LocalTransform>(owner);
-            BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(owner);
+            LocalTransform localTransform = entityManager.GetComponentData<LocalTransform>(jobTarget);
 
-            entityManager.AddComponentData(jobEntity, new JobComponent {
-                jobOwner = owner,
-                jobPosition = localTransform.Position,
-                jobType = JobType.Construction,
-                jobState = JobState.MovingToTarget,
-                jobDuration = buildingComponent.buildingCosts.timeInSeconds
-            });
+            if (ecb.HasValue) {
+                ecb.Value.AddComponent(jobEntity, new JobComponent {
+                    jobOwner = owner,
+                    jobTarget = jobTarget,
+                    jobPosition = localTransform.Position,
+                    jobType = jobType,
+                    jobState = JobState.MovingToTarget,
+                    jobDuration = duration
+                });
 
-            entityManager.AddComponent<TagWorking>(jobEntity);
-            entityManager.SetComponentEnabled<TagWorking>(jobEntity, false);
+                ecb.Value.AddComponent<TagWorking>(jobEntity);
+                ecb.Value.SetComponentEnabled<TagWorking>(jobEntity, false);
+            } else {
+                entityManager.AddComponentData(jobEntity, new JobComponent {
+                    jobOwner = owner,
+                    jobTarget = jobTarget,
+                    jobPosition = localTransform.Position,
+                    jobType = jobType,
+                    jobState = JobState.MovingToTarget,
+                    jobDuration = duration
+                });
+
+                entityManager.AddComponent<TagWorking>(jobEntity);
+                entityManager.SetComponentEnabled<TagWorking>(jobEntity, false);
+
+            }
 
             return jobEntity;
         }

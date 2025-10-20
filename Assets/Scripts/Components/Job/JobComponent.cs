@@ -15,7 +15,12 @@ namespace Components {
         /// <summary>
         /// The settler that is doing the job
         /// </summary>
-        public Entity jobWorker;
+        public Entity jobSettler;
+
+        /// <summary>
+        /// The target entity on which the job is executed
+        /// </summary>
+        public Entity jobTarget;
 
         /// <summary>
         /// The position where the job is located

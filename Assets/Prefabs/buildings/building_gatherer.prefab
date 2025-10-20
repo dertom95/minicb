@@ -52,6 +52,9 @@ MonoBehaviour:
     wood: 7
     stone: 3
     timeInSeconds: 20
+  maxJobs: 2
+  jobType: 2
+  jobDurationInSeconds: 5
 --- !u!114 &2356010207413593046
 MonoBehaviour:
   m_ObjectHideFlags: 0
