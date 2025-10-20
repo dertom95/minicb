@@ -37,7 +37,7 @@ namespace Manager {
         /// <param name="rotation"></param>
         public Entity SpawnBuilding(BuildingType buildingType, float3 position, float scale, float3 rotation, bool immediateBuild = false) {
             Entity entityPrefab = dataManager.GetBuildingEntityPrefab(buildingType);
-            Assert.IsFalse(entityPrefab!=Entity.Null);
+            Assert.IsFalse(entityPrefab==Entity.Null);
             Entity newEntity = entityManager.Instantiate(entityPrefab);
 
             scale = immediateBuild ? scale : math.min(scale, BUILDING_CONSTRUCTIONSITE_SCALE);
