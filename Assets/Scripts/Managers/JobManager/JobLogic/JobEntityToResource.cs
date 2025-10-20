@@ -16,17 +16,14 @@ public class JobEntityToResource : JobLogicBase {
         EntityManager em = state.EntityManager;
         ResourceComponent resComp = em.GetComponentData<ResourceComponent>(job.jobTarget);
 
-        Assert.IsFalse(em.HasComponent<InventoryComponent>(job.jobSettler),"Job-Worker already has InventoryComponent!");
+        DynamicBuffer<ResourceBufferElement> inventoryBuffer = em.GetBuffer<ResourceBufferElement>(job.jobSettler);
+        Assert.AreEqual(0, inventoryBuffer.Length);
 
-        InventoryComponent invComp = new InventoryComponent();
-        // TODO: Use a more generic approach
-        switch (resComp.resourceType) {
-            case ResourceType.Stone: invComp.stone = resComp.resourceAmountPerIteration; break;
-            case ResourceType.Food: invComp.food = resComp.resourceAmountPerIteration; break;
-            case ResourceType.Wood: invComp.wood = resComp.resourceAmountPerIteration; break;
-            default: Assert.IsTrue(false,"Unknown resourceType"); break;
-        }
-        ecb.AddComponent(job.jobSettler, invComp);
+        ecb.AppendToBuffer(job.jobSettler, new ResourceBufferElement {
+            amount = resComp.resourceAmountPerIteration,
+            type = resComp.resourceType
+        });
+
     }
 
     public override void OnWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt, float progress) {
@@ -46,13 +43,15 @@ public class JobEntityToResource : JobLogicBase {
     public override void OnReachedOwner(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
         // back in our work-building
         EntityManager em = state.EntityManager;
-        Assert.IsTrue(em.HasComponent<InventoryComponent>(job.jobSettler),"Settler finished 'EntityToResource'-Job, but got no InventoryComponent");
-        InventoryComponent invComp = em.GetComponentData<InventoryComponent>(job.jobSettler);
-        InventoryComponent globalInvComp = DataManager.Instance.AddToGlobalInventory(invComp);
+        Assert.IsTrue(em.HasComponent<ResourceBufferElement>(job.jobSettler),"Settler finished 'EntityToResource'-Job, but got no InventoryComponent");
+        
+        DynamicBuffer<ResourceBufferElement> inventoryBuffer = em.GetBuffer<ResourceBufferElement>(job.jobSettler);
 
-        Debug.Log($"Collected: Wood:{invComp.wood} Stone:{invComp.stone} Food:{invComp.food}!");
-        Debug.Log($"=> New Global Inventory: Wood:{globalInvComp.wood} Stone:{globalInvComp.stone} Food:{globalInvComp.food}!");
-        ecb.RemoveComponent<InventoryComponent>(job.jobSettler);
+        foreach (ResourceBufferElement resElem in inventoryBuffer) {
+            int totalAmount = DataManager.Instance.AddToGlobalInventory(resElem.type, resElem.amount);
+            Debug.Log($"Collected:{resElem.type} : {resElem.amount} => Total:{totalAmount}");
+        }
+        inventoryBuffer.Clear();
         // TODO add inventory to global inventory
     }
 }

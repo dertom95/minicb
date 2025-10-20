@@ -8,7 +8,8 @@ namespace Data {
     public enum ResourceType : byte { 
         Wood,   // needed to build houses or wood-objects
         Stone,  // needed to build houses
-        Food    // needed to feed settlers
+        Food,   // needed to feed settlers
+        Tools  // needed to speed up jobs 
     }
 
     /// <summary>

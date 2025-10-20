@@ -44,6 +44,7 @@ public class SettlerAuthoring : MonoBehaviour
             AddComponent<TagWorking>(entity);
             SetComponentEnabled<TagWorking>(entity, false);
 
+            AddBuffer<ResourceBufferElement>(entity);
         }
     }
 }

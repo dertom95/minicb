@@ -1,3 +1,4 @@
+using Codice.CM.Client.Differences;
 using Components;
 using Data;
 using System.Collections.Generic;
@@ -21,8 +22,8 @@ namespace Manager {
         private Dictionary<BuildingType, Entity> buildingEntityPrefabs;
         private Dictionary<ResourceType, Entity> resourceEntityPrefabs;
 
-        /// temporary global inventory handling
-        private InventoryComponent globalInventory;
+        private Dictionary<ResourceType, int> globalInventory;
+        private Dictionary<ResourceType, int> globalInventoryLimits;
 
         private static DataManager instance = new DataManager();
 
@@ -39,6 +40,8 @@ namespace Manager {
             dataStore = new Dictionary<ushort, object>();
             buildingEntityPrefabs = new Dictionary<BuildingType, Entity>();
             resourceEntityPrefabs = new Dictionary<ResourceType, Entity>();
+            globalInventory = new Dictionary<ResourceType, int>();
+            globalInventoryLimits = new Dictionary<ResourceType, int>();
         }
 
         public void Dispose() {
@@ -136,27 +139,11 @@ namespace Manager {
         /// </summary>
         /// <param name="inventoryComponent"></param>
         /// <returns></returns>
-        public InventoryComponent AddToGlobalInventory(InventoryComponent inventoryComponent) {
-            globalInventory.food += inventoryComponent.food;
-            globalInventory.wood += inventoryComponent.wood;
-            globalInventory.stone += inventoryComponent.stone;
-            return globalInventory;
+        public int AddToGlobalInventory(ResourceType res, int amount) {
+            int newAmount = globalInventory[res] + amount;
+            globalInventory[res] = newAmount;
+            return newAmount;
         }
-
-        public InventoryComponent GetGlobalInventory() {
-            return globalInventory;
-        }
-
-        /// <summary>
-        /// Check if all building costs are in the global inventory
-        /// </summary>
-        /// <param name="bcosts"></param>
-        /// <returns></returns>
-        public bool HasBuildingCostsInInventory(BuildingCosts bcosts) {
-            bool result = globalInventory.stone >= bcosts.stone && globalInventory.wood >= bcosts.wood;
-            return result;
-        }
-
 
     }
 
