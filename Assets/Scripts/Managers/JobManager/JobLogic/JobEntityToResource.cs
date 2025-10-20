@@ -3,11 +3,9 @@ using Components;
 using Components.Tags;
 using Data;
 using Manager;
-using NUnit.Framework;
 using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class JobEntityToResource : JobLogicBase {
     public override bool NeedsToGoBackToOwner() {
@@ -26,7 +24,7 @@ public class JobEntityToResource : JobLogicBase {
             case ResourceType.Stone: invComp.stone = resComp.resourceAmountPerIteration; break;
             case ResourceType.Food: invComp.food = resComp.resourceAmountPerIteration; break;
             case ResourceType.Wood: invComp.wood = resComp.resourceAmountPerIteration; break;
-            default: Assert.Fail("Unknown resourceType"); break;
+            default: Assert.IsTrue(false,"Unknown resourceType"); break;
         }
         ecb.AddComponent(job.jobSettler, invComp);
     }

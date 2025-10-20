@@ -1,13 +1,4 @@
-using Components;
-using Components.Tags;
-using Data;
-using NUnit.Framework;
-using System.Collections.Generic;
-using System.Numerics;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Transforms;
 
 namespace Manager {
     /// <summary>

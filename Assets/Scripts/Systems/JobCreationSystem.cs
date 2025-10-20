@@ -1,9 +1,9 @@
 using Components;
 using Components.Tags;
 using Manager;
-using NUnit.Framework;
 using Unity.Entities;
 using Unity.Transforms;
+using UnityEngine.Assertions;
 
 namespace Systems {
     public partial struct JobCreationSystem : ISystem {

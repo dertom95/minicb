@@ -1,8 +1,6 @@
 namespace Manager {
     using Components;
     using Data;
-    using Mono.Cecil;
-    using NUnit.Framework;
     using Unity.Entities;
     using Unity.Mathematics;
     using Unity.Physics;

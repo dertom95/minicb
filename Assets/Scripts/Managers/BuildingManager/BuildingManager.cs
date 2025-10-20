@@ -1,11 +1,10 @@
 using Components;
 using Components.Tags;
 using Data;
-using NUnit.Framework;
-using System.Numerics;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine.Assertions;
 
 namespace Manager {
     /// <summary>
@@ -38,7 +37,7 @@ namespace Manager {
         /// <param name="rotation"></param>
         public Entity SpawnBuilding(BuildingType buildingType, float3 position, float scale, float3 rotation, bool immediateBuild = false) {
             Entity entityPrefab = dataManager.GetBuildingEntityPrefab(buildingType);
-            Assert.IsNotNull(entityPrefab);
+            Assert.IsFalse(entityPrefab!=Entity.Null);
             Entity newEntity = entityManager.Instantiate(entityPrefab);
 
             scale = immediateBuild ? scale : math.min(scale, BUILDING_CONSTRUCTIONSITE_SCALE);

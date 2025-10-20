@@ -3,14 +3,11 @@ using Components;
 using Components.Tags;
 using Data;
 using Manager;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
-using System.Collections.Generic;
-using System.Linq;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine.Assertions;
 
 namespace Systems {
     public partial struct JobLifeCycleSystem : ISystem {
