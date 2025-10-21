@@ -29,6 +29,8 @@ namespace Manager {
 
         private static DataManager instance = new DataManager();
 
+        public event EventHandler<Dictionary<ResourceType, int>> EventInventoryChanged;
+
         /// <summary>
         /// Singleton Access
         /// </summary>
@@ -149,6 +151,7 @@ namespace Manager {
             int newAmount = globalInventory[res] + amount;
             globalInventory[res] = newAmount;
             UnityEngine.Debug.Log($"Added to globalInventory: {res}:{amount} => Total:{amount}");
+            TriggerInventoryChanged();
             return newAmount;
         }
 
@@ -181,6 +184,7 @@ namespace Manager {
             Assert.IsTrue(HasResInGlobalInventory(res, amount));
             globalInventory.TryGetValue(res, out int currentAmount);
             int newAmount = globalInventory[res] = currentAmount - amount;
+            TriggerInventoryChanged();
             return newAmount >= 0;
         }
 
@@ -194,6 +198,10 @@ namespace Manager {
 
         public int GetLimit(ResourceType res) {
             return globalInventoryLimits[res];
+        }
+
+        private void TriggerInventoryChanged() {
+            EventInventoryChanged?.Invoke(this, globalInventory);
         }
     }
 
