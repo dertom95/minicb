@@ -1,29 +1,40 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/hudstyle.uss?fileID=7433441132597879392&amp;guid=28cf0067e89227e4db2a9397e7d804b1&amp;type=3" />
-    <ui:VisualElement name="Container" data-source="project://database/Assets/Resources/UIData.asset?fileID=11400000&amp;guid=21b228c28bde9ba489a65be6d38ffa78&amp;type=2#UIData" style="flex-grow: 1; flex-direction: row; height: auto;">
-        <ui:Label text="Wood" name="Wood" style="height: 30px; background-color: rgb(198, 198, 198);" />
-        <ui:Label text="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
-            <Bindings>
-                <ui:DataBinding property="text" data-source-path="wood" binding-mode="ToTarget" />
-            </Bindings>
-        </ui:Label>
-        <ui:Label text="Stone" name="Stone" style="height: 30px; background-color: rgb(204, 204, 204);" />
-        <ui:Label text="Label" name="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
-            <Bindings>
-                <ui:DataBinding property="text" data-source-path="stone" binding-mode="ToTarget" />
-            </Bindings>
-        </ui:Label>
-        <ui:Label text="Food" name="Food" style="height: 30px; background-color: rgb(204, 204, 204);" />
-        <ui:Label text="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
-            <Bindings>
-                <ui:DataBinding property="text" data-source-path="food" binding-mode="ToTarget" />
-            </Bindings>
-        </ui:Label>
-        <ui:Label text="Tools" name="Tools" style="height: 30px; background-color: rgb(204, 204, 204);" />
-        <ui:Label text="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
-            <Bindings>
-                <ui:DataBinding property="text" data-source-path="tools" binding-mode="ToTarget" />
-            </Bindings>
-        </ui:Label>
+    <Style src="project://database/Assets/UI%20Toolkit/hudstyle.uss?fileID=7433441132597879392&amp;guid=28cf0067e89227e4db2a9397e7d804b1&amp;type=3#hudstyle" />
+    <ui:VisualElement name="Container" data-source="project://database/Assets/Resources/UIData.asset?fileID=11400000&amp;guid=21b228c28bde9ba489a65be6d38ffa78&amp;type=2#UIData" class="head" style="flex-grow: 1; flex-direction: row; height: auto; width: auto; align-self: flex-start; align-content: center; min-height: 50px; max-height: 50px; background-color: rgb(91, 91, 91); border-right-width: 10px; border-left-width: 10px; max-width: 1194px;">
+        <ui:VisualElement name="resource" style="flex-grow: 1; flex-direction: row; max-height: none; max-width: 466px;">
+            <ui:Label text="Wood" name="Wood" style="height: 30px; background-color: rgb(198, 198, 198);" />
+            <ui:Label text="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="wood" binding-mode="ToTarget" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label text="Stone" name="Stone" style="height: 30px; background-color: rgb(204, 204, 204);" />
+            <ui:Label text="Label" name="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="stone" binding-mode="ToTarget" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label text="Food" name="Food" style="height: 30px; background-color: rgb(204, 204, 204);" />
+            <ui:Label text="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="food" binding-mode="ToTarget" />
+                </Bindings>
+            </ui:Label>
+            <ui:Label text="Tools" name="Tools" style="height: 30px; background-color: rgb(204, 204, 204);" />
+            <ui:Label text="Label" style="height: 30px; background-color: rgb(204, 204, 204);">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="tools" binding-mode="ToTarget" />
+                </Bindings>
+            </ui:Label>
+        </ui:VisualElement>
+        <ui:VisualElement name="current-building-container" style="flex-grow: 1; flex-direction: row; max-width: 256px; background-color: rgb(77, 77, 77); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(26, 26, 26); border-right-color: rgb(26, 26, 26); border-top-color: rgb(26, 26, 26); border-bottom-color: rgb(26, 26, 26); padding-left: 4px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; min-width: 256px;">
+            <ui:Label text="Current" name="Current" style="height: 30px; background-color: rgb(204, 204, 204);" />
+            <ui:Label name="Tools" style="height: 30px; background-color: rgb(204, 204, 204);">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="selectedBuilding" binding-mode="ToTarget" />
+                </Bindings>
+            </ui:Label>
+        </ui:VisualElement>
+        <ui:VisualElement name="button-container" style="flex-grow: 1; flex-direction: row; background-color: rgb(102, 102, 102);" />
     </ui:VisualElement>
 </ui:UXML>

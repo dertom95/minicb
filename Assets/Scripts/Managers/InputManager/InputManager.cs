@@ -1,16 +1,21 @@
 namespace Manager {
     using Components;
     using Data;
+    using System;
+    using System.Collections.Generic;
     using Unity.Entities;
     using Unity.Mathematics;
     using Unity.Physics;
     using Unity.Transforms;
     using UnityEngine;
+    using UnityEngine.EventSystems;
 
     public class InputManager : IManager, IManagerUpdateable {
         public enum InputMode {
             SpawnBuilding
         }
+
+        public event EventHandler<BuildingType> EventSelectedBuildingChanged;
 
         private BuildingType currentBuilding = BuildingType.woodcutter;
 
@@ -30,6 +35,7 @@ namespace Manager {
             entityManager = world.EntityManager;
 
             physicsWorldSingletonQuery = entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
+            SetCurrentBuilding(BuildingType.gatherer);
         }
 
         public void Dispose() {
@@ -57,8 +63,14 @@ namespace Manager {
             }
         }
 
+        private bool IsMouseButtonDown(int btn, bool ignoreButtonIfOverUI = true) {
+            return Input.GetMouseButtonDown(btn) && (!ignoreButtonIfOverUI || UIManager.Instance.IsMouseOverUI());
+        }
+
         private void InstantiateBuildingOnLeftClick() {
-            if (Input.GetMouseButtonDown(0)) {
+
+            if (IsMouseButtonDown(0)) {
+
                 PhysicsWorldSingleton physicsWorld = physicsWorldSingletonQuery.GetSingleton<PhysicsWorldSingleton>();
 
                 var world = World.DefaultGameObjectInjectionWorld;
@@ -84,11 +96,6 @@ namespace Manager {
                      
                     Entity newEntity = BuildingManager.Instance.SpawnBuilding(currentBuilding, hit.Position);
 
-                    if (currentBuilding == BuildingType.gatherer) {
-                        currentBuilding = BuildingType.woodcutter;
-                    } else {
-                        currentBuilding = BuildingType.gatherer;
-                    }
                     //Entity entityPrefab = DataManager.Instance.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
                     //Entity newEntity = entityManager.Instantiate(entityPrefab);
                     //LocalTransform newTransform = new LocalTransform {
@@ -114,6 +121,18 @@ namespace Manager {
                 }
 
             }
+        }
+
+        //public bool MouseOverUIElement() {
+        //    bool mouseOver = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        //    Debug.Log("MouseOver UI:" + mouseOver);
+        //    return mouseOver;
+        //}
+
+        public void SetCurrentBuilding(BuildingType buildingType) {
+            this.currentBuilding = buildingType;
+
+            EventSelectedBuildingChanged?.Invoke(this, buildingType);
         }
 
         //private void RotateIsland() {

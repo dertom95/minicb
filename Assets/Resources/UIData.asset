@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 176ef00c08066384fbf6d4c820a1a450, type: 3}
   m_Name: UIData
   m_EditorClassIdentifier: MiniCB::UIData
+  buildingButtonTemplate: {fileID: 0}
+  hudUIDocument: {fileID: 0}
   wood: 0
   stone: 0
   food: 0

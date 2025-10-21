@@ -1,7 +1,12 @@
 :root {
 }
 
-.header {
-    font-size: 40px;
+.head {
+    font-size: 20px;
     color: rgb(255, 255, 255);
+}
+
+#Container Label {
+    color: rgb(0, 0, 0);
+    margin-right: 8px;
 }
