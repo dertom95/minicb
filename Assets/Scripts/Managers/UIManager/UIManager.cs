@@ -20,12 +20,12 @@ namespace Manager {
         public void Init() {
             uiData = Resources.Load<UIData>("UIData");
 
-            DataManager.Instance.EventInventoryChanged += OnInventoryChange;
+            DataManager.Instance.RegisterInventoryChangedEvent(OnInventoryChange);
             InputManager.Instance.EventSelectedBuildingChanged += OnSelectedBuildingChanged;
         }
 
         public void Dispose() {
-            DataManager.Instance.EventInventoryChanged -= OnInventoryChange;
+            DataManager.Instance.UnregisterInventoryChangedEvent(OnInventoryChange);
             InputManager.Instance.EventSelectedBuildingChanged -= OnSelectedBuildingChanged;
         }
 

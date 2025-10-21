@@ -13,6 +13,16 @@ namespace Data {
     }
 
     /// <summary>
+    /// All resource prefab types
+    /// The resource-prefabs itself are grouped in ResourceTypes 
+    /// </summary>
+    public enum ResourcePrefabType : byte {
+        Tree,   // Tree Prefab (res: wood)
+        Stone,  // Stone Prefab (res: stone)
+        Mushroom // Mushroom Prefab (res: food)
+    }
+
+    /// <summary>
     /// BuildingTypes. 
     /// Enforce byte for compact usage in components
     /// </summary>

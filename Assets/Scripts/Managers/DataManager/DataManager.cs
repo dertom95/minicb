@@ -44,7 +44,7 @@ namespace Manager {
         /// <summary>
         /// Lookup ResourceType->EntityPrefab
         /// </summary>
-        private Dictionary<ResourceType, Entity> resourceEntityPrefabs;
+        private Dictionary<ResourcePrefabType, Entity> resourceEntityPrefabs;
 
         // TODO: Extract Inventory in its own Manager
 
@@ -60,7 +60,7 @@ namespace Manager {
         /// <summary>
         /// Event triggered if the inventory got changed
         /// </summary>
-        public event EventHandler<Dictionary<ResourceType, int>> EventInventoryChanged;
+        private event EventHandler<Dictionary<ResourceType, int>> EventInventoryChanged;
 
         private DataManager() {
         }
@@ -71,7 +71,7 @@ namespace Manager {
             currentId = 1000;
             dataStore = new Dictionary<ushort, object>();
             buildingEntityPrefabs = new Dictionary<BuildingType, Entity>();
-            resourceEntityPrefabs = new Dictionary<ResourceType, Entity>();
+            resourceEntityPrefabs = new Dictionary<ResourcePrefabType, Entity>();
             InitInventory();
         }
 
@@ -85,6 +85,7 @@ namespace Manager {
             foreach (ResourceAmount res in Config.Instance.InitialInventory) {
                 globalInventory[res.resourceType] = res.resourceAmount;
             }
+            TriggerInventoryChanged();
         }
 
         public void Dispose() {
@@ -145,6 +146,29 @@ namespace Manager {
 
             return buildingEntityPrefabs[buildingType];
         }
+
+        /// <summary>
+        /// Register Building EntityPrefab (only one per BuildingType)
+        /// </summary>
+        /// <param name="resourcePrefType"></param>
+        /// <param name="entityPrefab"></param>
+        public void RegisterResourceEntityPrefab(ResourcePrefabType resourcePrefType, Entity entityPrefab) {
+            Assert.IsFalse(resourceEntityPrefabs.ContainsKey(resourcePrefType));
+
+            resourceEntityPrefabs[resourcePrefType] = entityPrefab;
+        }
+
+        /// <summary>
+        /// Returns EntityPrefab to specific buildingsType
+        /// </summary>
+        /// <param name="resPrefType"></param>
+        /// <returns></returns>
+        public Entity GetResourceEntityPrefab(ResourcePrefabType resPrefType) {
+            Assert.IsTrue(resourceEntityPrefabs.ContainsKey(resPrefType));
+
+            return resourceEntityPrefabs[resPrefType];
+        }
+
 
         /// <summary>
         /// Get resource entity in radius
@@ -210,10 +234,21 @@ namespace Manager {
             return currentAmount >= amount;
         }
 
+        /// <summary>
+        /// Remove the specified resourceAmount from inventory
+        /// </summary>
+        /// <param name="resAmount"></param>
+        /// <returns></returns>
         public bool RemoveResFromGlobalInventory(ResourceAmount resAmount) {
             return RemoveResFromGlobalInventory(resAmount.resourceType, resAmount.resourceAmount);
         }
 
+        /// <summary>
+        /// Remove the specified amount of resourceType
+        /// </summary>
+        /// <param name="res"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
         public bool RemoveResFromGlobalInventory(ResourceType res,int amount) {
             Assert.IsTrue(HasResInGlobalInventory(res, amount));
             globalInventory.TryGetValue(res, out int currentAmount);
@@ -236,6 +271,12 @@ namespace Manager {
             return result;
         }
 
+        /// <summary>
+        /// Try to remove building Costs from Inventory.
+        /// Return true if it worked, false if not
+        /// </summary>
+        /// <param name="buildingType"></param>
+        /// <returns></returns>
         public bool TryToRemoveBuildingCostsFromInventory(BuildingType buildingType) {
             if (!HasEnoughResourcesToBuildBuilding(buildingType)) {
                 return false;
@@ -248,17 +289,54 @@ namespace Manager {
             return true;
         }
 
+        /// <summary>
+        /// Set Limit for the specified resourceType
+        /// </summary>
+        /// <param name="res"></param>
+        /// <param name="limit"></param>
         public void SetLimit(ResourceType res, int limit) {
             globalInventoryLimits[res] = limit;
         }
 
+        /// <summary>
+        /// Check if the limit for the specified resourceType is reached
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
         public bool IsLimitReached(ResourceType res) {
             return globalInventory[res] >= globalInventoryLimits[res];
         }
 
+        /// <summary>
+        /// Get Inventory-Limit for the specified resource-type
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
         public int GetLimit(ResourceType res) {
             return globalInventoryLimits[res];
         }
+
+        /// <summary>
+        /// Register InventoryChanged Subscriber
+        /// Optionally Trigger directly on registration
+        /// </summary>
+        /// <param name="listener"></param>
+        /// <param name="trigger"></param>
+        public void RegisterInventoryChangedEvent(EventHandler<Dictionary<ResourceType, int>> listener, bool trigger = false) {
+            EventInventoryChanged += listener;
+            if (trigger) {
+                TriggerInventoryChanged();
+            }
+        }
+
+        /// <summary>
+        /// Unregister InventoryChanged Subscriber
+        /// </summary>
+        /// <param name="listener"></param>
+        public void UnregisterInventoryChangedEvent(EventHandler<Dictionary<ResourceType, int>> listener) {
+            EventInventoryChanged -= listener;
+        }
+
 
         private void TriggerInventoryChanged() {
             EventInventoryChanged?.Invoke(this, globalInventory);

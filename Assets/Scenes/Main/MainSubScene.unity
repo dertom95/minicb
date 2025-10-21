@@ -4452,6 +4452,13 @@ MonoBehaviour:
     prefab: {fileID: 8108672939339955757, guid: e31c9374348a35c489d6439a21c3bb44, type: 3}
   - type: 5
     prefab: {fileID: 7445733671717823309, guid: a292b8d4a500a6c4e9c52a59ae8b8c39, type: 3}
+  resourcePrefabs:
+  - type: 2
+    prefab: {fileID: 7049932333954273347, guid: 30b13525b392e114c91f4f848aa162ab, type: 3}
+  - type: 0
+    prefab: {fileID: 2497032533202971339, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
+  - type: 1
+    prefab: {fileID: 7049932333954273347, guid: 2ee7dddd335f86f4a957ee997c0014bb, type: 3}
 --- !u!4 &1975791396
 Transform:
   m_ObjectHideFlags: 0

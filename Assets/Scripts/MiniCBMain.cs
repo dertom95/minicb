@@ -6,6 +6,8 @@ using System.Collections.Generic;
 /// </summary>
 public class MiniCBMain {
 
+    public static bool initialized = false;
+
     private List<IManager> allManagers = new List<IManager>();
     private List<IManagerUpdateable> updateableManagers = new List<IManagerUpdateable>();
 
@@ -14,18 +16,21 @@ public class MiniCBMain {
     /// </summary>
     /// <param name="baseOnly"></param>
     public void Init(bool baseOnly=false) {
+        RegisterManager(Config.Instance);
+        RegisterManager(AssetManager.Instance);
+        RegisterManager(UIManager.Instance);
         if (!baseOnly) {
             RegisterManager(InputManager.Instance);
         }
-        RegisterManager(Config.Instance);
         RegisterManager(DataManager.Instance);
         RegisterManager(BuildingManager.Instance);
         RegisterManager(JobManager.Instance);
         RegisterManager(SettlerManager.Instance);
-        RegisterManager(UIManager.Instance);
 
         // call the init-methods
         InitManagers();
+
+        initialized = true;
     }
 
     private void RegisterManager(IManager manager) {
