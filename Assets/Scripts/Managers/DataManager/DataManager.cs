@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Manager {
@@ -19,36 +20,70 @@ namespace Manager {
     ///         can benefit the performance.
     /// </summary>
     public class DataManager : IManager {
-        private ushort currentId;
-        private Dictionary<ushort, object> dataStore;
-        private Dictionary<BuildingType, Entity> buildingEntityPrefabs;
-        private Dictionary<ResourceType, Entity> resourceEntityPrefabs;
-
-        private Dictionary<ResourceType, int> globalInventory;
-        private Dictionary<ResourceType, int> globalInventoryLimits;
-
         private static DataManager instance = new DataManager();
-
-        public event EventHandler<Dictionary<ResourceType, int>> EventInventoryChanged;
-
         /// <summary>
         /// Singleton Access
         /// </summary>
         public static DataManager Instance => instance;
+        private EntityManager entityManager;
+        
+        /// <summary>
+        /// next id used for datastore
+        /// </summary>
+        private ushort currentId;
+        /// <summary>
+        /// data store - dictionary
+        /// </summary>
+        private Dictionary<ushort, object> dataStore;
+
+        /// <summary>
+        /// Lookup BuildingType->EntityPrefab
+        /// </summary>
+        private Dictionary<BuildingType, Entity> buildingEntityPrefabs;
+
+        /// <summary>
+        /// Lookup ResourceType->EntityPrefab
+        /// </summary>
+        private Dictionary<ResourceType, Entity> resourceEntityPrefabs;
+
+        // TODO: Extract Inventory in its own Manager
+
+        /// <summary>
+        /// Global Inventory - Store
+        /// </summary>
+        private Dictionary<ResourceType, int> globalInventory;
+        /// <summary>
+        /// Global Inventory - Limits to prevent settlers from taking Jobs that will result in overflowing the limit. (not 100% strict)
+        /// </summary>
+        private Dictionary<ResourceType, int> globalInventoryLimits;
+
+        /// <summary>
+        /// Event triggered if the inventory got changed
+        /// </summary>
+        public event EventHandler<Dictionary<ResourceType, int>> EventInventoryChanged;
 
         private DataManager() {
         }
 
         public void Init() {
+            entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
             currentId = 1000;
             dataStore = new Dictionary<ushort, object>();
             buildingEntityPrefabs = new Dictionary<BuildingType, Entity>();
             resourceEntityPrefabs = new Dictionary<ResourceType, Entity>();
+            InitInventory();
+        }
+
+        private void InitInventory() {
             globalInventory = new Dictionary<ResourceType, int>();
             globalInventoryLimits = new Dictionary<ResourceType, int>();
             foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType))) {
                 globalInventory[resourceType] = 0;
                 globalInventoryLimits[resourceType] = 50;
+            }
+            foreach (ResourceAmount res in Config.Instance.InitialInventory) {
+                globalInventory[res.resourceType] = res.resourceAmount;
             }
         }
 
@@ -175,7 +210,6 @@ namespace Manager {
             return currentAmount >= amount;
         }
 
-
         public bool RemoveResFromGlobalInventory(ResourceAmount resAmount) {
             return RemoveResFromGlobalInventory(resAmount.resourceType, resAmount.resourceAmount);
         }
@@ -186,6 +220,32 @@ namespace Manager {
             int newAmount = globalInventory[res] = currentAmount - amount;
             TriggerInventoryChanged();
             return newAmount >= 0;
+        }
+
+        /// <summary>
+        /// Check if the building cost resources are in the global inventory
+        /// </summary>
+        /// <param name="buildingType"></param>
+        /// <returns></returns>
+        public bool HasEnoughResourcesToBuildBuilding(BuildingType buildingType) {
+            Entity buildingEntityPrefab = GetBuildingEntityPrefab(buildingType);
+            BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(buildingEntityPrefab);
+            bool enoughWood = HasResInGlobalInventory(ResourceType.Wood, buildingComponent.buildingCosts.wood);
+            bool enoughStone = HasResInGlobalInventory(ResourceType.Stone, buildingComponent.buildingCosts.stone);
+            bool result = enoughWood && enoughStone;
+            return result;
+        }
+
+        public bool TryToRemoveBuildingCostsFromInventory(BuildingType buildingType) {
+            if (!HasEnoughResourcesToBuildBuilding(buildingType)) {
+                return false;
+            }
+            Entity buildingEntityPrefab = GetBuildingEntityPrefab(buildingType);
+            BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(buildingEntityPrefab);
+            RemoveResFromGlobalInventory(ResourceType.Wood, buildingComponent.buildingCosts.wood);
+            RemoveResFromGlobalInventory(ResourceType.Stone, buildingComponent.buildingCosts.stone);
+
+            return true;
         }
 
         public void SetLimit(ResourceType res, int limit) {

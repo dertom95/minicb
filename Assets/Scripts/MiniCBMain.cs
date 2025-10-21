@@ -17,6 +17,7 @@ public class MiniCBMain {
         if (!baseOnly) {
             RegisterManager(InputManager.Instance);
         }
+        RegisterManager(Config.Instance);
         RegisterManager(DataManager.Instance);
         RegisterManager(BuildingManager.Instance);
         RegisterManager(JobManager.Instance);

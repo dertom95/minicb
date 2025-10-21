@@ -64,7 +64,7 @@ namespace Manager {
         }
 
         private bool IsMouseButtonDown(int btn, bool ignoreButtonIfOverUI = true) {
-            return Input.GetMouseButtonDown(btn) && (!ignoreButtonIfOverUI || UIManager.Instance.IsMouseOverUI());
+            return Input.GetMouseButtonDown(btn) && (!ignoreButtonIfOverUI || !UIManager.Instance.IsMouseOverUI());
         }
 
         private void InstantiateBuildingOnLeftClick() {
@@ -93,8 +93,18 @@ namespace Manager {
 
                 if (collisionWorld.CastRay(rayInput, out Unity.Physics.RaycastHit hit)) {
                     Debug.Log($"Hit: Entity:{hit.Entity}  Pos:{hit.Position} ColKey:{hit.ColliderKey}");
-                     
+
+                    bool hadEnoughResourceToBuildBuilding = DataManager.Instance.TryToRemoveBuildingCostsFromInventory(currentBuilding);
+                    if (!hadEnoughResourceToBuildBuilding) {
+                        UnityEngine.Debug.Log("Not enough resources to build:" + currentBuilding);
+                        return;
+                    }
                     Entity newEntity = BuildingManager.Instance.SpawnBuilding(currentBuilding, hit.Position);
+
+                    if (newEntity == Entity.Null) {
+                        // couldn't build
+                        return;
+                    }
 
                     //Entity entityPrefab = DataManager.Instance.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
                     //Entity newEntity = entityManager.Instantiate(entityPrefab);

@@ -28,6 +28,8 @@ namespace Manager {
             dataManager = DataManager.Instance;
         }
 
+
+
         /// <summary>
         /// Spawn building with position/rotation(degree)/scale
         /// </summary>
