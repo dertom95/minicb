@@ -1,8 +1,8 @@
 using Data;
 using Manager;
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Config : IManager {
     private static Config instance = new Config();

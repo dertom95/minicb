@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MiniCB::ConfigSO
   initialInventory:
   - resourceType: 0
-    resourceAmount: 15
+    resourceAmount: 40
   - resourceType: 1
-    resourceAmount: 15
+    resourceAmount: 40
   initialAmountSettlers: 3

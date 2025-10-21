@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingComponentAuthoring
   buildingType: 0
   buildingCosts:
-    wood: 7
+    wood: 3
     stone: 3
     timeInSeconds: 20
   maxJobs: 2
