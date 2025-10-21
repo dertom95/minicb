@@ -46,19 +46,37 @@ namespace Manager {
         /// </summary>
         /// <returns></returns>
         public bool IsMouseOverUI() {
-            var root = BuildingButtonSpawner.Instance.uiDocument.rootVisualElement;
+            var uiDoc = BuildingButtonSpawner.Instance?.uiDocument;
+            if (uiDoc == null) {
+                Debug.LogWarning("UIDocument is null");
+                return false;
+            }
+
+            var root = uiDoc.rootVisualElement;
+            if (root == null) {
+                Debug.LogWarning("rootVisualElement is null");
+                return false;
+            }
+
+            if (root.panel == null) {
+                Debug.LogWarning("root.panel is null");
+                return false;
+            }
+
+            //var root = BuildingButtonSpawner.Instance.uiDocument.rootVisualElement;
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             float flippedY = Screen.height - mousePosition.y;
-            Vector2 mousePos = new Vector2(mousePosition.x, Screen.height - mousePosition.y);
-
+//            float flippedY = mousePosition.y;
+            Vector2 mousePos = new Vector2(mousePosition.x, flippedY);
+            Vector2 ppos = RuntimePanelUtils.ScreenToPanel(root.panel, mousePos);
             // Pick the topmost element under the mouse
-            VisualElement elementUnderMouse = root.panel.Pick(mousePos);
+            VisualElement elementUnderMouse = root.panel.Pick(ppos);
 
             if (elementUnderMouse != null) {
-                //Debug.Log($"{mousePosition} : Mouse is over UI element: {elementUnderMouse.name}");
+                Debug.Log($"{mousePos}|{ppos} : Mouse is over UI element: {elementUnderMouse.name}");
                 return true;
             } else {
-                //Debug.Log($"{mousePosition} : Mouse is NOT over any UI element");
+                Debug.Log($"{mousePos}|{ppos} : Mouse is NOT over any UI element");
                 return false;
             }
         }

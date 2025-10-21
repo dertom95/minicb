@@ -1,5 +1,3 @@
-using Manager;
-using Unity.Collections;
 using Unity.Entities;
 
 namespace Manager {
@@ -31,6 +29,10 @@ namespace Manager {
             // Query for BuildingPrefabBufferElement buffers
             var buildingQuery = entityManager.CreateEntityQuery(ComponentType.ReadOnly<BuildingPrefabBufferElement>());
 
+            if (!buildingQuery.HasSingleton<BuildingPrefabBufferElement>()) {
+                UnityEngine.Debug.Log("assets not found,yet!");
+                return false;
+            }
             DynamicBuffer<BuildingPrefabBufferElement> buildingPrefabBuffer = buildingQuery.GetSingletonBuffer<BuildingPrefabBufferElement>();
             
             foreach (var entry in buildingPrefabBuffer) {
