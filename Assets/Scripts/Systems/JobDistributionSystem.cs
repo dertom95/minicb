@@ -1,5 +1,7 @@
+using BuildingLogic;
 using Components;
 using Components.Tags;
+using Manager;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -39,6 +41,14 @@ namespace Systems {
             for (int jobIndex = 0; jobIndex < jobEntities.Length; ++jobIndex) {
                 Entity jobEntity = jobEntities[jobIndex];
                 JobComponent job = jobComponents[jobIndex];
+                
+                IJobLogic jobLogic = JobManager.Instance.GetJobLogic(job.jobType);
+                
+                // check if the job can be assigned at all
+                bool canAssignJob = jobLogic.CanAcceptJob(jobEntity, state.EntityManager, ref job);
+                if (!canAssignJob) {
+                    continue;
+                }
 
                 bool assigned = false;
 
@@ -56,7 +66,7 @@ namespace Systems {
                     if ((settler.acceptJobs & job.jobType) != 0) {
                         // Assign job to settler and settler to job
                         job.jobSettler = settlerEntity;
-                        job.jobState = Data.JobState.MovingToTarget;
+                        job.jobState = Data.JobState.Start;
                         settler.currentJob = jobEntity;
                         settler.settlerState = Data.SettlerState.Working;
 

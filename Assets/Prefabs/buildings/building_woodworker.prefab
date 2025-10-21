@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9036349345337154456}
   - component: {fileID: -767275755699375607}
   - component: {fileID: -601040873147426798}
+  - component: {fileID: 6484508742108930280}
   m_Layer: 0
   m_Name: building_woodworker
   m_TagString: Untagged
@@ -58,14 +59,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bea615c27b965847b237e8220abfea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MiniCB::BuildingComponentAuthoring
-  buildingType: 0
+  buildingType: 5
   buildingCosts:
-    wood: 0
-    stone: 0
-    timeInSeconds: 0
-  maxJobs: 0
-  jobType: 0
-  jobDurationInSeconds: 0
+    wood: 4
+    stone: 4
+    timeInSeconds: 10
+  maxJobs: 1
+  jobType: 4
+  jobDurationInSeconds: 10
+--- !u!114 &6484508742108930280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7445733671717823309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32695c708111f14d846dc4800484816, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::ResourceToResourceAuthoring
+  inputResources:
+  - resourceType: 0
+    resourceAmount: 2
+  - resourceType: 1
+    resourceAmount: 1
+  outputResources:
+  - resourceType: 3
+    resourceAmount: 1
+  searchResourceType: 0
 --- !u!1001 &1418473750654841288
 PrefabInstance:
   m_ObjectHideFlags: 0

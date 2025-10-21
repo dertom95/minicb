@@ -21,7 +21,6 @@ namespace Manager {
         public static JobManager Instance => instance;
 
         private Dictionary<JobType, IJobLogic> jobLogicLookup;
-        private Dictionary<BuildingType, Func<Entity, Entity>> buildingJobSpawner;
 
         private EntityManager entityManager;
         private DataManager dataManager;
@@ -45,11 +44,7 @@ namespace Manager {
             jobLogicLookup = new Dictionary<JobType, IJobLogic>();
             jobLogicLookup.Add(JobType.Construction, new JobConstruction());
             jobLogicLookup.Add(JobType.EntityToResource, new JobEntityToResource());
-        }
-
-        private void InitJobSpawner() {
-            buildingJobSpawner = new Dictionary<BuildingType, Func<Entity, Entity>>();
-            
+            jobLogicLookup.Add(JobType.ConvertResource, new JobResourceToResource());
         }
 
         public void Dispose() {

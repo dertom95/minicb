@@ -1,7 +1,9 @@
 using Codice.CM.Client.Differences;
 using Components;
 using Data;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine.Assertions;
@@ -42,6 +44,10 @@ namespace Manager {
             resourceEntityPrefabs = new Dictionary<ResourceType, Entity>();
             globalInventory = new Dictionary<ResourceType, int>();
             globalInventoryLimits = new Dictionary<ResourceType, int>();
+            foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType))) {
+                globalInventory[resourceType] = 0;
+                globalInventoryLimits[resourceType] = 50;
+            }
         }
 
         public void Dispose() {
@@ -135,16 +141,60 @@ namespace Manager {
         }
 
         /// <summary>
-        /// temporary global inventory handling
+        /// Add resource to inventory
         /// </summary>
         /// <param name="inventoryComponent"></param>
         /// <returns></returns>
         public int AddToGlobalInventory(ResourceType res, int amount) {
             int newAmount = globalInventory[res] + amount;
             globalInventory[res] = newAmount;
+            UnityEngine.Debug.Log($"Added to globalInventory: {res}:{amount} => Total:{amount}");
             return newAmount;
         }
 
+        /// <summary>
+        /// Add resource to inventory
+        /// </summary>
+        /// <param name="resAmount"></param>
+        /// <returns></returns>
+        public int AddToGlobalInventory(ResourceAmount resAmount) {
+            return AddToGlobalInventory(resAmount.resourceType, resAmount.resourceAmount);
+        }
+
+        /// <summary>
+        /// Check if the specific amount for that resource is available
+        /// </summary>
+        /// <param name="res"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public bool HasResInGlobalInventory(ResourceType res, int amount) {
+            globalInventory.TryGetValue(res, out int currentAmount);
+            return currentAmount >= amount;
+        }
+
+
+        public bool RemoveResFromGlobalInventory(ResourceAmount resAmount) {
+            return RemoveResFromGlobalInventory(resAmount.resourceType, resAmount.resourceAmount);
+        }
+
+        public bool RemoveResFromGlobalInventory(ResourceType res,int amount) {
+            Assert.IsTrue(HasResInGlobalInventory(res, amount));
+            globalInventory.TryGetValue(res, out int currentAmount);
+            int newAmount = globalInventory[res] = currentAmount - amount;
+            return newAmount >= 0;
+        }
+
+        public void SetLimit(ResourceType res, int limit) {
+            globalInventoryLimits[res] = limit;
+        }
+
+        public bool IsLimitReached(ResourceType res) {
+            return globalInventory[res] >= globalInventoryLimits[res];
+        }
+
+        public int GetLimit(ResourceType res) {
+            return globalInventoryLimits[res];
+        }
     }
 
 }

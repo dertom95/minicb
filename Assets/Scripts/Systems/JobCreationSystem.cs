@@ -28,15 +28,11 @@ namespace Systems {
             foreach (
                 (
                     RefRW<BuildingComponent> buildingComp,
-                    EntityToResourceComponent entityToResourceComp,
-                    FieldOfInfluenceComponent fieldOfInfluenceComp,
                     LocalTransform localTransform,
                     Entity entity
                 )
                 in SystemAPI.Query<
                     RefRW<BuildingComponent>,
-                    EntityToResourceComponent,
-                    FieldOfInfluenceComponent,
                     LocalTransform
                 >()
                 .WithAll<TagWorking, TagBuilt, TagCreateJobs>()
@@ -45,19 +41,34 @@ namespace Systems {
                 // Check job amount constraint
                 Assert.IsTrue(buildingComp.ValueRO.currentJobAmount < buildingComp.ValueRO.maxJobs);
 
-                // search for specific resource
-                Entity resourceEntity = DataManager.Instance.GetResourceEntityInRadius(
-                    localTransform.Position,
-                    fieldOfInfluenceComp.radius,
-                    entityToResourceComp.searchResourceType,
-                    decreaseIterations: true
-                );
+                Entity target = Entity.Null;
 
-                if (resourceEntity != Entity.Null) {
+                // EntityToResource-specific
+                if (   SystemAPI.HasComponent<EntityToResourceComponent>(entity)
+                    && SystemAPI.HasComponent<FieldOfInfluenceComponent>(entity)
+                ) {
+                    EntityToResourceComponent entityToResourceComp = SystemAPI.GetComponent<EntityToResourceComponent>(entity);
+                    FieldOfInfluenceComponent fieldOfInfluenceComp = SystemAPI.GetComponent<FieldOfInfluenceComponent>(entity);
+
+                    // search for specific resource
+                    Entity resourceEntity = DataManager.Instance.GetResourceEntityInRadius(
+                        localTransform.Position,
+                        fieldOfInfluenceComp.radius,
+                        entityToResourceComp.searchResourceType,
+                        decreaseIterations: true
+                    );
+                    target = resourceEntity;
+                } else if (SystemAPI.HasComponent<ResourceToResourceComponent>(entity)) {
+                    target = entity;
+                } else {
+                    Assert.IsTrue(false, "Couldn't determine the buildingType");
+                }
+
+                if (target != Entity.Null) {
                     // found a resource entity in my radius
                     JobManager.Instance.CreateGenericJob(
                         owner: entity,
-                        jobTarget: resourceEntity,
+                        jobTarget: target,
                         jobType: buildingComp.ValueRO.jobType,
                         duration: buildingComp.ValueRO.jobDurationInSeconds,
                         ecb: ecb
@@ -72,6 +83,8 @@ namespace Systems {
                 }
             }
         }
+
+
 
     }
 }

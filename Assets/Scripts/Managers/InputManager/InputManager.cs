@@ -51,6 +51,9 @@ namespace Manager {
             } else if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 currentBuilding = BuildingType.mason;
                 Debug.Log("Selected mason");
+            } else if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                currentBuilding = BuildingType.woodworker;
+                Debug.Log("Selected woodworker");
             }
         }
 

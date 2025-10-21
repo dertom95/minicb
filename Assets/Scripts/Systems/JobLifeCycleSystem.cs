@@ -57,9 +57,17 @@ namespace Systems {
 
             IJobLogic jobLogic = JobManager.Instance.GetJobLogic(job.jobType);
 
+
+            //█▀ ▀█▀ ▄▀█ █▀█ ▀█▀ █▀▀ █▀▄
+            //▄█ ░█░ █▀█ █▀▄ ░█░ ██▄ █▄▀
+            if (job.jobState == Data.JobState.Start) {
+                jobLogic.OnStarted(ref ecb, ref jobEntity, ref state, ref job, dt);
+                job.jobState = JobState.MovingToTarget;
+                ecb.SetComponent(jobEntity, job);
+            }
             //█▀▄▀█ █▀█ █░█ █ █▄░█ █▀▀   ▀█▀ █▀█   ▀█▀ ▄▀█ █▀█ █▀▀ █▀▀ ▀█▀
             //█░▀░█ █▄█ ▀▄▀ █ █░▀█ █▄█   ░█░ █▄█   ░█░ █▀█ █▀▄ █▄█ ██▄ ░█░            
-            if (job.jobState == Data.JobState.MovingToTarget || job.jobState == Data.JobState.MovingToOwner) {
+            else if (job.jobState == Data.JobState.MovingToTarget || job.jobState == Data.JobState.MovingToOwner) {
                 RefRW<LocalTransform> settlerTransform = SystemAPI.GetComponentRW<LocalTransform>(job.jobSettler);
                 RefRW<SettlerComponent> settlerComponent = SystemAPI.GetComponentRW<SettlerComponent>(job.jobSettler);
 
@@ -118,6 +126,7 @@ namespace Systems {
 
                 bool isJobFinished = !jobLogic.NeedsToGoBackToOwner();
                 if (isJobFinished) {
+                    jobLogic.OnExit(ref ecb, ref jobEntity, ref state, ref job, dt);
                     cleanupJob(ref ecb, ref jobEntity, ref state, ref job, dt);
                 } else {
                     LocalTransform ownerTransform = SystemAPI.GetComponent<LocalTransform>(job.jobOwner);
@@ -132,6 +141,7 @@ namespace Systems {
                 // finished
                 jobLogic.OnReachedOwner(ref ecb, ref jobEntity, ref state, ref job, dt);
 
+                jobLogic.OnExit(ref ecb, ref jobEntity, ref state, ref job, dt);
                 cleanupJob(ref ecb, ref jobEntity, ref state, ref job, dt);
             }
         }

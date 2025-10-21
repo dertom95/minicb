@@ -64,6 +64,10 @@ namespace Data {
         /// </summary>
         free,
         /// <summary>
+        /// TransitionState at the very beginning of the job after assignment
+        /// </summary>
+        Start,
+        /// <summary>
         /// settler is moving to target
         /// </summary>
         MovingToTarget,
