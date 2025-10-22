@@ -76,3 +76,6 @@ crashlytics-build.properties
 
 Assets/SceneDependencyCache
 Assets/SceneDependencyCache.meta
+
+*.blend1
+*.blend2
