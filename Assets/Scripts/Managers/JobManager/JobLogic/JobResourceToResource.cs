@@ -40,9 +40,17 @@ public class JobResourceToResource : JobLogicBase {
         return true;
     }
 
-    public override void OnStarted(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+    public override bool OnStarted(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        bool success = base.OnStarted(ref ecb, ref jobEntity, ref state, ref job, dt);
+        if (!success) {
+            return false;
+        }
+
         EntityManager em = state.EntityManager;
-        Assert.IsTrue(CanAcceptJob(jobEntity, em, ref job));
+        bool requirementSuccess = CanAcceptJob(jobEntity, em, ref job);
+        if (!requirementSuccess) {
+            return false;
+        }
 
         DynamicBuffer<RTRInputResource> inputResources = em.GetBuffer<RTRInputResource>(job.jobOwner);
 
@@ -50,17 +58,15 @@ public class JobResourceToResource : JobLogicBase {
 
         // check if the inputResources are available in the inventory
         foreach (RTRInputResource resource in inputResources) {
-            bool success = dm.RemoveResFromGlobalInventory(resource.resIn);
-            if (!success) {
-                Debug.LogError("Couldn't remove all resources for R2R-Job!");
-            }
+            success = dm.RemoveResFromGlobalInventory(resource.resIn);
+            Assert.IsTrue(success, "ResourceRemoval should be guaranteed by CanAcceptJob(..). Only possible way for this to fail is using multithreading!?");
         }
-    }
-
-    public override void OnWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt, float progress) {
+        return true;
     }
 
     public override void OnFinishedWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        base.OnFinishedWorking(ref ecb, ref jobEntity, ref state, ref job, dt);
+
         EntityManager em = state.EntityManager;
         DynamicBuffer<RTROutputResource> outputResources = em.GetBuffer<RTROutputResource>(job.jobOwner);
 

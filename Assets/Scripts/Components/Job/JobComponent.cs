@@ -23,6 +23,11 @@ namespace Components {
         public Entity jobTarget;
 
         /// <summary>
+        /// One generic entity-reference to do something job-specific
+        /// </summary>
+        public Entity jobGenericEntity;
+
+        /// <summary>
         /// The position where the job is located
         /// </summary>
         public float3 jobPosition;

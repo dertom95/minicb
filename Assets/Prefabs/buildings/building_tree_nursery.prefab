@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8061179148054495980}
   - component: {fileID: 8745227476165698035}
   - component: {fileID: 8054139952498123757}
+  - component: {fileID: 4691366950231773629}
+  - component: {fileID: -7858890566309574917}
   m_Layer: 0
   m_Name: building_tree_nursery
   m_TagString: Untagged
@@ -60,12 +62,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: MiniCB::BuildingComponentAuthoring
   buildingType: 0
   buildingCosts:
-    wood: 0
-    stone: 0
-    timeInSeconds: 0
-  maxJobs: 0
-  jobType: 0
-  jobDurationInSeconds: 0
+    wood: 3
+    stone: 1
+    timeInSeconds: 10
+  maxJobs: 1
+  jobType: 8
+  jobDurationInSeconds: 10
+--- !u!114 &4691366950231773629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448284749141492630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8c7cc47f9903e41bc1d83eaccbe9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::FieldOfInfluenceAuthoring
+  radius: 15
+--- !u!114 &-7858890566309574917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448284749141492630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2149c468b7bda4bbb2b11b53954bad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::SpawnEntityComponentAuthoring
+  mode: 0
+  spawnPrefabs:
+  - {fileID: 2497032533202971339, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
 --- !u!1001 &6263015357406050904
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -100,7 +100,11 @@ namespace Data {
         /// <summary>
         /// TransitionState after MovingToOwner finished
         /// </summary>
-        ReachedMovingToOwner
+        ReachedMovingToOwner,
+        /// <summary>
+        /// Something went wrong and the job is going to be terminated
+        /// </summary>
+        Quit
 
     }
 

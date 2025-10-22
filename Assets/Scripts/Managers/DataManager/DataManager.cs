@@ -23,7 +23,7 @@ namespace Manager {
         /// </summary>
         public static DataManager Instance => instance;
         private EntityManager entityManager;
-        
+
         /// <summary>
         /// next id used for datastore
         /// </summary>
@@ -77,7 +77,7 @@ namespace Manager {
             globalInventoryLimits = new Dictionary<ResourceType, int>();
             foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType))) {
                 globalInventory[resourceType] = 0;
-                globalInventoryLimits[resourceType] = 50;
+                globalInventoryLimits[resourceType] = 75;
             }
             foreach (ResourceAmount res in Config.Instance.InitialInventory) {
                 globalInventory[res.resourceType] = res.resourceAmount;
@@ -95,7 +95,7 @@ namespace Manager {
         /// <param name="data"></param>
         /// <returns></returns>
         public int StoreData(object data) {
-            Assert.IsFalse(data == null,"It is not allowed to put null data into the store");
+            Assert.IsFalse(data == null, "It is not allowed to put null data into the store");
             Assert.IsFalse(currentId < short.MaxValue, "the datastore reached its limit! consider using int as key instead!");
             ushort objectId = currentId;
             dataStore[objectId] = data;
@@ -176,10 +176,10 @@ namespace Manager {
         /// <returns></returns>
         public Entity GetResourceEntityInRadius(float3 position, float radius, ResourceType resourceType, bool decreaseIterations = false) {
             Entity entity = PhysicsUtils.FindFirstEntityInRadius(
-                World.DefaultGameObjectInjectionWorld, 
-                position, 
-                radius, 
-                Config.LAYER_RESOURCE, 
+                World.DefaultGameObjectInjectionWorld,
+                position,
+                radius,
+                1u << Config.LAYER_RESOURCE,
                 (em, entity) => {
                     if (em.HasComponent<ResourceComponent>(entity)) {
                         ResourceComponent resourceComponent = em.GetComponentData<ResourceComponent>(entity);
@@ -246,7 +246,7 @@ namespace Manager {
         /// <param name="res"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public bool RemoveResFromGlobalInventory(ResourceType res,int amount) {
+        public bool RemoveResFromGlobalInventory(ResourceType res, int amount) {
             Assert.IsTrue(HasResInGlobalInventory(res, amount));
             globalInventory.TryGetValue(res, out int currentAmount);
             int newAmount = globalInventory[res] = currentAmount - amount;
@@ -338,6 +338,7 @@ namespace Manager {
         private void TriggerInventoryChanged() {
             EventInventoryChanged?.Invoke(this, globalInventory);
         }
+
     }
 
 }

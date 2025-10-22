@@ -23,7 +23,8 @@ public abstract class JobLogicBase : IJobLogic {
     /// <summary>
     /// A settler got assigned to this job
     /// </summary>
-    public virtual void OnStarted(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+    public virtual bool OnStarted(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        return true;
     }
 
     /// <summary>

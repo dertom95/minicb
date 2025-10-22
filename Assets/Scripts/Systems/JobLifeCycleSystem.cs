@@ -61,8 +61,13 @@ namespace Systems {
             //█▀ ▀█▀ ▄▀█ █▀█ ▀█▀ █▀▀ █▀▄
             //▄█ ░█░ █▀█ █▀▄ ░█░ ██▄ █▄▀
             if (job.jobState == Data.JobState.Start) {
-                jobLogic.OnStarted(ref ecb, ref jobEntity, ref state, ref job, dt);
-                job.jobState = JobState.MovingToTarget;
+                bool success = jobLogic.OnStarted(ref ecb, ref jobEntity, ref state, ref job, dt);
+                if ( !success) {
+                    // something went wrong! quit the job
+                    job.jobState = JobState.Quit;
+                } else {
+                    job.jobState = JobState.MovingToTarget;
+                }
                 ecb.SetComponent(jobEntity, job);
             }
             //█▀▄▀█ █▀█ █░█ █ █▄░█ █▀▀   ▀█▀ █▀█   ▀█▀ ▄▀█ █▀█ █▀▀ █▀▀ ▀█▀
@@ -126,6 +131,7 @@ namespace Systems {
 
                 bool isJobFinished = !jobLogic.NeedsToGoBackToOwner();
                 if (isJobFinished) {
+                    // TODO: Do we want to use (new) JobState-Quit for this?
                     jobLogic.OnExit(ref ecb, ref jobEntity, ref state, ref job, dt);
                     cleanupJob(ref ecb, ref jobEntity, ref state, ref job, dt);
                 } else {
@@ -141,6 +147,11 @@ namespace Systems {
                 // finished
                 jobLogic.OnReachedOwner(ref ecb, ref jobEntity, ref state, ref job, dt);
 
+                // TODO: Do we want to use (new) JobState-Quit for this?
+                jobLogic.OnExit(ref ecb, ref jobEntity, ref state, ref job, dt);
+                cleanupJob(ref ecb, ref jobEntity, ref state, ref job, dt);
+            }
+            else if (job.jobState == JobState.Quit) {
                 jobLogic.OnExit(ref ecb, ref jobEntity, ref state, ref job, dt);
                 cleanupJob(ref ecb, ref jobEntity, ref state, ref job, dt);
             }

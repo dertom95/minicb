@@ -27,6 +27,8 @@ namespace Manager {
         private EntityQuery jobComponentQuery;
         private EntityQuery settlerComponentQuery;
 
+        private EntityArchetype archetypeJob;
+
         private JobManager() {
         }
 
@@ -34,6 +36,8 @@ namespace Manager {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             dataManager = DataManager.Instance;
             jobComponentQuery = entityManager.CreateEntityQuery(typeof(JobComponent));
+            archetypeJob = entityManager.CreateArchetype(typeof(LocalTransform), typeof(JobComponent));
+            
             InitJobLogic();
         }
 
@@ -45,6 +49,7 @@ namespace Manager {
             jobLogicLookup.Add(JobType.Construction, new JobConstruction());
             jobLogicLookup.Add(JobType.EntityToResource, new JobEntityToResource());
             jobLogicLookup.Add(JobType.ConvertResource, new JobResourceToResource());
+            jobLogicLookup.Add(JobType.SpawnEntity, new JobSpawnEntity());
         }
 
         public void Dispose() {
@@ -78,11 +83,12 @@ namespace Manager {
         public Entity CreateGenericJob(Entity owner, Entity jobTarget, JobType jobType, float duration, EntityCommandBuffer? ecb=null) {
             Assert.AreNotEqual(Entity.Null, owner);
 
-            Entity jobEntity = entityManager.CreateEntity();
+            Entity jobEntity;
 
             LocalTransform localTransform = entityManager.GetComponentData<LocalTransform>(jobTarget);
 
             if (ecb.HasValue) {
+                jobEntity = ecb.Value.CreateEntity(archetypeJob);
                 ecb.Value.AddComponent(jobEntity, new JobComponent {
                     jobOwner = owner,
                     jobTarget = jobTarget,
@@ -95,6 +101,8 @@ namespace Manager {
                 ecb.Value.AddComponent<TagWorking>(jobEntity);
                 ecb.Value.SetComponentEnabled<TagWorking>(jobEntity, false);
             } else {
+                jobEntity = entityManager.CreateEntity(archetypeJob);
+
                 entityManager.AddComponentData(jobEntity, new JobComponent {
                     jobOwner = owner,
                     jobTarget = jobTarget,

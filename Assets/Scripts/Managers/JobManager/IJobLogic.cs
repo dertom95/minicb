@@ -19,9 +19,9 @@ namespace BuildingLogic {
         bool CanAcceptJob(Entity jobEntity, EntityManager em, ref JobComponent job);
         
         /// <summary>
-        /// A settler got assigned to this job
+        /// A settler got assigned to this job. Returns false if start was not possible (e.g. because there were problems with resources or no freespace,etc)
         /// </summary>
-        void OnStarted(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt);
+        bool OnStarted(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt);
 
         /// <summary>
         /// The settler reached the target where it is starting its work

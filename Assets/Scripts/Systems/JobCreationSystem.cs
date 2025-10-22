@@ -2,11 +2,14 @@ using Components;
 using Components.Tags;
 using Manager;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine.Assertions;
 
 namespace Systems {
     public partial struct JobCreationSystem : ISystem {
+
+        private static Random random = new Random();
 
         public void OnUpdate(ref SystemState state) {
             EntityCommandBuffer ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
@@ -29,7 +32,7 @@ namespace Systems {
                 (
                     RefRW<BuildingComponent> buildingComp,
                     LocalTransform localTransform,
-                    Entity entity
+                    Entity buildingEntity
                 )
                 in SystemAPI.Query<
                     RefRW<BuildingComponent>,
@@ -41,14 +44,15 @@ namespace Systems {
                 // Check job amount constraint
                 Assert.IsTrue(buildingComp.ValueRO.currentJobAmount < buildingComp.ValueRO.maxJobs);
 
-                Entity target = Entity.Null;
+                Entity jobTarget = Entity.Null;
 
                 // EntityToResource-specific
-                if (   SystemAPI.HasComponent<EntityToResourceComponent>(entity)
-                    && SystemAPI.HasComponent<FieldOfInfluenceComponent>(entity)
+                if (   SystemAPI.HasComponent<EntityToResourceComponent>(buildingEntity)
+                    && SystemAPI.HasComponent<FieldOfInfluenceComponent>(buildingEntity)
                 ) {
-                    EntityToResourceComponent entityToResourceComp = SystemAPI.GetComponent<EntityToResourceComponent>(entity);
-                    FieldOfInfluenceComponent fieldOfInfluenceComp = SystemAPI.GetComponent<FieldOfInfluenceComponent>(entity);
+                    // find a valid resource at job-creation
+                    EntityToResourceComponent entityToResourceComp = SystemAPI.GetComponent<EntityToResourceComponent>(buildingEntity);
+                    FieldOfInfluenceComponent fieldOfInfluenceComp = SystemAPI.GetComponent<FieldOfInfluenceComponent>(buildingEntity);
 
                     // search for specific resource
                     Entity resourceEntity = DataManager.Instance.GetResourceEntityInRadius(
@@ -57,18 +61,20 @@ namespace Systems {
                         entityToResourceComp.searchResourceType,
                         decreaseIterations: true
                     );
-                    target = resourceEntity;
-                } else if (SystemAPI.HasComponent<ResourceToResourceComponent>(entity)) {
-                    target = entity;
+                    jobTarget = resourceEntity;
+                } else if (SystemAPI.HasComponent<ResourceToResourceComponent>(buildingEntity)) {
+                    jobTarget = buildingEntity;
+                } else if (SystemAPI.HasComponent<SpawnEntityComponent>(buildingEntity)){
+                    jobTarget = buildingEntity; // for now set target to the building! Later set jobEntity's position to the spawnPosition and use target
                 } else {
                     Assert.IsTrue(false, "Couldn't determine the buildingType");
                 }
 
-                if (target != Entity.Null) {
+                if (jobTarget != Entity.Null) {
                     // found a resource entity in my radius
                     JobManager.Instance.CreateGenericJob(
-                        owner: entity,
-                        jobTarget: target,
+                        owner: buildingEntity,
+                        jobTarget: jobTarget,
                         jobType: buildingComp.ValueRO.jobType,
                         duration: buildingComp.ValueRO.jobDurationInSeconds,
                         ecb: ecb
@@ -78,7 +84,7 @@ namespace Systems {
 
                     bool reachedMaxJobAmount = buildingComp.ValueRW.currentJobAmount == buildingComp.ValueRO.maxJobs;
                     if (reachedMaxJobAmount) {
-                        ecb.SetComponentEnabled<TagCreateJobs>(entity, false);
+                        ecb.SetComponentEnabled<TagCreateJobs>(buildingEntity, false);
                     }
                 }
             }

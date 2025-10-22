@@ -16,11 +16,13 @@ namespace Systems {
         public void OnCreate(ref SystemState state) {
             jobQuery = state.GetEntityQuery(
                 ComponentType.ReadWrite<JobComponent>(),
-                ComponentType.Exclude<TagWorking>());
+                ComponentType.Exclude<TagWorking>()
+            );
 
             settlerQuery = state.GetEntityQuery(
                 ComponentType.ReadWrite<SettlerComponent>(),
-                ComponentType.Exclude<TagWorking>());
+                ComponentType.Exclude<TagWorking>()
+            );
         }
 
         public void OnUpdate(ref SystemState state) {
@@ -36,9 +38,7 @@ namespace Systems {
             // Track settlers assigned this update to avoid multiple assignments
             NativeHashSet<Entity> assignedSettlers = new NativeHashSet<Entity>(settlerEntities.Length, Allocator.Temp);
 
-            int settlerIndex = 0;
-
-            for (int jobIndex = 0; jobIndex < jobEntities.Length; ++jobIndex) {
+            for (int jobIndex = 0; jobIndex < jobEntities.Length; jobIndex++) {
                 Entity jobEntity = jobEntities[jobIndex];
                 JobComponent job = jobComponents[jobIndex];
                 
@@ -53,10 +53,9 @@ namespace Systems {
                 bool assigned = false;
 
                 // Find next settler that accepts this job type and is not assigned yet
-                while (settlerIndex < settlerEntities.Length) {
+                for (int settlerIndex=0,settlerIndexEnd = settlerEntities.Length; settlerIndex < settlerIndexEnd; settlerIndex++) {
                     Entity settlerEntity = settlerEntities[settlerIndex];
                     SettlerComponent settler = settlerComponents[settlerIndex];
-                    settlerIndex++;
 
                     if (assignedSettlers.Contains(settlerEntity)) {
                         continue; // Already assigned this update
@@ -67,6 +66,7 @@ namespace Systems {
                         // Assign job to settler and settler to job
                         job.jobSettler = settlerEntity;
                         job.jobState = Data.JobState.Start;
+
                         settler.currentJob = jobEntity;
                         settler.settlerState = Data.SettlerState.Working;
 
@@ -80,13 +80,9 @@ namespace Systems {
 
                         assignedSettlers.Add(settlerEntity);
                         assigned = true;
+
                         break;
                     }
-                }
-
-                if (!assigned) {
-                    // No suitable settler found for this job, continue to next job
-                    continue;
                 }
             }
 

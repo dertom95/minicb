@@ -15,6 +15,8 @@ public class JobConstruction : JobLogicBase {
     }
 
     public override void OnWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt, float progress) {
+        base.OnWorking(ref ecb, ref jobEntity, ref state, ref job, dt, progress);
+
         EntityManager em = state.EntityManager;
         LocalTransform settlerTransform = em.GetComponentData<LocalTransform>(job.jobOwner);
         settlerTransform.Scale = math.lerp(BuildingManager.BUILDING_CONSTRUCTIONSITE_SCALE, 1.0f, progress);
@@ -22,6 +24,8 @@ public class JobConstruction : JobLogicBase {
     }
 
     public override void OnFinishedWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        base.OnFinishedWorking(ref ecb, ref jobEntity, ref state, ref job, dt);
+
         ecb.RemoveComponent<TagUnderConstruction>(job.jobOwner);
         ecb.AddComponent<TagBuilt>(job.jobOwner);
         ecb.AddComponent<TagWorking>(job.jobOwner);

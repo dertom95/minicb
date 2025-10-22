@@ -18,7 +18,7 @@ public static class PhysicsUtils {
     /// <param name="resourceLayer">Physics layer bit index used by resource entities</param>
     /// <returns>Entity found or Entity.Null if none</returns>
 
-    public static Entity FindFirstEntityInRadius(World world, float3 position, float radius, int layer, Func<EntityManager,Entity,bool> funcFilter=null) {
+    public static Entity FindFirstEntityInRadius(World world, float3 position, float radius, UInt32 layerMask, Func<EntityManager,Entity,bool> funcFilter=null) {
         EntityManager entityManager = world.EntityManager;
         EntityQuery physicsWorldSingletonQuery = entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
 
@@ -28,7 +28,7 @@ public static class PhysicsUtils {
 
         CollisionFilter filter = new CollisionFilter {
             BelongsTo = ~0u,               // Belongs to all layers
-            CollidesWith = 1u << layer,        // Collides only with layer 3
+            CollidesWith = layerMask,        // Collides only with layer 3
             GroupIndex = 0
         };
 

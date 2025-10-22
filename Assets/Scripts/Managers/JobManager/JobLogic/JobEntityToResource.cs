@@ -13,6 +13,8 @@ public class JobEntityToResource : JobLogicBase {
     }
 
     public override void OnReachedTarget(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        base.OnReachedTarget(ref ecb, ref jobEntity, ref state, ref job, dt);
+
         EntityManager em = state.EntityManager;
         ResourceComponent resComp = em.GetComponentData<ResourceComponent>(job.jobTarget);
 
@@ -26,10 +28,9 @@ public class JobEntityToResource : JobLogicBase {
 
     }
 
-    public override void OnWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt, float progress) {
-    }
-
     public override void OnFinishedWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        base.OnFinishedWorking(ref ecb, ref jobEntity, ref state, ref job, dt);
+
         ResourceComponent resComp = state.EntityManager.GetComponentData<ResourceComponent>(job.jobTarget);
         resComp.pendingJobs--;
         ecb.SetComponent(job.jobTarget, resComp);
@@ -41,6 +42,8 @@ public class JobEntityToResource : JobLogicBase {
     }
 
     public override void OnReachedOwner(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        base.OnReachedOwner(ref ecb, ref jobEntity, ref state, ref job, dt);
+
         // back in our work-building
         EntityManager em = state.EntityManager;
         Assert.IsTrue(em.HasComponent<ResourceBufferElement>(job.jobSettler),"Settler finished 'EntityToResource'-Job, but got no InventoryComponent");

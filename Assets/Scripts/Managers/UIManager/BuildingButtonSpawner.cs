@@ -18,7 +18,7 @@ public class BuildingButtonSpawner : MonoBehaviour {
         var container = root.Q<VisualElement>("button-container");
 
         // Example data for buttons
-        BuildingType[] buttonLabels = { BuildingType.gatherer, BuildingType.mason, BuildingType.woodcutter, BuildingType.woodworker };
+        BuildingType[] buttonLabels = { BuildingType.gatherer, BuildingType.mason, BuildingType.woodcutter, BuildingType.woodworker, BuildingType.tree_nursery };
 
         for (int i = 0; i < buttonLabels.Length; i++) {
             int index = i; // Capture for closure
