@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2356010207413593046}
   - component: {fileID: 3811270770579458073}
   - component: {fileID: -1614799939286502754}
+  - component: {fileID: -4806133234853643894}
   m_Layer: 0
   m_Name: building_gatherer
   m_TagString: Untagged
@@ -94,6 +95,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
+--- !u!114 &-4806133234853643894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052800053472007847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44682161197ea45ac29556a402e657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::JobEmitterComponentAuthoring
+  maxJobs: 2
+  jobType: 2
+  jobDurationInSeconds: 5
 --- !u!1001 &6915147967246453006
 PrefabInstance:
   m_ObjectHideFlags: 0

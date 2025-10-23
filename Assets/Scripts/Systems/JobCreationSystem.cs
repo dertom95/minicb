@@ -30,19 +30,19 @@ namespace Systems {
             // TODO: Still looking for a good readable format to write those queries
             foreach (
                 (
-                    RefRW<BuildingComponent> buildingComp,
+                    RefRW<JobEmitterComponent> jobEmitterComp,
                     LocalTransform localTransform,
                     Entity buildingEntity
                 )
                 in SystemAPI.Query<
-                    RefRW<BuildingComponent>,
+                    RefRW<JobEmitterComponent>,
                     LocalTransform
                 >()
                 .WithAll<TagWorking, TagBuilt, TagCreateJobs>()
-                .WithEntityAccess()
-            ) {
+                .WithEntityAccess())
+            {
                 // Check job amount constraint
-                Assert.IsTrue(buildingComp.ValueRO.currentJobAmount < buildingComp.ValueRO.maxJobs);
+                Assert.IsTrue(jobEmitterComp.ValueRO.currentJobAmount < jobEmitterComp.ValueRO.maxJobs);
 
                 Entity jobTarget = Entity.Null;
 
@@ -75,14 +75,14 @@ namespace Systems {
                     JobManager.Instance.CreateGenericJob(
                         owner: buildingEntity,
                         jobTarget: jobTarget,
-                        jobType: buildingComp.ValueRO.jobType,
-                        duration: buildingComp.ValueRO.jobDurationInSeconds,
+                        jobType: jobEmitterComp.ValueRO.jobType,
+                        duration: jobEmitterComp.ValueRO.jobDurationInSeconds,
                         ecb: ecb
                     );
 
-                    buildingComp.ValueRW.currentJobAmount++;
+                    jobEmitterComp.ValueRW.currentJobAmount++;
 
-                    bool reachedMaxJobAmount = buildingComp.ValueRW.currentJobAmount == buildingComp.ValueRO.maxJobs;
+                    bool reachedMaxJobAmount = jobEmitterComp.ValueRW.currentJobAmount == jobEmitterComp.ValueRO.maxJobs;
                     if (reachedMaxJobAmount) {
                         ecb.SetComponentEnabled<TagCreateJobs>(buildingEntity, false);
                     }

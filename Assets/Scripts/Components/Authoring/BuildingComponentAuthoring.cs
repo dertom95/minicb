@@ -17,24 +17,6 @@ public class BuildingComponentAuthoring : MonoBehaviour
     [Tooltip("Building Costs")]
     public BuildingCosts buildingCosts;
 
-    /// <summary>
-    /// Max amount of Jobs for this building to spawn at the same time
-    /// </summary>
-    [Tooltip("Max amount of Jobs for this building to spawn at the same time")]
-    public byte maxJobs;
-
-    /// <summary>
-    /// JobType for spawned jobs
-    /// </summary>
-    [Tooltip("JobType for spawned jobs")]
-    public JobType jobType;
-
-    /// <summary>
-    /// Job Duration for spawned jobs
-    /// </summary>
-    [Tooltip("Job Duration for spawned jobs")]
-    public byte jobDurationInSeconds;
-
     public class Baker : Baker<BuildingComponentAuthoring> {
         public override void Bake(BuildingComponentAuthoring authoring) {
             var entity = GetEntity(TransformUsageFlags.None);
@@ -42,9 +24,6 @@ public class BuildingComponentAuthoring : MonoBehaviour
                 buildingType = authoring.buildingType,
                 buildingCosts = authoring.buildingCosts,
                 currentState = BuildingState.UnderConstruction,
-                maxJobs = authoring.maxJobs,
-                jobType = authoring.jobType,
-                jobDurationInSeconds = authoring.jobDurationInSeconds,
             });
         }
     }

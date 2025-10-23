@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -767275755699375607}
   - component: {fileID: -601040873147426798}
   - component: {fileID: 6484508742108930280}
+  - component: {fileID: -6353844991913730}
   m_Layer: 0
   m_Name: building_woodworker
   m_TagString: Untagged
@@ -87,7 +88,21 @@ MonoBehaviour:
   outputResources:
   - resourceType: 3
     resourceAmount: 1
-  searchResourceType: 0
+--- !u!114 &-6353844991913730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7445733671717823309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44682161197ea45ac29556a402e657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::JobEmitterComponentAuthoring
+  maxJobs: 1
+  jobType: 4
+  jobDurationInSeconds: 10
 --- !u!1001 &1418473750654841288
 PrefabInstance:
   m_ObjectHideFlags: 0

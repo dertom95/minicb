@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5483834595206440834}
   - component: {fileID: -7484045101720783469}
   - component: {fileID: -1221223664197048950}
+  - component: {fileID: 8930982253135260244}
   m_Layer: 0
   m_Name: building_house
   m_TagString: Untagged
@@ -63,6 +64,21 @@ MonoBehaviour:
     wood: 0
     stone: 0
     timeInSeconds: 0
+  maxJobs: 0
+  jobType: 0
+  jobDurationInSeconds: 0
+--- !u!114 &8930982253135260244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8215549634878234814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44682161197ea45ac29556a402e657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::JobEmitterComponentAuthoring
   maxJobs: 0
   jobType: 0
   jobDurationInSeconds: 0

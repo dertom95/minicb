@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8054139952498123757}
   - component: {fileID: 4691366950231773629}
   - component: {fileID: -7858890566309574917}
+  - component: {fileID: 976812221988315505}
   m_Layer: 0
   m_Name: building_tree_nursery
   m_TagString: Untagged
@@ -96,6 +97,21 @@ MonoBehaviour:
   mode: 0
   spawnPrefabs:
   - {fileID: 2497032533202971339, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
+--- !u!114 &976812221988315505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448284749141492630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44682161197ea45ac29556a402e657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::JobEmitterComponentAuthoring
+  maxJobs: 1
+  jobType: 8
+  jobDurationInSeconds: 10
 --- !u!1001 &6263015357406050904
 PrefabInstance:
   m_ObjectHideFlags: 0

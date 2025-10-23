@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -1899739034047136513}
   - component: {fileID: 2274104338921588686}
   - component: {fileID: -4262531927080908284}
+  - component: {fileID: 4185704682158189471}
   m_Layer: 0
   m_Name: building_woodcutter
   m_TagString: Untagged
@@ -94,6 +95,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MiniCB::EntityToResourceComponentAuthoring
   searchResourceType: 0
+--- !u!114 &4185704682158189471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108672939339955757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d44682161197ea45ac29556a402e657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::JobEmitterComponentAuthoring
+  maxJobs: 2
+  jobType: 2
+  jobDurationInSeconds: 5
 --- !u!1001 &7608824979323135286
 PrefabInstance:
   m_ObjectHideFlags: 0

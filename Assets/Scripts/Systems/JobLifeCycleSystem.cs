@@ -179,8 +179,9 @@ namespace Systems {
 
             // remove job reference in settler and make settler available
             if (job.jobType != JobType.Construction) {
-                RefRW<BuildingComponent> buildingComp = SystemAPI.GetComponentRW<BuildingComponent>(job.jobOwner);
-                buildingComp.ValueRW.currentJobAmount--;
+                RefRW<JobEmitterComponent> jobEmitterComponent = SystemAPI.GetComponentRW<JobEmitterComponent>(job.jobOwner);
+                jobEmitterComponent.ValueRW.currentJobAmount--;
+                
                 SystemAPI.SetComponentEnabled<TagCreateJobs>(job.jobOwner, true);
             }
             
