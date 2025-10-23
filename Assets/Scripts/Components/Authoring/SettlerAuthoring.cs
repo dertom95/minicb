@@ -26,6 +26,11 @@ public class SettlerAuthoring : MonoBehaviour
     /// </summary>
     public JobType acceptJobs;
 
+    [Header("Bouncy Animation")]
+    public float bounceheight;
+    public float walkBounceSpeed;
+    public float workBounceSpeed;
+
     public class Baker : Baker<SettlerAuthoring> {
         public override void Bake(SettlerAuthoring authoring) {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
@@ -43,6 +48,16 @@ public class SettlerAuthoring : MonoBehaviour
             // add disabled TagWorking
             AddComponent<TagWorking>(entity);
             SetComponentEnabled<TagWorking>(entity, false);
+
+            AddComponent(entity, new AnimationStateComponent { 
+                animationState = Data.AnimationState.idle
+            });
+
+            AddComponent(entity, new JumpAnimationComponent { 
+                height = authoring.bounceheight,
+                walkSpeed = authoring.walkBounceSpeed,
+                workSpeed = authoring.workBounceSpeed
+            });
 
             AddBuffer<ResourceBufferElement>(entity);
         }

@@ -49,6 +49,9 @@ MonoBehaviour:
   workSpeed: 1
   settlerType: 1
   acceptJobs: 15
+  bounceheight: 0.125
+  walkBounceSpeed: 8
+  workBounceSpeed: 12
 --- !u!1001 &7477932283626208135
 PrefabInstance:
   m_ObjectHideFlags: 0

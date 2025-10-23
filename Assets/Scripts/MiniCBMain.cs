@@ -26,6 +26,7 @@ public class MiniCBMain {
         RegisterManager(BuildingManager.Instance);
         RegisterManager(JobManager.Instance);
         RegisterManager(SettlerManager.Instance);
+        RegisterManager(AnimationManager.Instance);
 
         // call the init-methods
         InitManagers();

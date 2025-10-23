@@ -67,6 +67,13 @@ namespace Systems {
                     job.jobState = JobState.Quit;
                 } else {
                     job.jobState = JobState.MovingToTarget;
+                    AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.walking);
+                    
+                    // rotate to direction
+                    RefRW<LocalTransform> settlerTransform = SystemAPI.GetComponentRW<LocalTransform>(job.jobSettler);
+                    float3 direction = math.normalize(job.jobPosition - settlerTransform.ValueRO.Position);
+                    quaternion rotation = quaternion.LookRotation(direction, math.up());
+                    settlerTransform.ValueRW.Rotation = rotation;
                 }
                 ecb.SetComponent(jobEntity, job);
             }
@@ -105,6 +112,8 @@ namespace Systems {
 
                 job.jobState = Data.JobState.Working;
                 ecb.SetComponent(jobEntity, job);
+
+                AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.working);
             }
             //█░█░█ █▀█ █▀█ █▄▀ █ █▄░█ █▀▀
             //▀▄▀▄▀ █▄█ █▀▄ █░█ █ █░▀█ █▄█
@@ -127,8 +136,10 @@ namespace Systems {
             //█▀▀ █ █▄░█ █ █▀ █░█ █▀▀ █▀▄   █░█░█ █▀█ █▀█ █▄▀ █ █▄░█ █▀▀
             //█▀░ █ █░▀█ █ ▄█ █▀█ ██▄ █▄▀   ▀▄▀▄▀ █▄█ █▀▄ █░█ █ █░▀█ █▄█
             else if (job.jobState == Data.JobState.FinishedWorking) {
+                AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.walking); 
+                
                 jobLogic.OnFinishedWorking(ref ecb, ref jobEntity, ref state, ref job, dt);
-
+                
                 bool isJobFinished = !jobLogic.NeedsToGoBackToOwner();
                 if (isJobFinished) {
                     // TODO: Do we want to use (new) JobState-Quit for this?
@@ -139,6 +150,12 @@ namespace Systems {
                     job.jobPosition = ownerTransform.Position;
                     job.jobState = Data.JobState.MovingToOwner;
                     ecb.SetComponent(jobEntity, job);
+
+                    // rotate to direction
+                    RefRW<LocalTransform> settlerTransform = SystemAPI.GetComponentRW<LocalTransform>(job.jobSettler);
+                    float3 direction = math.normalize(job.jobPosition - settlerTransform.ValueRO.Position);
+                    quaternion rotation = quaternion.LookRotation(direction, math.up());
+                    settlerTransform.ValueRW.Rotation = rotation;
                 }
             }
             //█▀█ █▀▀ ▄▀█ █▀▀ █░█ █▀▀ █▀▄   █▀█ █░█░█ █▄░█ █▀▀ █▀█
@@ -158,6 +175,8 @@ namespace Systems {
         }
 
         private void cleanupJob(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+            AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.idle);
+
             // remove job reference in settler and make settler available
             if (job.jobType != JobType.Construction) {
                 RefRW<BuildingComponent> buildingComp = SystemAPI.GetComponentRW<BuildingComponent>(job.jobOwner);
