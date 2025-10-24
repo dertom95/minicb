@@ -5,6 +5,7 @@ using Data;
 using Manager;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Entities.Serialization;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine.Assertions;

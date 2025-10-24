@@ -19,6 +19,7 @@ namespace Manager {
 
         private EntityManager entityManager;
         private DataManager dataManager;
+        private AssetManager assetManager;
 
         private BuildingManager() {
         }
@@ -26,6 +27,7 @@ namespace Manager {
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             dataManager = DataManager.Instance;
+            assetManager = AssetManager.Instance;
         }
 
 
@@ -38,7 +40,7 @@ namespace Manager {
         /// <param name="scale"></param>
         /// <param name="rotation"></param>
         public Entity SpawnBuilding(BuildingType buildingType, float3 position, float scale, float3 rotation, bool immediateBuild = false) {
-            Entity entityPrefab = dataManager.GetBuildingEntityPrefab(buildingType);
+            Entity entityPrefab = assetManager.GetBuildingEntityPrefab(buildingType);
             Assert.IsFalse(entityPrefab==Entity.Null);
             Entity newEntity = entityManager.Instantiate(entityPrefab);
 

@@ -22,7 +22,9 @@ namespace Manager {
         /// Singleton Access
         /// </summary>
         public static DataManager Instance => instance;
+
         private EntityManager entityManager;
+        private AssetManager assetManager;
 
         /// <summary>
         /// next id used for datastore
@@ -32,16 +34,6 @@ namespace Manager {
         /// data store - dictionary
         /// </summary>
         private Dictionary<ushort, object> dataStore;
-
-        /// <summary>
-        /// Lookup BuildingType->EntityPrefab
-        /// </summary>
-        private Dictionary<BuildingType, Entity> buildingEntityPrefabs;
-
-        /// <summary>
-        /// Lookup ResourceType->EntityPrefab
-        /// </summary>
-        private Dictionary<ResourcePrefabType, Entity> resourceEntityPrefabs;
 
         // TODO: Extract Inventory in its own Manager
 
@@ -64,11 +56,10 @@ namespace Manager {
 
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
+            assetManager = AssetManager.Instance;
+            
             currentId = 1000;
             dataStore = new Dictionary<ushort, object>();
-            buildingEntityPrefabs = new Dictionary<BuildingType, Entity>();
-            resourceEntityPrefabs = new Dictionary<ResourcePrefabType, Entity>();
             InitInventory();
         }
 
@@ -122,49 +113,6 @@ namespace Manager {
             return dataStore[objectId];
         }
 
-        /// <summary>
-        /// Register Building EntityPrefab (only one per BuildingType)
-        /// </summary>
-        /// <param name="buildingType"></param>
-        /// <param name="entityPrefab"></param>
-        public void RegisterBuildingEntityPrefab(BuildingType buildingType, Entity entityPrefab) {
-            Assert.IsFalse(buildingEntityPrefabs.ContainsKey(buildingType));
-
-            buildingEntityPrefabs[buildingType] = entityPrefab;
-        }
-
-        /// <summary>
-        /// Returns EntityPrefab to specific buildingsType
-        /// </summary>
-        /// <param name="buildingType"></param>
-        /// <returns></returns>
-        public Entity GetBuildingEntityPrefab(BuildingType buildingType) {
-            Assert.IsTrue(buildingEntityPrefabs.ContainsKey(buildingType));
-
-            return buildingEntityPrefabs[buildingType];
-        }
-
-        /// <summary>
-        /// Register Building EntityPrefab (only one per BuildingType)
-        /// </summary>
-        /// <param name="resourcePrefType"></param>
-        /// <param name="entityPrefab"></param>
-        public void RegisterResourceEntityPrefab(ResourcePrefabType resourcePrefType, Entity entityPrefab) {
-            Assert.IsFalse(resourceEntityPrefabs.ContainsKey(resourcePrefType));
-
-            resourceEntityPrefabs[resourcePrefType] = entityPrefab;
-        }
-
-        /// <summary>
-        /// Returns EntityPrefab to specific buildingsType
-        /// </summary>
-        /// <param name="resPrefType"></param>
-        /// <returns></returns>
-        public Entity GetResourceEntityPrefab(ResourcePrefabType resPrefType) {
-            Assert.IsTrue(resourceEntityPrefabs.ContainsKey(resPrefType));
-
-            return resourceEntityPrefabs[resPrefType];
-        }
 
 
         /// <summary>
@@ -258,7 +206,7 @@ namespace Manager {
         /// <param name="buildingType"></param>
         /// <returns></returns>
         public bool HasEnoughResourcesToBuildBuilding(BuildingType buildingType) {
-            Entity buildingEntityPrefab = GetBuildingEntityPrefab(buildingType);
+            Entity buildingEntityPrefab = assetManager.GetBuildingEntityPrefab(buildingType);
             BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(buildingEntityPrefab);
             bool enoughWood = HasResInGlobalInventory(ResourceType.Wood, buildingComponent.buildingCosts.wood);
             bool enoughStone = HasResInGlobalInventory(ResourceType.Stone, buildingComponent.buildingCosts.stone);
@@ -276,7 +224,7 @@ namespace Manager {
             if (!HasEnoughResourcesToBuildBuilding(buildingType)) {
                 return false;
             }
-            Entity buildingEntityPrefab = GetBuildingEntityPrefab(buildingType);
+            Entity buildingEntityPrefab = assetManager.GetBuildingEntityPrefab(buildingType);
             BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(buildingEntityPrefab);
             RemoveResFromGlobalInventory(ResourceType.Wood, buildingComponent.buildingCosts.wood);
             RemoveResFromGlobalInventory(ResourceType.Stone, buildingComponent.buildingCosts.stone);
