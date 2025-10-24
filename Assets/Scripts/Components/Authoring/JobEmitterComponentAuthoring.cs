@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using Unity.Entities;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class JobEmitterComponentAuthoring : MonoBehaviour {
     /// <summary>
     /// Max amount of Jobs for this building to spawn at the same time

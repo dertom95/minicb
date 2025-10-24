@@ -4,6 +4,7 @@ using Data;
 using Unity.Entities;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class SettlerAuthoring : MonoBehaviour
 {
     /// <summary>

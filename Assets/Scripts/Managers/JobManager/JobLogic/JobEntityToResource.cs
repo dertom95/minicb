@@ -31,15 +31,12 @@ public class JobEntityToResource : JobLogicBase {
     public override void OnFinishedWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
         base.OnFinishedWorking(ref ecb, ref jobEntity, ref state, ref job, dt);
 
-        ResourceComponent resComp = state.EntityManager.GetComponentData<ResourceComponent>(job.jobTarget);
-        resComp.pendingJobs--;
-        ecb.SetComponent(job.jobTarget, resComp);
+        EntityManager em = state.EntityManager;
 
-        bool destroyEntity = resComp.pendingJobs == 0 && resComp.iterationsLeft == 0;
-        if (destroyEntity) {
-            ecb.DestroyEntity(job.jobTarget);
-        }
+        JobManager.PendingJobsDecrease(job.jobTarget, ref em, ecb);
     }
+
+
 
     public override void OnReachedOwner(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
         base.OnReachedOwner(ref ecb, ref jobEntity, ref state, ref job, dt);

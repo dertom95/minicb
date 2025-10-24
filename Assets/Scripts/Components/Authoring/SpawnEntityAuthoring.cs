@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class SpawnEntityComponentAuthoring : MonoBehaviour {
     /// <summary>
     /// The mode this entity spawner operates

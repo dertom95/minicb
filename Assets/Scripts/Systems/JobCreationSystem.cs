@@ -58,9 +58,21 @@ namespace Systems {
                     Entity resourceEntity = DataManager.Instance.GetResourceEntityInRadius(
                         localTransform.Position,
                         fieldOfInfluenceComp.radius,
-                        entityToResourceComp.searchResourceType,
-                        decreaseIterations: true
+                        entityToResourceComp.searchResourceType
                     );
+
+                    if (resourceEntity != Entity.Null) {
+                        RefRW<IterationsComponent> iterationsComponent = SystemAPI.GetComponentRW<IterationsComponent>(resourceEntity);
+                        Assert.IsTrue(iterationsComponent.ValueRO.iterationsLeft > 0);
+
+                        iterationsComponent.ValueRW.iterationsLeft--;
+
+                        if (SystemAPI.HasComponent<JobTargetComponent>(resourceEntity)) {
+                            EntityManager em = state.EntityManager;
+                            JobManager.PendingJobsIncrease(resourceEntity,ref em);
+                        }
+                    }
+ 
                     jobTarget = resourceEntity;
                 } else if (SystemAPI.HasComponent<ResourceToResourceComponent>(buildingEntity)) {
                     jobTarget = buildingEntity;
@@ -89,8 +101,6 @@ namespace Systems {
                 }
             }
         }
-
-
 
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1490169579001822074}
   - component: {fileID: 6033029395702835527}
   - component: {fileID: 6518063428026145700}
+  - component: {fileID: 5943781802529161218}
   m_Layer: 3
   m_Name: res_tree
   m_TagString: Untagged
@@ -48,7 +49,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceComponentAuthoring
   resourceType: 0
-  iterations: 2
   resourceAmountPerIteration: 3
 --- !u!135 &6033029395702835527
 SphereCollider:
@@ -83,6 +83,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
+--- !u!114 &5943781802529161218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2497032533202971339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372317d7c649277439e6dc996a197f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::IterationsComponentAuthoring
+  amountIterations: 3
+  destroyEntityOnNoIterationsLeft: 1
 --- !u!1001 &4146760910219306511
 PrefabInstance:
   m_ObjectHideFlags: 0

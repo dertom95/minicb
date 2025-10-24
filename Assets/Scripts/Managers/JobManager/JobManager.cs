@@ -121,6 +121,63 @@ namespace Manager {
         }
 
         /// <summary>
+        /// Decrease the pending job-amount. Makes sure to disable JobTargetComponent once no job is pending anymore
+        /// 
+        /// Only modify pending-job amount via JobManager
+        /// </summary>
+        /// <param name="ecb"></param>
+        /// <param name="entity"></param>
+        /// <param name="em"></param>
+        /// <returns></returns>
+        public static bool PendingJobsDecrease(Entity entity, ref EntityManager em, EntityCommandBuffer? ecb=null) {
+            JobTargetComponent resComp = em.GetComponentData<JobTargetComponent>(entity);
+            resComp.pendingJobs--;
+            bool hasPendingJobs = resComp.pendingJobs > 0;
+            if (ecb.HasValue) {
+                ecb.Value.SetComponent(entity, resComp);
+            } else {
+                em.SetComponentData(entity, resComp);
+            }
+            if (!hasPendingJobs) {
+                if (ecb.HasValue) {
+                    ecb.Value.SetComponentEnabled<JobTargetComponent>(entity, false);
+                } else {
+                    em.SetComponentEnabled<JobTargetComponent>(entity, false);
+                }
+            }
+
+            return hasPendingJobs;
+        }
+
+        /// <summary>
+        /// Increase the pending job-amount. Makes sure to enable JobTargetComponent if needed
+        ///
+        /// Only modify pending-job amount via JobManager
+        /// </summary>
+        /// <param name="resourceEntity"></param>
+        /// <param name="em"></param>
+        public static void PendingJobsIncrease(Entity resourceEntity, ref EntityManager em, EntityCommandBuffer? ecb = null) {
+            JobTargetComponent jobTargetComp = em.GetComponentData<JobTargetComponent>(resourceEntity);
+
+            byte pendingJobsBefore = jobTargetComp.pendingJobs;
+            jobTargetComp.pendingJobs++;
+            if (ecb.HasValue) {
+                ecb.Value.SetComponent(resourceEntity, jobTargetComp);
+            } else {
+                em.SetComponentData(resourceEntity, jobTargetComp);
+            }
+
+            if (pendingJobsBefore == 0) {
+                if (ecb.HasValue) {
+                    ecb.Value.SetComponentEnabled<JobTargetComponent>(resourceEntity, true);
+                } else {
+                    em.SetComponentEnabled<JobTargetComponent>(resourceEntity, true);
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Return job specific logic to be executed in JobLifeCycleSystem
         /// </summary>
         /// <param name="jobType"></param>

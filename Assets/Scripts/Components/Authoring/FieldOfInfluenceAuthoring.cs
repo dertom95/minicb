@@ -3,6 +3,7 @@ using Data;
 using Unity.Entities;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class FieldOfInfluenceAuthoring : MonoBehaviour
 {
     public float radius;

@@ -174,7 +174,7 @@ namespace Manager {
         /// <param name="radius"></param>
         /// <param name="resourceType"></param>
         /// <returns></returns>
-        public Entity GetResourceEntityInRadius(float3 position, float radius, ResourceType resourceType, bool decreaseIterations = false) {
+        public Entity GetResourceEntityInRadius(float3 position, float radius, ResourceType resourceType) {
             Entity entity = PhysicsUtils.FindFirstEntityInRadius(
                 World.DefaultGameObjectInjectionWorld,
                 position,
@@ -182,14 +182,12 @@ namespace Manager {
                 1u << Config.LAYER_RESOURCE,
                 (em, entity) => {
                     if (em.HasComponent<ResourceComponent>(entity)) {
+                        Assert.IsTrue(em.HasComponent<IterationsComponent>(entity),"Each resource component must have an IterationsComponent!");
+
                         ResourceComponent resourceComponent = em.GetComponentData<ResourceComponent>(entity);
-                        if (resourceComponent.resourceType == resourceType && resourceComponent.iterationsLeft > 0) {
-                            if (decreaseIterations) {
-                                resourceComponent.iterationsLeft--;
-                                resourceComponent.pendingJobs++; // TODO: This needs to be handled somewhere else!
-                                em.SetComponentData(entity, resourceComponent);
-                            }
-                            return true;
+                        if (resourceComponent.resourceType == resourceType) {
+                            IterationsComponent iterationsComp = em.GetComponentData<IterationsComponent>(entity);
+                            return iterationsComp.iterationsLeft > 0;
                         }
                     }
                     return false;

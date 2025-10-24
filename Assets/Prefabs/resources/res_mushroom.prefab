@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1752789141665399729}
   - component: {fileID: 6574946444110939787}
   - component: {fileID: -4764597462116752745}
+  - component: {fileID: 6920997109221578678}
   m_Layer: 3
   m_Name: res_mushroom
   m_TagString: Untagged
@@ -48,7 +49,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceComponentAuthoring
   resourceType: 2
-  iterations: 1
   resourceAmountPerIteration: 5
 --- !u!135 &6574946444110939787
 SphereCollider:
@@ -83,6 +83,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
+--- !u!114 &6920997109221578678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7049932333954273347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372317d7c649277439e6dc996a197f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::IterationsComponentAuthoring
+  amountIterations: 1
+  destroyEntityOnNoIterationsLeft: 1
 --- !u!1001 &7183497555152986244
 PrefabInstance:
   m_ObjectHideFlags: 0

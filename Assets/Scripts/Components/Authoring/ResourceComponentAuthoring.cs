@@ -4,6 +4,8 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
+[DisallowMultipleComponent]
+[RequireComponent(typeof(IterationsComponentAuthoring), typeof(JobTargetComponentAuthoring))]
 public class ResourceComponentAuthoring : MonoBehaviour
 {
     /// <summary>
@@ -11,12 +13,6 @@ public class ResourceComponentAuthoring : MonoBehaviour
     /// </summary>
     [Tooltip("The resource type of this entity")]
     public ResourceType resourceType;
-
-    /// <summary>
-    /// The amount of iterations you can collect resources from this resource
-    /// </summary>
-    [Tooltip("The amount of iterations you can collect resources from this resource")]
-    public byte iterations;
 
     /// <summary>
     /// The amount of resources added to the inventory per iteration
@@ -29,7 +25,6 @@ public class ResourceComponentAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.None);
             AddComponent(entity, new ResourceComponent { 
                 resourceType = authoring.resourceType,
-                iterationsLeft = authoring.iterations,
                 resourceAmountPerIteration = authoring.resourceAmountPerIteration
             });
             
