@@ -16,15 +16,9 @@ namespace Manager {
     ///         in DataOriented-Scenarios that can have an impact for CPU-Data-Caching. Keeping components (that do use the key) as compact as possible
     ///         can benefit the performance.
     /// </summary>
-    public class DataManager : IManager {
-        private static DataManager instance = new DataManager();
-        /// <summary>
-        /// Singleton Access
-        /// </summary>
-        public static DataManager Instance => instance;
-
+    public class DataManager : IManager, IDataManager {
         private EntityManager entityManager;
-        private AssetManager assetManager;
+        private IAssetManager assetManager;
 
         /// <summary>
         /// next id used for datastore
@@ -51,13 +45,13 @@ namespace Manager {
         /// </summary>
         private event EventHandler<Dictionary<ResourceType, int>> EventInventoryChanged;
 
-        private DataManager() {
+        public DataManager() {
         }
 
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            assetManager = AssetManager.Instance;
-            
+            assetManager = Mgr.assetManager;
+
             currentId = 1000;
             dataStore = new Dictionary<ushort, object>();
             InitInventory();
@@ -130,7 +124,7 @@ namespace Manager {
                 1u << Config.LAYER_RESOURCE,
                 (em, entity) => {
                     if (em.HasComponent<ResourceComponent>(entity)) {
-                        Assert.IsTrue(em.HasComponent<IterationsComponent>(entity),"Each resource component must have an IterationsComponent!");
+                        Assert.IsTrue(em.HasComponent<IterationsComponent>(entity), "Each resource component must have an IterationsComponent!");
 
                         ResourceComponent resourceComponent = em.GetComponentData<ResourceComponent>(entity);
                         if (resourceComponent.resourceType == resourceType) {

@@ -10,9 +10,11 @@
         "Unity.Collections",
         "Unity.Scenes",
         "MiniCB",
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "Unity.Entities.Tests",
+        "Unity.Scenes.Tests"
     ],
-    "includePlatforms": [],
+    "includePlatforms": ["Editor"],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

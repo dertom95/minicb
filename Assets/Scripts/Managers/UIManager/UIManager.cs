@@ -5,28 +5,25 @@ using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Manager {
-    public class UIManager : IManager{
-        private static UIManager instance = new UIManager();
-        public static UIManager Instance => instance;
-
+    public class UIManager : IManager, IUIManager {
         /// <summary>
         /// ScriptableObject to expose uiData
         /// </summary>
         // TODO use another approach!?
         private UIData uiData;
 
-        private UIManager() { }
+        public UIManager() { }
 
         public void Init() {
             uiData = Resources.Load<UIData>("UIData");
 
-            DataManager.Instance.RegisterInventoryChangedEvent(OnInventoryChange);
-            InputManager.Instance.EventSelectedBuildingChanged += OnSelectedBuildingChanged;
+            Mgr.dataManager.RegisterInventoryChangedEvent(OnInventoryChange);
+            Mgr.inputManager.EventSelectedBuildingChanged += OnSelectedBuildingChanged;
         }
 
         public void Dispose() {
-            DataManager.Instance.UnregisterInventoryChangedEvent(OnInventoryChange);
-            InputManager.Instance.EventSelectedBuildingChanged -= OnSelectedBuildingChanged;
+            Mgr.dataManager.UnregisterInventoryChangedEvent(OnInventoryChange);
+            Mgr.inputManager.EventSelectedBuildingChanged -= OnSelectedBuildingChanged;
         }
 
         private void OnInventoryChange(object sender, Dictionary<Data.ResourceType, int> inv) {
@@ -66,7 +63,7 @@ namespace Manager {
             //var root = BuildingButtonSpawner.Instance.uiDocument.rootVisualElement;
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             float flippedY = Screen.height - mousePosition.y;
-//            float flippedY = mousePosition.y;
+            //            float flippedY = mousePosition.y;
             Vector2 mousePos = new Vector2(mousePosition.x, flippedY);
             Vector2 ppos = RuntimePanelUtils.ScreenToPanel(root.panel, mousePos);
             // Pick the topmost element under the mouse

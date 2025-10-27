@@ -33,7 +33,7 @@ public class JobEntityToResource : JobLogicBase {
 
         EntityManager em = state.EntityManager;
 
-        JobManager.PendingJobsDecrease(job.jobTarget, ref em, ecb);
+        Mgr.jobManager.PendingJobsDecrease(job.jobTarget, ref em, ecb);
     }
 
 
@@ -48,7 +48,7 @@ public class JobEntityToResource : JobLogicBase {
         DynamicBuffer<ResourceBufferElement> inventoryBuffer = em.GetBuffer<ResourceBufferElement>(job.jobSettler);
 
         foreach (ResourceBufferElement resElem in inventoryBuffer) {
-            int totalAmount = DataManager.Instance.AddToGlobalInventory(resElem.type, resElem.amount);
+            int totalAmount = Mgr.dataManager.AddToGlobalInventory(resElem.type, resElem.amount);
             Debug.Log($"Collected:{resElem.type} : {resElem.amount} => Total:{totalAmount}");
         }
         inventoryBuffer.Clear();

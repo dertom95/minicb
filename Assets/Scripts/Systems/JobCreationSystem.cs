@@ -55,7 +55,7 @@ namespace Systems {
                     FieldOfInfluenceComponent fieldOfInfluenceComp = SystemAPI.GetComponent<FieldOfInfluenceComponent>(buildingEntity);
 
                     // search for specific resource
-                    Entity resourceEntity = DataManager.Instance.GetResourceEntityInRadius(
+                    Entity resourceEntity = Mgr.dataManager.GetResourceEntityInRadius(
                         localTransform.Position,
                         fieldOfInfluenceComp.radius,
                         entityToResourceComp.searchResourceType
@@ -69,7 +69,7 @@ namespace Systems {
 
                         if (SystemAPI.HasComponent<JobTargetComponent>(resourceEntity)) {
                             EntityManager em = state.EntityManager;
-                            JobManager.PendingJobsIncrease(resourceEntity,ref em);
+                            Mgr.jobManager.PendingJobsIncrease(resourceEntity,ref em);
                         }
                     }
  
@@ -84,7 +84,7 @@ namespace Systems {
 
                 if (jobTarget != Entity.Null) {
                     // found a resource entity in my radius
-                    JobManager.Instance.CreateGenericJob(
+                    Mgr.jobManager.CreateGenericJob(
                         owner: buildingEntity,
                         jobTarget: jobTarget,
                         jobType: jobEmitterComp.ValueRO.jobType,

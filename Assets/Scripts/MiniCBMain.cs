@@ -1,4 +1,5 @@
 using Manager;
+using NUnit.Framework;
 using System.Collections.Generic;
 
 /// <summary>
@@ -15,18 +16,10 @@ public class MiniCBMain {
     /// Init minicb and its managers. Use baseOnly in test-scenario to ignore 'unwanted' managers
     /// </summary>
     /// <param name="baseOnly"></param>
-    public void Init(bool baseOnly=false) {
-        RegisterManager(Config.Instance);
-        RegisterManager(AssetManager.Instance);
-        RegisterManager(UIManager.Instance);
-        if (!baseOnly) {
-            RegisterManager(InputManager.Instance);
+    public void Init(List<IManager> managers) {
+        foreach (IManager manager in managers) {
+            RegisterManager(manager);
         }
-        RegisterManager(DataManager.Instance);
-        RegisterManager(BuildingManager.Instance);
-        RegisterManager(JobManager.Instance);
-        RegisterManager(SettlerManager.Instance);
-        RegisterManager(AnimationManager.Instance);
 
         // call the init-methods
         InitManagers();
@@ -35,6 +28,8 @@ public class MiniCBMain {
     }
 
     private void RegisterManager(IManager manager) {
+        Assert.IsNotNull(manager);
+
         allManagers.Add(manager);
         if (manager is IManagerUpdateable updateableManager) {
             updateableManagers.Add(updateableManager);
@@ -68,8 +63,6 @@ public class MiniCBMain {
     /// Disposes all registered Managers
     /// </summary>
     public void DisposeManagers() {
-        foreach (IManager manager in allManagers) {
-            manager.Dispose();
-        }
+        Mgr.CleanupManagers();
     }
 }

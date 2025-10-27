@@ -56,7 +56,7 @@ namespace Systems {
             Assert.IsTrue(job.jobSettler != Entity.Null);
             Assert.IsTrue(SystemAPI.HasComponent<SettlerComponent>(job.jobSettler));
 
-            IJobLogic jobLogic = JobManager.Instance.GetJobLogic(job.jobType);
+            IJobLogic jobLogic = Mgr.jobManager.GetJobLogic(job.jobType);
 
 
             //█▀ ▀█▀ ▄▀█ █▀█ ▀█▀ █▀▀ █▀▄
@@ -68,7 +68,7 @@ namespace Systems {
                     job.jobState = JobState.Quit;
                 } else {
                     job.jobState = JobState.MovingToTarget;
-                    AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.walking);
+                    Mgr.animationManager.SetAnimationState(job.jobSettler, AnimationState.walking);
                     
                     // rotate to direction
                     RefRW<LocalTransform> settlerTransform = SystemAPI.GetComponentRW<LocalTransform>(job.jobSettler);
@@ -114,7 +114,7 @@ namespace Systems {
                 job.jobState = Data.JobState.Working;
                 ecb.SetComponent(jobEntity, job);
 
-                AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.working);
+                Mgr.animationManager.SetAnimationState(job.jobSettler, AnimationState.working);
             }
             //█░█░█ █▀█ █▀█ █▄▀ █ █▄░█ █▀▀
             //▀▄▀▄▀ █▄█ █▀▄ █░█ █ █░▀█ █▄█
@@ -137,7 +137,7 @@ namespace Systems {
             //█▀▀ █ █▄░█ █ █▀ █░█ █▀▀ █▀▄   █░█░█ █▀█ █▀█ █▄▀ █ █▄░█ █▀▀
             //█▀░ █ █░▀█ █ ▄█ █▀█ ██▄ █▄▀   ▀▄▀▄▀ █▄█ █▀▄ █░█ █ █░▀█ █▄█
             else if (job.jobState == Data.JobState.FinishedWorking) {
-                AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.walking); 
+                Mgr.animationManager.SetAnimationState(job.jobSettler, AnimationState.walking); 
                 
                 jobLogic.OnFinishedWorking(ref ecb, ref jobEntity, ref state, ref job, dt);
                 
@@ -176,7 +176,7 @@ namespace Systems {
         }
 
         private void cleanupJob(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
-            AnimationManager.Instance.SetAnimationState(job.jobSettler, AnimationState.idle);
+            Mgr.animationManager.SetAnimationState(job.jobSettler, AnimationState.idle);
 
             // remove job reference in settler and make settler available
             if (job.jobType != JobType.Construction) {

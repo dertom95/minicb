@@ -4,11 +4,8 @@ using Unity.Entities;
 using UnityEngine.Assertions;
 
 namespace Manager {
-    public class AssetManager : IManager {
-        private static AssetManager instance = new AssetManager();
-        public static AssetManager Instance => instance;
-        
-        private AssetManager() { }
+    public class AssetManager : IManager, IAssetManager {
+        public AssetManager() { }
 
         /// <summary>
         /// Lookup BuildingType->EntityPrefab

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[CreateAssetMenu(menuName = "minicb/uidata")]
+[CreateAssetMenu(menuName = "MiniCB/uidata")]
 public class UIData : ScriptableObject {
     [Header("Runtime-Data")]
     public int wood = 0;

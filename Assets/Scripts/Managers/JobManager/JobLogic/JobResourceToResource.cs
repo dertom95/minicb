@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 public class JobResourceToResource : JobLogicBase {
+    IDataManager dataManager = Mgr.dataManager;
+
     public override bool NeedsToGoBackToOwner() {
         return false;
     }
@@ -18,11 +20,10 @@ public class JobResourceToResource : JobLogicBase {
 
         DynamicBuffer<RTRInputResource> inputResources = em.GetBuffer<RTRInputResource>(job.jobOwner);
 
-        DataManager dm = DataManager.Instance;
         
         // check if the inputResources are available in the inventory
         foreach (RTRInputResource resource in inputResources) {
-            bool enoughResourceInInventory = dm.HasResInGlobalInventory(resource.resIn.resourceType, resource.resIn.resourceAmount);
+            bool enoughResourceInInventory = dataManager.HasResInGlobalInventory(resource.resIn.resourceType, resource.resIn.resourceAmount);
             if (!enoughResourceInInventory) {
                 // not all resources available for conversion
                 return false;
@@ -31,7 +32,7 @@ public class JobResourceToResource : JobLogicBase {
 
         DynamicBuffer<RTROutputResource> outputResources = em.GetBuffer<RTROutputResource>(job.jobOwner);
         foreach (RTROutputResource resource in outputResources) {
-            bool limitReached = dm.IsLimitReached(resource.resOut.resourceType);
+            bool limitReached = dataManager.IsLimitReached(resource.resOut.resourceType);
             if (limitReached) {
                 // at least one output resource would hit the limit
                 return false;
@@ -54,11 +55,9 @@ public class JobResourceToResource : JobLogicBase {
 
         DynamicBuffer<RTRInputResource> inputResources = em.GetBuffer<RTRInputResource>(job.jobOwner);
 
-        DataManager dm = DataManager.Instance;
-
         // check if the inputResources are available in the inventory
         foreach (RTRInputResource resource in inputResources) {
-            success = dm.RemoveResFromGlobalInventory(resource.resIn);
+            success = dataManager.RemoveResFromGlobalInventory(resource.resIn);
             Assert.IsTrue(success, "ResourceRemoval should be guaranteed by CanAcceptJob(..). Only possible way for this to fail is using multithreading!?");
         }
         return true;
@@ -70,11 +69,9 @@ public class JobResourceToResource : JobLogicBase {
         EntityManager em = state.EntityManager;
         DynamicBuffer<RTROutputResource> outputResources = em.GetBuffer<RTROutputResource>(job.jobOwner);
 
-        DataManager dm = DataManager.Instance;
-
         // check if the inputResources are available in the inventory
         foreach (RTROutputResource resource in outputResources) {
-            dm.AddToGlobalInventory(resource.resOut);
+            dataManager.AddToGlobalInventory(resource.resOut);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Manager {
     using UnityEngine;
     using UnityEngine.EventSystems;
 
-    public class InputManager : IManager, IManagerUpdateable {
+    public class InputManager : IManagerUpdateable, IInputManager {
         public enum InputMode {
             SpawnBuilding
         }
@@ -19,14 +19,10 @@ namespace Manager {
 
         private BuildingType currentBuilding = BuildingType.woodcutter;
 
-        private static readonly InputManager inputManager = new InputManager();
-
-        public static InputManager Instance => inputManager;
-
         EntityManager entityManager;
         EntityQuery physicsWorldSingletonQuery;
 
-        private InputManager() {
+        public InputManager() {
         }
 
 
@@ -50,8 +46,7 @@ namespace Manager {
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 currentBuilding = BuildingType.gatherer;
                 Debug.Log("Selected gatherer");
-            } 
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            } else if (Input.GetKeyDown(KeyCode.Alpha2)) {
                 currentBuilding = BuildingType.woodcutter;
                 Debug.Log("Selected woodcutter");
             } else if (Input.GetKeyDown(KeyCode.Alpha3)) {
@@ -64,7 +59,7 @@ namespace Manager {
         }
 
         private bool IsMouseButtonDown(int btn, bool ignoreButtonIfOverUI = true) {
-            return Input.GetMouseButtonDown(btn) && (!ignoreButtonIfOverUI || !UIManager.Instance.IsMouseOverUI());
+            return Input.GetMouseButtonDown(btn) && (!ignoreButtonIfOverUI || !Mgr.uiManager.IsMouseOverUI());
         }
 
         private void InstantiateBuildingOnLeftClick() {
@@ -94,19 +89,19 @@ namespace Manager {
                 if (collisionWorld.CastRay(rayInput, out Unity.Physics.RaycastHit hit)) {
                     Debug.Log($"Hit: Entity:{hit.Entity}  Pos:{hit.Position} ColKey:{hit.ColliderKey}");
 
-                    bool hadEnoughResourceToBuildBuilding = DataManager.Instance.TryToRemoveBuildingCostsFromInventory(currentBuilding);
+                    bool hadEnoughResourceToBuildBuilding = Mgr.dataManager.TryToRemoveBuildingCostsFromInventory(currentBuilding);
                     if (!hadEnoughResourceToBuildBuilding) {
                         UnityEngine.Debug.Log("Not enough resources to build:" + currentBuilding);
                         return;
                     }
-                    Entity newEntity = BuildingManager.Instance.SpawnBuilding(currentBuilding, hit.Position);
+                    Entity newEntity = Mgr.buildingManager.SpawnBuilding(currentBuilding, hit.Position);
 
                     if (newEntity == Entity.Null) {
                         // couldn't build
                         return;
                     }
 
-                    //Entity entityPrefab = DataManager.Instance.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
+                    //Entity entityPrefab = Mgr.dataManager.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
                     //Entity newEntity = entityManager.Instantiate(entityPrefab);
                     //LocalTransform newTransform = new LocalTransform {
                     //    Position = hit.Position,

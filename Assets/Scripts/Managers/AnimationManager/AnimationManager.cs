@@ -4,10 +4,9 @@ using Unity.Entities;
 using UnityEngine.Assertions;
 
 namespace Manager {
-    public class AnimationManager : IManager {
-        private static AnimationManager instance = new AnimationManager();
-        public static AnimationManager Instance => instance;
-        private AnimationManager() { }
+    public class AnimationManager : IManager, IAnimationManager {
+
+        public AnimationManager() { }
 
         EntityManager entityManager;
 
@@ -26,7 +25,7 @@ namespace Manager {
                 // nothing to do
                 return;
             }
-            
+
             animationStateComp.animationState = newAnimationState;
             entityManager.SetComponentData(entity, animationStateComp);
 

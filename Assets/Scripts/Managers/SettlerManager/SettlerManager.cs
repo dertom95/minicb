@@ -4,20 +4,16 @@ namespace Manager {
     /// <summary>
     /// Settler-Specific functions
     /// </summary>
-    public class SettlerManager : IManager {
-        private static readonly SettlerManager instance = new SettlerManager();
-
-        public static SettlerManager Instance => instance;
-
+    public class SettlerManager : ISettlerManager {
         private EntityManager entityManager;
-        private DataManager dataManager;
+        private IDataManager dataManager;
 
-        private SettlerManager() {
+        public SettlerManager() {
         }
 
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            dataManager = DataManager.Instance;
+            dataManager = Mgr.dataManager;
         }
 
         public void Dispose() {

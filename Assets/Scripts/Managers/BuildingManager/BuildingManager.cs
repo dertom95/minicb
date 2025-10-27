@@ -10,24 +10,20 @@ namespace Manager {
     /// <summary>
     /// Building-Specific functions
     /// </summary>
-    public class BuildingManager : IManager {
+    public class BuildingManager : IManager, IBuildingManager {
         public const float BUILDING_CONSTRUCTIONSITE_SCALE = 0.2f;
 
-        private static readonly BuildingManager instance = new BuildingManager();
-
-        public static BuildingManager Instance => instance;
-
         private EntityManager entityManager;
-        private DataManager dataManager;
-        private AssetManager assetManager;
+        private IDataManager dataManager;
+        private IAssetManager assetManager;
 
-        private BuildingManager() {
+        public BuildingManager() {
         }
 
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            dataManager = DataManager.Instance;
-            assetManager = AssetManager.Instance;
+            dataManager = Mgr.dataManager;
+            assetManager = Mgr.assetManager;
         }
 
 
@@ -41,7 +37,7 @@ namespace Manager {
         /// <param name="rotation"></param>
         public Entity SpawnBuilding(BuildingType buildingType, float3 position, float scale, float3 rotation, bool immediateBuild = false) {
             Entity entityPrefab = assetManager.GetBuildingEntityPrefab(buildingType);
-            Assert.IsFalse(entityPrefab==Entity.Null);
+            Assert.IsFalse(entityPrefab == Entity.Null);
             Entity newEntity = entityManager.Instantiate(entityPrefab);
 
             scale = immediateBuild ? scale : math.min(scale, BUILDING_CONSTRUCTIONSITE_SCALE);
@@ -55,16 +51,16 @@ namespace Manager {
 
             if (immediateBuild == false) {
                 entityManager.AddComponent<TagUnderConstruction>(newEntity);
-                 
+
                 BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(newEntity);
-                JobManager.Instance.CreateConstructionJob(newEntity);
+                Mgr.jobManager.CreateConstructionJob(newEntity);
                 // TODO: Create Construction Job
             } else {
                 throw new System.Exception("immediateBuild,not implemented!");
             }
 
             return newEntity;
-        } 
+        }
 
         /// <summary>
         /// Spawn building at position

@@ -42,7 +42,7 @@ namespace Systems {
                 Entity jobEntity = jobEntities[jobIndex];
                 JobComponent job = jobComponents[jobIndex];
                 
-                IJobLogic jobLogic = JobManager.Instance.GetJobLogic(job.jobType);
+                IJobLogic jobLogic = Mgr.jobManager.GetJobLogic(job.jobType);
                 
                 // check if the job can be assigned at all
                 bool canAssignJob = jobLogic.CanAcceptJob(jobEntity, state.EntityManager, ref job);

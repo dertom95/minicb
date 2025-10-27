@@ -15,29 +15,25 @@ namespace Manager {
     /// <summary>
     /// Building-Specific functions
     /// </summary>
-    public class JobManager : IManager {
-        private static readonly JobManager instance = new JobManager();
-
-        public static JobManager Instance => instance;
-
+    public class JobManager : IJobManager {
         private Dictionary<JobType, IJobLogic> jobLogicLookup;
 
         private EntityManager entityManager;
-        private DataManager dataManager;
+        private IDataManager dataManager;
         private EntityQuery jobComponentQuery;
         private EntityQuery settlerComponentQuery;
 
         private EntityArchetype archetypeJob;
 
-        private JobManager() {
+        public JobManager() {
         }
 
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            dataManager = DataManager.Instance;
+            dataManager = Mgr.dataManager;
             jobComponentQuery = entityManager.CreateEntityQuery(typeof(JobComponent));
             archetypeJob = entityManager.CreateArchetype(typeof(LocalTransform), typeof(JobComponent));
-            
+
             InitJobLogic();
         }
 
@@ -66,9 +62,9 @@ namespace Manager {
             BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(owner);
 
             Entity constructionJob = CreateGenericJob(
-                owner, 
-                owner, 
-                JobType.Construction, 
+                owner,
+                owner,
+                JobType.Construction,
                 buildingComponent.buildingCosts.timeInSeconds
             );
 
@@ -80,7 +76,7 @@ namespace Manager {
         /// </summary>
         /// <param name="owner"></param>
         /// <returns></returns>
-        public Entity CreateGenericJob(Entity owner, Entity jobTarget, JobType jobType, float duration, EntityCommandBuffer? ecb=null) {
+        public Entity CreateGenericJob(Entity owner, Entity jobTarget, JobType jobType, float duration, EntityCommandBuffer? ecb = null) {
             Assert.AreNotEqual(Entity.Null, owner);
 
             Entity jobEntity;
@@ -129,7 +125,7 @@ namespace Manager {
         /// <param name="entity"></param>
         /// <param name="em"></param>
         /// <returns></returns>
-        public static bool PendingJobsDecrease(Entity entity, ref EntityManager em, EntityCommandBuffer? ecb=null) {
+        public bool PendingJobsDecrease(Entity entity, ref EntityManager em, EntityCommandBuffer? ecb = null) {
             JobTargetComponent resComp = em.GetComponentData<JobTargetComponent>(entity);
             resComp.pendingJobs--;
             bool hasPendingJobs = resComp.pendingJobs > 0;
@@ -156,7 +152,7 @@ namespace Manager {
         /// </summary>
         /// <param name="resourceEntity"></param>
         /// <param name="em"></param>
-        public static void PendingJobsIncrease(Entity resourceEntity, ref EntityManager em, EntityCommandBuffer? ecb = null) {
+        public void PendingJobsIncrease(Entity resourceEntity, ref EntityManager em, EntityCommandBuffer? ecb = null) {
             JobTargetComponent jobTargetComp = em.GetComponentData<JobTargetComponent>(resourceEntity);
 
             byte pendingJobsBefore = jobTargetComp.pendingJobs;

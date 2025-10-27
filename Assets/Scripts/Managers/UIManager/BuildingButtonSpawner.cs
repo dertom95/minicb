@@ -32,7 +32,7 @@ public class BuildingButtonSpawner : MonoBehaviour {
 
             // Assign an action to the button
             button.clicked += () => {
-                InputManager.Instance.SetCurrentBuilding(currentBuildingType);
+                Mgr.inputManager.SetCurrentBuilding(currentBuildingType);
                 Debug.Log($"Button '{buttonLabels[index]}' clicked! Index: {index}");
                 // Place your custom action here
             };
