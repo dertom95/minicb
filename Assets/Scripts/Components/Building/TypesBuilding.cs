@@ -21,6 +21,7 @@ namespace Data {
     /// </summary>
     /// TODO: Rethink this. The state should be handled via Tags
     public enum BuildingState : byte {
+        Preview,
         UnderConstruction,
         Built
     }

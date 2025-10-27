@@ -22,6 +22,23 @@ public class Config : IManager {
     /// </summary>
     public const int LAYER_RESOURCE = 3;
 
+
+    /// <summary>
+    /// The unity layer where all resource entities are stored
+    /// </summary>
+    public const int LAYER_BUILDINGS = 6;
+
+    /// <summary>
+    /// The unity layer where all resource entities are stored
+    /// </summary>
+    public const int LAYER_TERRAIN = 7;
+
+    /// <summary>
+    /// The material id to use for to color the visual on error (e.g. collision)
+    /// TOOD: Not sure how to reliably get this id in code (I just tested to find it) ;)
+    /// </summary>
+    public const int MAT_PALETTE_ERROR = 6;
+
     public void Init() {
         configSO = Resources.Load<ConfigSO>("Config");
         Assert.IsNotNull(configSO);

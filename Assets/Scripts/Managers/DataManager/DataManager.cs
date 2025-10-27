@@ -19,6 +19,7 @@ namespace Manager {
     public class DataManager : IManager, IDataManager {
         private EntityManager entityManager;
         private IAssetManager assetManager;
+        private IPhysicsManager physicsManager;
 
         /// <summary>
         /// next id used for datastore
@@ -51,6 +52,7 @@ namespace Manager {
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             assetManager = Mgr.assetManager;
+            physicsManager = Mgr.physicsManager;
 
             currentId = 1000;
             dataStore = new Dictionary<ushort, object>();
@@ -117,7 +119,7 @@ namespace Manager {
         /// <param name="resourceType"></param>
         /// <returns></returns>
         public Entity GetResourceEntityInRadius(float3 position, float radius, ResourceType resourceType) {
-            Entity entity = PhysicsUtils.FindFirstEntityInRadius(
+            Entity entity = physicsManager.FindFirstEntityInRadius(
                 World.DefaultGameObjectInjectionWorld,
                 position,
                 radius,

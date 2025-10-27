@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2274104338921588686}
   - component: {fileID: -4262531927080908284}
   - component: {fileID: 4185704682158189471}
+  - component: {fileID: 7962237293811663026}
   m_Layer: 0
   m_Name: building_woodcutter
   m_TagString: Untagged
@@ -66,9 +67,6 @@ MonoBehaviour:
     wood: 2
     stone: 2
     timeInSeconds: 10
-  maxJobs: 2
-  jobType: 2
-  jobDurationInSeconds: 5
 --- !u!114 &2274104338921588686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +108,27 @@ MonoBehaviour:
   maxJobs: 2
   jobType: 2
   jobDurationInSeconds: 5
+--- !u!135 &7962237293811663026
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108672939339955757}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 3.22
+  m_Center: {x: 0, y: 3.34, z: 0}
 --- !u!1001 &7608824979323135286
 PrefabInstance:
   m_ObjectHideFlags: 0

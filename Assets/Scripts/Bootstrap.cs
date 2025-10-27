@@ -1,6 +1,7 @@
 using Manager;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour {
@@ -12,6 +13,7 @@ public class Bootstrap : MonoBehaviour {
 
         main.Init(new List<IManager>() {
             Config.Instance,
+            Mgr.physicsManager,
             Mgr.assetManager,
             Mgr.uiManager,
             Mgr.inputManager,

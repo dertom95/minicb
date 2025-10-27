@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -8235770944551799340}
   - component: {fileID: 6627418763237362064}
   - component: {fileID: 5663389876466701797}
+  - component: {fileID: 5510995541990984903}
   m_Layer: 0
   m_Name: building_mason
   m_TagString: Untagged
@@ -66,9 +67,6 @@ MonoBehaviour:
     wood: 3
     stone: 3
     timeInSeconds: 20
-  maxJobs: 2
-  jobType: 2
-  jobDurationInSeconds: 5
 --- !u!114 &-8235770944551799340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +108,27 @@ MonoBehaviour:
   maxJobs: 2
   jobType: 2
   jobDurationInSeconds: 5
+--- !u!135 &5510995541990984903
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3900730901164831973}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 3.06
+  m_Center: {x: 0, y: 3.24, z: 0}
 --- !u!1001 &5812110847872530066
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1641,7 +1641,7 @@ GameObject:
   - component: {fileID: 734721928}
   - component: {fileID: 734721927}
   - component: {fileID: 734721926}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2373,6 +2373,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: res_tree (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3336556760402655883, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5e68295abfb90c74283f68f8c6863c1d, type: 2}
     - target: {fileID: 7872282012780628103, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
       propertyPath: m_LocalPosition.x
       value: 34.3
@@ -3514,6 +3518,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: res_tree (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 3336556760402655883, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1e7929b7e46defd41a90b675ec60718c, type: 2}
     - target: {fileID: 7872282012780628103, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
       propertyPath: m_LocalPosition.x
       value: 41.98

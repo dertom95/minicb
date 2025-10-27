@@ -1,7 +1,8 @@
+using Components.Decorators;
 using Unity.Entities;
 
 namespace Components {
-    public struct SpawnEntityComponent : IComponentData {
+    public struct SpawnEntityComponent : IComponentData, IRemoveForPreviewEntity {
         public enum Mode : byte {
             /// <summary>
             /// A random entityPrefab is selected

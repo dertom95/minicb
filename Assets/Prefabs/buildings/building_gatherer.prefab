@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 3811270770579458073}
   - component: {fileID: -1614799939286502754}
   - component: {fileID: -4806133234853643894}
-  m_Layer: 0
+  - component: {fileID: 29534419052983450}
+  m_Layer: 6
   m_Name: building_gatherer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,9 +55,6 @@ MonoBehaviour:
     wood: 3
     stone: 3
     timeInSeconds: 20
-  maxJobs: 2
-  jobType: 2
-  jobDurationInSeconds: 5
 --- !u!114 &2356010207413593046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +108,27 @@ MonoBehaviour:
   maxJobs: 2
   jobType: 2
   jobDurationInSeconds: 5
+--- !u!135 &29534419052983450
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052800053472007847}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 3.72
+  m_Center: {x: 0, y: 3.85, z: 0}
 --- !u!1001 &6915147967246453006
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -161,6 +180,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 59bf47409dc077f4e9aaa3d5da2105c4, type: 3}
       propertyPath: m_Name
       value: building_gatherer
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 59bf47409dc077f4e9aaa3d5da2105c4, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

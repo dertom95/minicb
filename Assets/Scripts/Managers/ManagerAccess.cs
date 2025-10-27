@@ -22,10 +22,12 @@ public static class Mgr {
     public static IJobManager jobManager;
     public static ISettlerManager settlerManager;
     public static IUIManager uiManager;
+    public static IPhysicsManager physicsManager;
 
     private static ManagerSetup currentSetup = ManagerSetup.None;
 
     public static void CleanupManagers() {
+        physicsManager?.Dispose();
         animationManager?.Dispose();
         assetManager?.Dispose();
         buildingManager?.Dispose();
@@ -60,6 +62,7 @@ public static class Mgr {
     }
 
     private static void InitRuntime() {
+        physicsManager = new PhysicsManager();
         animationManager = new AnimationManager();
         assetManager = new AssetManager();
         buildingManager = new BuildingManager();
@@ -71,6 +74,7 @@ public static class Mgr {
     }
 
     private static void InitUnitTesting() {
+        physicsManager = new PhysicsManager();
         animationManager = new AnimationManager();
         assetManager = new AssetManager();
         buildingManager = new BuildingManager();

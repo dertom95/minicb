@@ -8,150 +8,71 @@ namespace Manager {
     using Unity.Physics;
     using Unity.Transforms;
     using UnityEngine;
-    using UnityEngine.EventSystems;
+    using UnityEngine.InputSystem;
 
     public class InputManager : IManagerUpdateable, IInputManager {
-        public enum InputMode {
-            SpawnBuilding
-        }
 
         public event EventHandler<BuildingType> EventSelectedBuildingChanged;
 
-        private BuildingType currentBuilding = BuildingType.woodcutter;
+        public enum InputMode {
+            Selection, BuildMode
+        }
 
-        EntityManager entityManager;
-        EntityQuery physicsWorldSingletonQuery;
+        public struct InputManagerContext {
+            public InputMode mode;
+            public IPhysicsManager physicsManager;
+            public InputManager inputManager;
+            public World world;
+        }
+
+        public StateMachine<InputMode, InputManagerContext> stateMachine;
+
+        private InputManagerContext ctx;
+
+        private EntityManager entityManager;
+
 
         public InputManager() {
         }
 
-
         public void Init() {
-            var world = World.DefaultGameObjectInjectionWorld;
-            entityManager = world.EntityManager;
+            World world = World.DefaultGameObjectInjectionWorld;
+            ctx = new InputManagerContext {
+                world = world,
+                physicsManager = Mgr.physicsManager
+            };
 
-            physicsWorldSingletonQuery = entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
-            SetCurrentBuilding(BuildingType.gatherer);
+            entityManager = world.EntityManager;
+            stateMachine = new StateMachine<InputMode,InputManagerContext>(ctx, InputMode.Selection);
+            stateMachine.RegisterState(InputMode.Selection, new StateSelectionMode());
+            stateMachine.RegisterState(InputMode.BuildMode, new StateBuildMode());
+            stateMachine.ChangeState(InputMode.Selection);
         }
 
         public void Dispose() {
         }
 
         public void Update(float dt) {
-            HandleKeyboard();
-            InstantiateBuildingOnLeftClick();
+            stateMachine.Update();
         }
 
-        private void HandleKeyboard() {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                currentBuilding = BuildingType.gatherer;
-                Debug.Log("Selected gatherer");
-            } else if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                currentBuilding = BuildingType.woodcutter;
-                Debug.Log("Selected woodcutter");
-            } else if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                currentBuilding = BuildingType.mason;
-                Debug.Log("Selected mason");
-            } else if (Input.GetKeyDown(KeyCode.Alpha4)) {
-                currentBuilding = BuildingType.woodworker;
-                Debug.Log("Selected woodworker");
-            }
-        }
-
-        private bool IsMouseButtonDown(int btn, bool ignoreButtonIfOverUI = true) {
+        /// <summary>
+        /// Check if the mouseButton is down button is pressed
+        /// Optionally ignore the button if the mouse was abouve ui-element
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="ignoreButtonIfOverUI"></param>
+        /// <returns></returns>
+        public bool IsMouseButtonDown(int btn, bool ignoreButtonIfOverUI = true) {
             return Input.GetMouseButtonDown(btn) && (!ignoreButtonIfOverUI || !Mgr.uiManager.IsMouseOverUI());
         }
 
-        private void InstantiateBuildingOnLeftClick() {
-
-            if (IsMouseButtonDown(0)) {
-
-                PhysicsWorldSingleton physicsWorld = physicsWorldSingletonQuery.GetSingleton<PhysicsWorldSingleton>();
-
-                var world = World.DefaultGameObjectInjectionWorld;
-                var physicsWorldSystem = physicsWorldSingletonQuery.GetSingleton<PhysicsWorldSingleton>();
-                var collisionWorld = physicsWorldSystem.CollisionWorld;
-
-                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                //// Define your ray
-                float3 rayOrigin = ray.origin;
-                float3 rayDirection = ray.direction;
-                float rayLength = 10000f;
-
-                var rayInput = new RaycastInput {
-                    Start = rayOrigin,
-                    End = rayOrigin + rayDirection * rayLength,
-                    Filter = CollisionFilter.Default
-                };
-
-
-                if (collisionWorld.CastRay(rayInput, out Unity.Physics.RaycastHit hit)) {
-                    Debug.Log($"Hit: Entity:{hit.Entity}  Pos:{hit.Position} ColKey:{hit.ColliderKey}");
-
-                    bool hadEnoughResourceToBuildBuilding = Mgr.dataManager.TryToRemoveBuildingCostsFromInventory(currentBuilding);
-                    if (!hadEnoughResourceToBuildBuilding) {
-                        UnityEngine.Debug.Log("Not enough resources to build:" + currentBuilding);
-                        return;
-                    }
-                    Entity newEntity = Mgr.buildingManager.SpawnBuilding(currentBuilding, hit.Position);
-
-                    if (newEntity == Entity.Null) {
-                        // couldn't build
-                        return;
-                    }
-
-                    //Entity entityPrefab = Mgr.dataManager.GetBuildingEntityPrefab(Data.BuildingType.gatherer);
-                    //Entity newEntity = entityManager.Instantiate(entityPrefab);
-                    //LocalTransform newTransform = new LocalTransform {
-                    //    Position = hit.Position,
-                    //    Rotation = quaternion.EulerXYZ(new float3(0f, math.radians(45f), 0f)),
-                    //    Scale = 1f
-                    //};
-                    //entityManager.SetComponentData(newEntity, newTransform);
-
-                    //EntityPrefabs entityPrefabs = prefabSingletonQuery.GetSingleton<EntityPrefabs>();
-                    //Assert.IsTrue(entityPrefabs.treePrefab != Entity.Null);
-                    //Entity islandEntity = islandSingletonQuery.GetSingletonEntity();
-                    //Assert.IsTrue(islandEntity != Entity.Null);
-
-                    //Entity newEntity = entityManager.Instantiate(entityPrefabs.treePrefab);
-                    //LocalTransform newTransform = new LocalTransform {
-                    //    Position = hit.Position,
-                    //    Rotation = quaternion.EulerXYZ(new float3(0f, math.radians(45f), 0f)),
-                    //    Scale = 1f
-                    //};
-                    //entityManager.SetComponentData(newEntity, newTransform);
-                    //entityManager.AddComponentData(newEntity, new Parent { Value = islandEntity });
-                }
-
-            }
-        }
-
-        //public bool MouseOverUIElement() {
-        //    bool mouseOver = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
-        //    Debug.Log("MouseOver UI:" + mouseOver);
-        //    return mouseOver;
-        //}
-
-        public void SetCurrentBuilding(BuildingType buildingType) {
-            this.currentBuilding = buildingType;
+        public void StartBuildMode(BuildingType buildingType) {
+            stateMachine.ChangeState(InputMode.BuildMode, buildingType);
 
             EventSelectedBuildingChanged?.Invoke(this, buildingType);
         }
-
-        //private void RotateIsland() {
-        //    InputComponent inputComponent = new InputComponent();
-        //    if (Input.GetKey(KeyCode.A)) {
-        //        inputComponent.rotate += -1;
-        //    }
-        //    if (Input.GetKey(KeyCode.D)) {
-        //        inputComponent.rotate += 1;
-        //    }
-
-        //    Entity inputEntity = inputSingletonQuery.GetSingletonEntity();
-        //    entityManager.SetComponentData(inputEntity, inputComponent);
-        //}
     }
+
 }
 

@@ -1,8 +1,9 @@
+using Components.Decorators;
 using Data;
 using Unity.Entities;
 
 namespace Components {
-    public struct ResourceToResourceComponent : IComponentData {
+    public struct ResourceToResourceComponent : IComponentData, IRemoveForPreviewEntity {
     }
 
     public struct RTRInputResource : IBufferElementData {

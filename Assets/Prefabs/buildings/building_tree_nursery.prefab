@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4691366950231773629}
   - component: {fileID: -7858890566309574917}
   - component: {fileID: 976812221988315505}
+  - component: {fileID: 1865580275657009214}
   m_Layer: 0
   m_Name: building_tree_nursery
   m_TagString: Untagged
@@ -66,9 +67,6 @@ MonoBehaviour:
     wood: 3
     stone: 1
     timeInSeconds: 10
-  maxJobs: 1
-  jobType: 8
-  jobDurationInSeconds: 10
 --- !u!114 &4691366950231773629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,6 +110,27 @@ MonoBehaviour:
   maxJobs: 1
   jobType: 8
   jobDurationInSeconds: 10
+--- !u!135 &1865580275657009214
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448284749141492630}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 3.03
+  m_Center: {x: 0, y: 3.59, z: 0}
 --- !u!1001 &6263015357406050904
 PrefabInstance:
   m_ObjectHideFlags: 0
