@@ -28,7 +28,7 @@ namespace Manager {
         /// <summary>
         /// data store - dictionary
         /// </summary>
-        private Dictionary<ushort, object> dataStore;
+        private Dictionary<int, object> dataStore;
 
         // TODO: Extract Inventory in its own Manager
 
@@ -55,7 +55,7 @@ namespace Manager {
             physicsManager = Mgr.physicsManager;
 
             currentId = 1000;
-            dataStore = new Dictionary<ushort, object>();
+            dataStore = new Dictionary<int, object>();
             InitInventory();
         }
 
@@ -84,7 +84,7 @@ namespace Manager {
         public int StoreData(object data) {
             Assert.IsFalse(data == null, "It is not allowed to put null data into the store");
             Assert.IsFalse(currentId < short.MaxValue, "the datastore reached its limit! consider using int as key instead!");
-            ushort objectId = currentId;
+            int objectId = currentId;
             dataStore[objectId] = data;
             currentId++;
             return objectId;
@@ -94,7 +94,7 @@ namespace Manager {
         /// Remove data from the dataStore by objectId
         /// </summary>
         /// <param name="objectId"></param>
-        public void RemoveData(ushort objectId) {
+        public void RemoveData(int objectId) {
             Assert.IsTrue(dataStore.ContainsKey(objectId));
             dataStore.Remove(objectId);
         }
@@ -104,7 +104,7 @@ namespace Manager {
         /// </summary>
         /// <param name="objectId"></param>
         /// <returns></returns>
-        public object GetData(ushort objectId) {
+        public object GetData(int objectId) {
             Assert.IsTrue(dataStore.ContainsKey(objectId));
             return dataStore[objectId];
         }
@@ -168,7 +168,7 @@ namespace Manager {
         /// <param name="res"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public bool HasResInGlobalInventory(ResourceType res, int amount) {
+        public bool HasResourceInGlobalInventory(ResourceType res, int amount) {
             globalInventory.TryGetValue(res, out int currentAmount);
             return currentAmount >= amount;
         }
@@ -189,7 +189,7 @@ namespace Manager {
         /// <param name="amount"></param>
         /// <returns></returns>
         public bool RemoveResFromGlobalInventory(ResourceType res, int amount) {
-            Assert.IsTrue(HasResInGlobalInventory(res, amount));
+            Assert.IsTrue(HasResourceInGlobalInventory(res, amount));
             globalInventory.TryGetValue(res, out int currentAmount);
             int newAmount = globalInventory[res] = currentAmount - amount;
             TriggerInventoryChanged();
@@ -204,8 +204,8 @@ namespace Manager {
         public bool HasEnoughResourcesToBuildBuilding(BuildingType buildingType) {
             Entity buildingEntityPrefab = assetManager.GetBuildingEntityPrefab(buildingType);
             BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(buildingEntityPrefab);
-            bool enoughWood = HasResInGlobalInventory(ResourceType.Wood, buildingComponent.buildingCosts.wood);
-            bool enoughStone = HasResInGlobalInventory(ResourceType.Stone, buildingComponent.buildingCosts.stone);
+            bool enoughWood = HasResourceInGlobalInventory(ResourceType.Wood, buildingComponent.buildingCosts.wood);
+            bool enoughStone = HasResourceInGlobalInventory(ResourceType.Stone, buildingComponent.buildingCosts.stone);
             bool result = enoughWood && enoughStone;
             return result;
         }
@@ -261,7 +261,7 @@ namespace Manager {
         /// </summary>
         /// <param name="listener"></param>
         /// <param name="trigger"></param>
-        public void RegisterInventoryChangedEvent(EventHandler<Dictionary<ResourceType, int>> listener, bool trigger = false) {
+        public void SubscribeToInventoryChangedEvent(EventHandler<Dictionary<ResourceType, int>> listener, bool trigger = false) {
             EventInventoryChanged += listener;
             if (trigger) {
                 TriggerInventoryChanged();
@@ -272,7 +272,7 @@ namespace Manager {
         /// Unregister InventoryChanged Subscriber
         /// </summary>
         /// <param name="listener"></param>
-        public void UnregisterInventoryChangedEvent(EventHandler<Dictionary<ResourceType, int>> listener) {
+        public void UnsubscribeFromInventoryChangedEvent(EventHandler<Dictionary<ResourceType, int>> listener) {
             EventInventoryChanged -= listener;
         }
 

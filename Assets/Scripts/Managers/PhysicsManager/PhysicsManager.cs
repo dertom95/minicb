@@ -11,37 +11,22 @@ namespace Manager {
     public class PhysicsManager : IPhysicsManager {
         private World world;
 
-        private EntityQuery physicsWorldSingletonQuery;
-        private PhysicsWorldSingleton physicsWorldSingleton;
-        private EntityManager entityManager;
-        private Camera camera;
-        private CollisionWorld collisionWorld;
-        private PhysicsWorld physicsWorld;
-
         public void Init() {
-            SetWorld(World.DefaultGameObjectInjectionWorld, Camera.main);
         }
 
         public void Dispose() {
         }
 
-        public void Update(float dt) {
-            UpdatePhysicsSingleton();
+        public PhysicsWorldSingleton GetPhysicsWorldSingleton(World world) {
+            EntityManager em = world.EntityManager;
+            EntityQuery query = em.CreateEntityQuery(typeof(PhysicsWorldSingleton));
+            PhysicsWorldSingleton physicsWorldSingleton = query.GetSingleton<PhysicsWorldSingleton>();
+            return physicsWorldSingleton;
         }
 
-        public void SetWorld(World world, Camera camera) {
-            this.world = world;
-            this.camera = camera;
-            entityManager = world.EntityManager;
-
-            physicsWorldSingletonQuery = entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
-            UpdatePhysicsSingleton();
-        }
-
-        private void UpdatePhysicsSingleton() {
-            physicsWorldSingleton = physicsWorldSingletonQuery.GetSingleton<PhysicsWorldSingleton>();
-            physicsWorld = physicsWorldSingleton.PhysicsWorld;
-            collisionWorld = physicsWorldSingleton.CollisionWorld;
+        public PhysicsWorld GetPhysicsWorld(World world) {
+            var physicsWorldSingleton = GetPhysicsWorldSingleton(world);
+            return physicsWorldSingleton.PhysicsWorld;
         }
 
         /// <summary>
@@ -62,12 +47,14 @@ namespace Manager {
                 GroupIndex = 0
             };
 
+            var physicsWorldSingleton = GetPhysicsWorldSingleton(world);
+
             if (physicsWorldSingleton.OverlapSphere(position, radius, ref resultHits, filter)) {
                 for (int i = 0; i < resultHits.Length; i++) {
                     var hit = resultHits[i];
                     var entity = physicsWorldSingleton.PhysicsWorld.Bodies[hit.RigidBodyIndex].Entity;
                     if (funcFilter != null) {
-                        if (funcFilter(entityManager, entity)) {
+                        if (funcFilter(world.EntityManager, entity)) {
                             return entity;
                         }
                         continue;
@@ -83,11 +70,14 @@ namespace Manager {
         }
 
         public bool TryToPickRaycast(out Unity.Physics.RaycastHit result, CollisionFilter collisionFilter) {
+            return TryToPickRaycast(World.DefaultGameObjectInjectionWorld, Camera.main, collisionFilter, out result);
+        }
+
+        public bool TryToPickRaycast(World world, Camera camera, CollisionFilter collisionFilter, out Unity.Physics.RaycastHit result) {
             result = default;
 
             //physicsWorldSingleton = physicsWorldSingletonQuery.GetSingleton<PhysicsWorldSingleton>();
-            collisionWorld = physicsWorldSingleton.CollisionWorld;
-            physicsWorld = physicsWorldSingleton.PhysicsWorld;
+            var physicsWorld = GetPhysicsWorld(world);
 
             UnityEngine.Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 

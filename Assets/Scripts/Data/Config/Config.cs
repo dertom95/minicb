@@ -42,7 +42,7 @@ public class Config : IManager {
 
     public void Init() {
         configSO = Resources.Load<ConfigSO>("Config");
-        Assert.IsNotNull(configSO);
+        Assert.IsNotNull(configSO); 
     }
 
     public void Dispose() {

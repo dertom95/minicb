@@ -14,18 +14,18 @@ namespace Systems {
         public void OnUpdate(ref SystemState state) {
             EntityCommandBuffer ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
 
-            ProcessEntityToResourceJob(ref ecb, ref state);
+            HandleJobCreation(ref ecb, ref state);
 
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
         }
 
         /// <summary>
-        /// Find EntityToResource-Buildings that needs to create jobs
+        /// Handle job creation for all JobEmitters
         /// </summary>
         /// <param name="ecb"></param>
         /// <param name="state"></param>
-        private void ProcessEntityToResourceJob(ref EntityCommandBuffer ecb, ref SystemState state) {
+        private void HandleJobCreation(ref EntityCommandBuffer ecb, ref SystemState state) {
             // Query entities with the specified components and tags.
             // TODO: Still looking for a good readable format to write those queries
             foreach (
@@ -34,10 +34,7 @@ namespace Systems {
                     LocalTransform localTransform,
                     Entity buildingEntity
                 )
-                in SystemAPI.Query<
-                    RefRW<JobEmitterComponent>,
-                    LocalTransform
-                >()
+                in SystemAPI.Query<RefRW<JobEmitterComponent>,LocalTransform>()
                 .WithAll<TagWorking, TagBuilt, TagCreateJobs>()
                 .WithEntityAccess())
             {

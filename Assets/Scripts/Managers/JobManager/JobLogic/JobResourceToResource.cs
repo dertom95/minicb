@@ -23,7 +23,7 @@ public class JobResourceToResource : JobLogicBase {
         
         // check if the inputResources are available in the inventory
         foreach (RTRInputResource resource in inputResources) {
-            bool enoughResourceInInventory = dataManager.HasResInGlobalInventory(resource.resIn.resourceType, resource.resIn.resourceAmount);
+            bool enoughResourceInInventory = dataManager.HasResourceInGlobalInventory(resource.resIn.resourceType, resource.resIn.resourceAmount);
             if (!enoughResourceInInventory) {
                 // not all resources available for conversion
                 return false;

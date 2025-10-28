@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8661493210980727669}
+  - component: {fileID: -1614799939286502754}
   - component: {fileID: 742227057199870322}
   - component: {fileID: 2356010207413593046}
   - component: {fileID: 3811270770579458073}
-  - component: {fileID: -1614799939286502754}
   - component: {fileID: -4806133234853643894}
   - component: {fileID: 29534419052983450}
   m_Layer: 6
@@ -38,6 +38,18 @@ Transform:
   - {fileID: 6376308779734019813}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-1614799939286502754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052800053472007847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
 --- !u!114 &742227057199870322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,18 +93,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityToResourceComponentAuthoring
   searchResourceType: 2
---- !u!114 &-1614799939286502754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5052800053472007847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Entities.Hybrid::Unity.Entities.Hybrid.Baking.LinkedEntityGroupAuthoring
 --- !u!114 &-4806133234853643894
 MonoBehaviour:
   m_ObjectHideFlags: 0

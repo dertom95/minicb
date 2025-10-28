@@ -169,6 +169,8 @@ namespace Systems {
                 jobLogic.OnExit(ref ecb, ref jobEntity, ref state, ref job, dt);
                 cleanupJob(ref ecb, ref jobEntity, ref state, ref job, dt);
             }
+            //█▀█ █░█ █ ▀█▀
+            //▀▀█ █▄█ █ ░█░
             else if (job.jobState == JobState.Quit) {
                 jobLogic.OnExit(ref ecb, ref jobEntity, ref state, ref job, dt);
                 cleanupJob(ref ecb, ref jobEntity, ref state, ref job, dt);

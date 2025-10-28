@@ -51,7 +51,6 @@ namespace Manager {
             sphereRadius = EntityUtils.GetPhysicsSphereWorldRadius(entityManager, previewEntity);
             entityManager.RemoveComponent<PhysicsCollider>(previewEntity);
 
-            ctx.physicsManager.Update(0);
             UpdatePreviewEntity(ctx.world);
         }
 

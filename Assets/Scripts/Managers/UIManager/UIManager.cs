@@ -17,12 +17,12 @@ namespace Manager {
         public void Init() {
             uiData = Resources.Load<UIData>("UIData");
 
-            Mgr.dataManager.RegisterInventoryChangedEvent(OnInventoryChange);
+            Mgr.dataManager.SubscribeToInventoryChangedEvent(OnInventoryChange);
             Mgr.inputManager.EventSelectedBuildingChanged += OnSelectedBuildingChanged;
         }
 
         public void Dispose() {
-            Mgr.dataManager.UnregisterInventoryChangedEvent(OnInventoryChange);
+            Mgr.dataManager.UnsubscribeFromInventoryChangedEvent(OnInventoryChange);
             Mgr.inputManager.EventSelectedBuildingChanged -= OnSelectedBuildingChanged;
         }
 
