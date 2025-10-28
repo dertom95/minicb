@@ -4,23 +4,28 @@ However, the API is quite extensive, and I'm still figuring out the best practic
 To get a better grasp of it, I’m creating this simple game.
 
 The game is still in a very early stage.  
-Currently, you can select the following buildings using the keyboard:  
-- 1 - Gatherer (collects mushrooms)  
-- 2 - Woodcutter (collects wood from trees)  
-- 3 - Mason (collects stones)  
+Controls:
+Panning: Right-Click and Drag | AWSD
+Rotate: Middle-Click and Move
+Zoom: Mouse-Wheel
 
-Use left-click to build — there are no restrictions yet.  
-You’ll see some feedback in the console when selecting buildings and upon job completion.  
+Select Building on the menu on top, deselect with ESC
 
-CurrentVersion: [https://github.com/dertom95/minicb/releases/download/0.01/minicb.zip]
 
-Camera movement is not implemented at this point.  
-Everything is very basic.
+CurrentVersion: [https://github.com/dertom95/minicb/releases/download/0.05/minicb_0.05.zip]
+
+Buildings:
+- Gatherer : Collects Mushrooms (Food)
+- Mason    : Collects Stones (Stone)
+- WoodCutter:Collects Wood (Wood)
+- WoodWorker:Transforms Wood and Stone to Tools
+- TreeNursery: Put new Trees in the World 
+
 No map generation, or spawning of settlers, yet.
-There are going to be three different types of building:
+Those are the ComponentType all buildings are based on:
 - Entity To Resource-Converter - Find a specific resource entity in the buildings radius and collect its resource  
-- Convert Input Resources to Output Resource - converts a defined amount of input-resources to a defined amout of output-resource **TO BE DONE**
-- Spawn Entity - Spawn specific prefabs in the buildings radius **TO BE DONE**
+- Convert Input Resources to Output Resource - converts a defined amount of input-resources to a defined amout of output-resource 
+- Spawn Entity - Spawn specific prefabs in the buildings radius 
 
 **Key Elements:**
 
