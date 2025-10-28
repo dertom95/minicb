@@ -27,7 +27,7 @@ namespace Manager {
 
         public bool OnUpdate(InputManagerContext ctx) {
             if (ctx.physicsManager.TryToPickRaycast(out Unity.Physics.RaycastHit hit)) {
-                UnityEngine.Debug.Log("SelectionMode: Picked: " + hit.Entity);
+                //UnityEngine.Debug.Log("SelectionMode: Picked: " + hit.Entity);
             }
             return true; // keep running
         }

@@ -1,7 +1,5 @@
 using Manager;
-using NUnit.Framework;
 using System.Collections.Generic;
-using Unity.Entities;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour {

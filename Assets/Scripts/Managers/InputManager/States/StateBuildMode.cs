@@ -1,6 +1,5 @@
 using Data;
 using Manager;
-using NUnit.Framework;
 using System;
 using System.Diagnostics;
 using Unity.Entities;
@@ -8,6 +7,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Rendering;
 using Unity.Transforms;
+using UnityEngine.Assertions;
 using static Manager.InputManager;
 
 
@@ -107,7 +107,7 @@ namespace Manager {
                 return false;
             }
 
-            if (inputManager.IsMouseButtonDown(0)) {
+            if (!isColliding && inputManager.IsMouseButtonDown(0)) {
                 TryToBuildBuilding();
             }
             if (notEnoughResourcesError) { 
