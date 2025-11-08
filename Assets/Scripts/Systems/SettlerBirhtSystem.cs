@@ -16,7 +16,7 @@ namespace Systems {
             for (int i = 0; i < neededSettlers; i++) {
                 float3 spawnPos = Utils.RandomPointInRadiusXZ(float3.zero, 5, 1);
                 Entity newSettler = Mgr.settlerManager.SpawnSettler(Data.SettlerType.Worker, spawnPos, 1, default);
-                Mgr.settlerManager.IncreaseCurrentSettlerAmount(1);
+                //Mgr.settlerManager.IncreaseCurrentSettlerAmount(1);
             }
         }
     }

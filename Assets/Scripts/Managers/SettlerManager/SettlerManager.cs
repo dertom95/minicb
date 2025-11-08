@@ -57,7 +57,6 @@ namespace Manager {
         public int IncreaseCurrentSettlerAmount(int amount) {
             SettlerAmountComponent settlerAmountComponent = GetSettlerAmountComponent();
             settlerAmountComponent.currentSettlerAmount += amount;
-            Assert.IsTrue(settlerAmountComponent.currentSettlerAmount <= settlerAmountComponent.maxSettlerAmount);
             
             entityManager.SetComponentData(playerSingletonEntity, settlerAmountComponent);
             EventSettlerAmountChanged.Invoke(this,null);
@@ -104,7 +103,7 @@ namespace Manager {
                 Scale = scale
             };
             entityManager.SetComponentData(newEntity, newTransform);
-
+            IncreaseCurrentSettlerAmount(1);
             return newEntity;
         }
     }

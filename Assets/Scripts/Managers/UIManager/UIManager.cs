@@ -17,6 +17,8 @@ namespace Manager {
 
         public void Init() {
             uiData = Resources.Load<UIData>("UIData");
+            uiData.currentSettlerAmount = 0;
+            uiData.maxSettlerAmount = 0;
 
             Mgr.dataManager.SubscribeToInventoryChangedEvent(OnInventoryChange);
             Mgr.inputManager.EventSelectedBuildingChanged += OnSelectedBuildingChanged;

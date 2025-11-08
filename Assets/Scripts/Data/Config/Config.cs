@@ -18,6 +18,11 @@ public class Config : IManager {
     public List<ResourceAmount> InitialInventory => configSO.initialInventory;
 
     /// <summary>
+    /// The initial amount of settlers on session startup
+    /// </summary>
+    public int InitialSettlerAmount => configSO.initialAmountSettlers;
+
+    /// <summary>
     /// The unity layer where all resource entities are stored
     /// </summary>
     public const int LAYER_RESOURCE = 3;
@@ -44,6 +49,7 @@ public class Config : IManager {
         configSO = Resources.Load<ConfigSO>("Config");
         Assert.IsNotNull(configSO); 
     }
+
 
     public void Dispose() {
     }

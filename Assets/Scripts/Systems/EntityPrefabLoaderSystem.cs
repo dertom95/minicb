@@ -11,8 +11,8 @@ namespace Systems {
     /// <summary>
     /// System to load prefabs and store them in the AssetManager
     /// </summary>
-    [UpdateInGroup(typeof(GameSystemGroup))]
-    public partial struct BuildingPrefabDictionarySystem : ISystem {
+    [UpdateInGroup(typeof(GameSystemGroup),OrderFirst = true)]
+    public partial struct PrefabLoaderSystem : ISystem {
         public void OnCreate(ref SystemState state) {
             // only run if there is at least one entity with BuildingPrefabBufferElement (this prevents running update before the scene is finished loading)
             state.RequireForUpdate<BuildingPrefabBufferElement>();
