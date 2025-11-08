@@ -4467,6 +4467,8 @@ MonoBehaviour:
     prefab: {fileID: 2497032533202971339, guid: 9954baec7c147754e96b8f9f3cfc0130, type: 3}
   - type: 1
     prefab: {fileID: 7049932333954273347, guid: 2ee7dddd335f86f4a957ee997c0014bb, type: 3}
+  settlerPrefabs:
+  - prefab: {fileID: 3191340089547567576, guid: 53df5a7089c91014e92f9b6dbcd79002, type: 3}
 --- !u!4 &1975791396
 Transform:
   m_ObjectHideFlags: 0

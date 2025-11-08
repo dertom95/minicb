@@ -17,8 +17,8 @@ public class BuildingButtonSpawner : MonoBehaviour {
         var root = uiDocument.rootVisualElement;
         var container = root.Q<VisualElement>("button-container");
 
-        // Example data for buttons
-        BuildingType[] buttonLabels = { BuildingType.gatherer, BuildingType.mason, BuildingType.woodcutter, BuildingType.woodworker, BuildingType.tree_nursery };
+        // TODO: this must be somehow be configurable. At least in the configs
+        BuildingType[] buttonLabels = { BuildingType.gatherer, BuildingType.mason, BuildingType.woodcutter, BuildingType.woodworker, BuildingType.tree_nursery, BuildingType.house };
 
         for (int i = 0; i < buttonLabels.Length; i++) {
             int index = i; // Capture for closure

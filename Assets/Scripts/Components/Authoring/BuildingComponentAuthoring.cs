@@ -26,6 +26,11 @@ public class BuildingComponentAuthoring : MonoBehaviour
                 buildingCosts = authoring.buildingCosts,
                 currentState = BuildingState.UnderConstruction,
             });
+
+            AddComponent(entity, new EntityStateComponent { 
+                currentState = EntityStateComponent.EntityStateType.Created
+            });
+            SetComponentEnabled<EntityStateComponent>(entity, false);
         }
     }
 }

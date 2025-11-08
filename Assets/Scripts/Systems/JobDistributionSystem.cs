@@ -2,6 +2,7 @@ using BuildingLogic;
 using Components;
 using Components.Tags;
 using Manager;
+using Systems.SystemGroups;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -9,6 +10,7 @@ namespace Systems {
     /// <summary>
     /// System to iterate over all open jobs and try to assign free settlers to the jobs
     /// </summary>
+    [UpdateInGroup(typeof(GameSystemGroup))]
     public partial struct JobDistributionSystem : ISystem {
         private EntityQuery jobQuery;
         private EntityQuery settlerQuery;

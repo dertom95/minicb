@@ -9,5 +9,8 @@ public class UIData : ScriptableObject {
     public int food = 0;
     public int tools = 0;
 
+    public int currentSettlerAmount = 0;
+    public int maxSettlerAmount = 0;
+
     public string selectedBuilding;
 }

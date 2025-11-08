@@ -21,6 +21,8 @@ namespace Manager {
         private IAssetManager assetManager;
         private IPhysicsManager physicsManager;
 
+        private Dictionary<BuildingType, List<Entity>> buildings;
+
         /// <summary>
         /// next id used for datastore
         /// </summary>
@@ -56,6 +58,8 @@ namespace Manager {
 
             currentId = 1000;
             dataStore = new Dictionary<int, object>();
+            buildings = new Dictionary<BuildingType, List<Entity>>();
+
             InitInventory();
         }
 

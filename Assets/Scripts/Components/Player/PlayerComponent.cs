@@ -5,6 +5,8 @@ using Unity.Entities;
 
 namespace Components {
     public class PlayerComponent : IComponentData {
-        ushort playerNameStoreId;
+    }
+
+    public struct MainPlayerSingleton : IComponentData {
     }
 }

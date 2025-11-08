@@ -17,12 +17,18 @@ namespace Manager {
         /// </summary>
         private Dictionary<ResourcePrefabType, Entity> resourceEntityPrefabs;
 
+        /// <summary>
+        /// Lookup ResourceType->EntityPrefab
+        /// </summary>
+        private Dictionary<SettlerType, Entity> settlerEntityPrefabs;
+
         EntityManager entityManager;
 
         public void Init() {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             buildingEntityPrefabs = new Dictionary<BuildingType, Entity>();
             resourceEntityPrefabs = new Dictionary<ResourcePrefabType, Entity>();
+            settlerEntityPrefabs = new Dictionary<SettlerType, Entity>();
         }
 
         /// <summary>
@@ -67,6 +73,29 @@ namespace Manager {
             Assert.IsTrue(resourceEntityPrefabs.ContainsKey(resPrefType));
 
             return resourceEntityPrefabs[resPrefType];
+        }
+
+
+        /// <summary>
+        /// Register Settler EntityPrefab (only one per SettlerType)
+        /// </summary>
+        /// <param name="settlerType"></param>
+        /// <param name="entityPrefab"></param>
+        public void RegisterSettlerEntityPrefab(SettlerType settlerType, Entity entityPrefab) {
+            Assert.IsFalse(settlerEntityPrefabs.ContainsKey(settlerType));
+
+            settlerEntityPrefabs[settlerType] = entityPrefab;
+        }
+
+        /// <summary>
+        /// Returns EntityPrefab to specific settlerType
+        /// </summary>
+        /// <param name="buildsettlerTypeingType"></param>
+        /// <returns></returns>
+        public Entity GetSettlerEntityPrefab(SettlerType settlerType) {
+            Assert.IsTrue(settlerEntityPrefabs.ContainsKey(settlerType));
+
+            return settlerEntityPrefabs[settlerType];
         }
 
 

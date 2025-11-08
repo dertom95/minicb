@@ -1,4 +1,6 @@
 
+using Components;
+using System.Runtime.CompilerServices;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -6,8 +8,28 @@ using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem.HID;
+using static Components.EntityStateComponent;
 
 public static class EntityUtils {
+
+    private static EntityQuery queryEndSimulationCommandBufferSingleton;
+
+    public static void InitQueries(ref SystemState state) {
+        var entityQueryBuilder = new global::Unity.Entities.EntityQueryBuilder(global::Unity.Collections.Allocator.Temp);
+        queryEndSimulationCommandBufferSingleton =
+            entityQueryBuilder
+                .WithAll<global::Unity.Entities.EndSimulationEntityCommandBufferSystem.Singleton>()
+                .WithOptions(global::Unity.Entities.EntityQueryOptions.IncludeSystems)
+                .Build(ref state);
+        entityQueryBuilder.Reset();
+        entityQueryBuilder.Dispose();
+    }
+
+    public static EntityCommandBuffer CreateEntityCommandBufferEndSim() {
+        EndSimulationEntityCommandBufferSystem.Singleton ecbSingleton = queryEndSimulationCommandBufferSingleton.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+        var ecb = ecbSingleton.CreateCommandBuffer(World.DefaultGameObjectInjectionWorld.Unmanaged);
+        return ecb;
+    }
 
     /// <summary>
     /// Returns a specific child from that entity
@@ -86,4 +108,36 @@ public static class EntityUtils {
         }
     }
 
+    public static void SetEntityState(this EntityManager em, Entity entity, EntityStateType entityStateType) {
+        EntityStateComponent entityStateComponent = em.GetComponentData<EntityStateComponent>(entity);
+        entityStateComponent.currentState = entityStateType;
+        em.SetComponentData(entity, entityStateComponent);
+        em.SetComponentEnabled<EntityStateComponent>(entity, true);
+    }
+
+    /// <summary>
+    /// Check if the specific entity is a House.
+    /// </summary>
+    /// <param name="em"></param>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsBuilding(this EntityManager em, Entity entity) {
+        bool isHouse = em.HasComponent<BuildingComponent>(entity);
+        return isHouse;
+    }
+
+
+    /// <summary>
+    /// Check if the specific entity is a House.
+    /// </summary>
+    /// <param name="em"></param>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsHouse(this EntityManager em, Entity entity) {
+        Assert.IsTrue(em.IsBuilding(entity));
+        bool isHouse = em.HasComponent<HouseComponent>(entity);
+        return isHouse;
+    }
 }

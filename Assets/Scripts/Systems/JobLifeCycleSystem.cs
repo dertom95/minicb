@@ -3,6 +3,7 @@ using Components;
 using Components.Tags;
 using Data;
 using Manager;
+using Systems.SystemGroups;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Entities.Serialization;
@@ -11,6 +12,7 @@ using Unity.Transforms;
 using UnityEngine.Assertions;
 
 namespace Systems {
+    [UpdateInGroup(typeof(GameSystemGroup))]
     public partial struct JobLifeCycleSystem : ISystem {
         private const float SQRDISTANCE_TO_FINISH_MOVEMENT = 1f;
 

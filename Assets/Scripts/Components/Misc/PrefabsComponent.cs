@@ -16,4 +16,8 @@ public struct BuildingPrefabBufferElement : IBufferElementData {
 public struct ResourcePrefabBufferElement : IBufferElementData {
     public ResourcePrefabType type;
     public Entity prefabEntity;
-} 
+}
+
+public struct SettlerPrefabBufferElement : IBufferElementData {
+    public Entity prefabEntity;
+}

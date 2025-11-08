@@ -30,5 +30,19 @@ namespace Manager {
         /// <param name="resourcePrefType"></param>
         /// <param name="entityPrefab"></param>
         void RegisterResourceEntityPrefab(ResourcePrefabType resourcePrefType, Entity entityPrefab);
+
+        /// <summary>
+        /// Register Settler EntityPrefab (only one per SettlerType)
+        /// </summary>
+        /// <param name="settlerType"></param>
+        /// <param name="entityPrefab"></param>
+        void RegisterSettlerEntityPrefab(SettlerType settlerType, Entity entityPrefab);
+
+        /// <summary>
+        /// Returns EntityPrefab to specific settlerType
+        /// </summary>
+        /// <param name="buildsettlerTypeingType"></param>
+        /// <returns></returns>
+        Entity GetSettlerEntityPrefab(SettlerType settlerType);
     }
 }

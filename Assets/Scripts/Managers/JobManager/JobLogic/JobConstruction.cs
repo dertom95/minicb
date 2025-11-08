@@ -14,6 +14,15 @@ public class JobConstruction : JobLogicBase {
         return false;
     }
 
+    public override bool OnStarted(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt) {
+        bool success = base.OnStarted(ref ecb, ref jobEntity, ref state, ref job, dt);
+        if (!success) {
+            return false;
+        }
+        state.EntityManager.SetEntityState(job.jobOwner, EntityStateComponent.EntityStateType.OnCreation);
+        return true;
+    }
+
     public override void OnWorking(ref EntityCommandBuffer ecb, ref Entity jobEntity, ref SystemState state, ref JobComponent job, float dt, float progress) {
         base.OnWorking(ref ecb, ref jobEntity, ref state, ref job, dt, progress);
 
@@ -30,6 +39,8 @@ public class JobConstruction : JobLogicBase {
         ecb.AddComponent<TagBuilt>(job.jobOwner);
         ecb.AddComponent<TagWorking>(job.jobOwner);
         ecb.AddComponent<TagCreateJobs>(job.jobOwner);
+        // change entity state
+        state.EntityManager.SetEntityState(job.jobOwner, EntityStateComponent.EntityStateType.Created);
     }
 
 }

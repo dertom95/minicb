@@ -1,4 +1,5 @@
 using Data;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,11 +20,13 @@ namespace Manager {
 
             Mgr.dataManager.SubscribeToInventoryChangedEvent(OnInventoryChange);
             Mgr.inputManager.EventSelectedBuildingChanged += OnSelectedBuildingChanged;
+            Mgr.settlerManager.EventSettlerAmountChanged += OnSettlerAmountChanged;
         }
 
         public void Dispose() {
             Mgr.dataManager.UnsubscribeFromInventoryChangedEvent(OnInventoryChange);
             Mgr.inputManager.EventSelectedBuildingChanged -= OnSelectedBuildingChanged;
+            Mgr.settlerManager.EventSettlerAmountChanged -= OnSettlerAmountChanged;
         }
 
         private void OnInventoryChange(object sender, Dictionary<Data.ResourceType, int> inv) {
@@ -36,6 +39,11 @@ namespace Manager {
 
         private void OnSelectedBuildingChanged(object sender, BuildingType buildingType) {
             uiData.selectedBuilding = buildingType.ToString();
+        }
+
+        public void OnSettlerAmountChanged(object sender, EventArgs e) {
+            uiData.maxSettlerAmount = Mgr.settlerManager.GetMaxSettlerAmount();
+            uiData.currentSettlerAmount = Mgr.settlerManager.GetCurrentSettlerAmount();
         }
 
         /// <summary>

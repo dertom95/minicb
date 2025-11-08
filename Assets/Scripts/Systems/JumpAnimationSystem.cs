@@ -1,9 +1,11 @@
 using Components;
+using Systems.SystemGroups;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Systems {
+    [UpdateInGroup(typeof(GameSystemGroup))]
     public partial struct JumpAnimationSystem : ISystem {
         public void OnUpdate(ref SystemState state) {
             float dt = (float)SystemAPI.Time.DeltaTime;

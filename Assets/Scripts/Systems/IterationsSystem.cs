@@ -1,7 +1,9 @@
 using Components;
+using Systems.SystemGroups;
 using Unity.Entities;
 
 namespace Systems {
+    [UpdateInGroup(typeof(GameSystemGroup))]
     public partial struct IterationsSystem : ISystem {
         public void OnUpdate(ref SystemState state) {
             EntityCommandBuffer ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);

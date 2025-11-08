@@ -1,7 +1,9 @@
+using Components;
 using Data;
 using Manager;
 using System;
 using System.Collections.Generic;
+using Systems.SystemGroups;
 using Unity.Entities;
 
 
@@ -9,6 +11,7 @@ namespace Systems {
     /// <summary>
     /// System to load prefabs and store them in the AssetManager
     /// </summary>
+    [UpdateInGroup(typeof(GameSystemGroup))]
     public partial struct BuildingPrefabDictionarySystem : ISystem {
         public void OnCreate(ref SystemState state) {
             // only run if there is at least one entity with BuildingPrefabBufferElement (this prevents running update before the scene is finished loading)
@@ -17,6 +20,8 @@ namespace Systems {
 
         public void OnUpdate(ref SystemState state) {
             EntityManager entityManager = state.EntityManager;
+
+            state.Enabled = false;
 
             // Find all Building-EntityPrefabs
             foreach (var (buffer, entity) in SystemAPI.Query<DynamicBuffer<BuildingPrefabBufferElement>>().WithEntityAccess()) {
@@ -32,7 +37,15 @@ namespace Systems {
                 }
             }
 
-            state.Enabled = false;
+            // Find all Settler-EntityPrefabs
+            foreach (var (buffer, entity) in SystemAPI.Query<DynamicBuffer<SettlerPrefabBufferElement>>().WithEntityAccess()) {
+                foreach (var entry in buffer) {
+                    SettlerComponent settlerComponent = entityManager.GetComponentData<SettlerComponent>(entry.prefabEntity);
+                    Mgr.assetManager.RegisterSettlerEntityPrefab(settlerComponent.settlerType, entry.prefabEntity);
+                }
+            }
+
+            EntityUtils.InitQueries(ref state);
         }
     }
 }

@@ -1,12 +1,14 @@
 using Components;
 using Components.Tags;
 using Manager;
+using Systems.SystemGroups;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine.Assertions;
 
 namespace Systems {
+    [UpdateInGroup(typeof(GameSystemGroup))]
     public partial struct JobCreationSystem : ISystem {
 
         private static Random random = new Random();

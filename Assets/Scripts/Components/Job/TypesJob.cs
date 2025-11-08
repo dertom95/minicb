@@ -10,7 +10,8 @@ namespace Data {
         EntityToResource = 1 << 1,
         ConvertResource = 1 << 2,
         SpawnEntity = 1 << 3,
-        Attack = 1 << 4
+        Attack = 1 << 4,
+        ChildProduction = 1 << 5 // :D couldn't come up with a better name 
     }
 
     /// <summary>

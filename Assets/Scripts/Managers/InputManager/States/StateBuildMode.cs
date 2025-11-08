@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Rendering;
 using Unity.Transforms;
+using UnityEngine;
 using UnityEngine.Assertions;
 using static Manager.InputManager;
 
@@ -55,6 +56,7 @@ namespace Manager {
         }
 
         public bool OnUpdate(InputManagerContext ctx) {
+            UnityEngine.Debug.Log("BUILDMODE-UPDATE");
             UpdatePreviewEntity(ctx.world);
             bool keepRunning = HandleInput();
             return keepRunning;
