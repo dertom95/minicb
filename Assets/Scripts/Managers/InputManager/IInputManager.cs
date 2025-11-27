@@ -1,9 +1,20 @@
 ﻿using Data;
 using System;
+using Unity.Entities;
 
 namespace Manager {
     public interface IInputManager : IManager {
-        event EventHandler<BuildingType> EventSelectedBuildingChanged;
+        public Entity CurrentSelectedEntity { get; }
+
+        /// <summary>
+        /// Event that in building-mode the selected buildingtype for build has changed
+        /// </summary>
+        event EventHandler<BuildingType> EventSelectedBuildBuildingChanged;
+
+        /// <summary>
+        /// In selection-mode the selected entity changed (can be Entity.Null)
+        /// </summary>
+        event EventHandler<Entity> EventSelectedEntityChanged;
 
         /// <summary>
         /// Check if the mouseButton is down button is pressed

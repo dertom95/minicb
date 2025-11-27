@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -1221223664197048950}
   - component: {fileID: -7173941066250391290}
   - component: {fileID: -1742946071350928856}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: building_house
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bea615c27b965847b237e8220abfea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MiniCB::BuildingComponentAuthoring
-  buildingType: 0
+  buildingType: 1
   buildingCosts:
     wood: 2
     stone: 2
@@ -150,6 +150,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5ceb377d6ee9e1e43a54c2f04ac4655b, type: 3}
       propertyPath: m_Name
       value: building_house
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5ceb377d6ee9e1e43a54c2f04ac4655b, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -16,6 +16,8 @@ namespace Systems {
 
             UnityEngine.Debug.Log("GAMESYSTEM");
             gameEntity = state.EntityManager.CreateEntity(typeof(GameSingletonComponent));
+            state.EntityManager.AddComponent<UIComponent>(gameEntity);
+
             mainPlayerEntity = state.EntityManager.CreateEntity(typeof(PlayerComponent), typeof(SettlerAmountComponent), typeof(MainPlayerSingleton));
         }
 

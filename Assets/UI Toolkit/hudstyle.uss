@@ -10,3 +10,26 @@
     color: rgb(0, 0, 0);
     margin-right: 8px;
 }
+
+#Frame {
+    background-image: url("project://database/Assets/Visuals/textures/ui/ui_frame1.png?fileID=2800000&guid=fe58f7047b2d6d84c8c7a19a4e314aec&type=3#ui_frame1");
+    -unity-slice-left: 16;
+    -unity-slice-top: 16;
+    -unity-slice-right: 16;
+    -unity-slice-bottom: 16;
+}
+
+.ribbon1 {
+    background-image: url("project://database/Assets/Visuals/textures/ui/ui_ribbon1.png?fileID=2800000&guid=031873ca13d55c447852dc27f3e32043&type=3#ui_ribbon1");
+    -unity-slice-left: 24;
+    -unity-slice-top: 8;
+    -unity-slice-right: 41;
+    -unity-slice-bottom: 24;
+}
+
+#building-inspector {
+    position: absolute;
+    bottom: 25;
+    right: 25;
+    flex-direction: row;
+}

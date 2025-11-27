@@ -1,6 +1,8 @@
+using Components;
 using Data;
 using System;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -12,6 +14,8 @@ namespace Manager {
         /// </summary>
         // TODO use another approach!?
         private UIData uiData;
+        private EntityManager entityManager;
+        private Entity currentSelectedEntity = Entity.Null;
 
         public UIManager() { }
 
@@ -19,15 +23,19 @@ namespace Manager {
             uiData = Resources.Load<UIData>("UIData");
             uiData.currentSettlerAmount = 0;
             uiData.maxSettlerAmount = 0;
+            uiData.currentBuildingName = "unknown";
 
             Mgr.dataManager.SubscribeToInventoryChangedEvent(OnInventoryChange);
-            Mgr.inputManager.EventSelectedBuildingChanged += OnSelectedBuildingChanged;
+            Mgr.inputManager.EventSelectedBuildBuildingChanged += OnSelectedBuildBuildingTypeChanged;
+            Mgr.inputManager.EventSelectedEntityChanged += OnSelectedEntityChanged;
             Mgr.settlerManager.EventSettlerAmountChanged += OnSettlerAmountChanged;
+
+            entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         }
 
         public void Dispose() {
             Mgr.dataManager.UnsubscribeFromInventoryChangedEvent(OnInventoryChange);
-            Mgr.inputManager.EventSelectedBuildingChanged -= OnSelectedBuildingChanged;
+            Mgr.inputManager.EventSelectedBuildBuildingChanged -= OnSelectedBuildBuildingTypeChanged;
             Mgr.settlerManager.EventSettlerAmountChanged -= OnSettlerAmountChanged;
         }
 
@@ -39,7 +47,7 @@ namespace Manager {
             uiData.tools = inv[Data.ResourceType.Tools];
         }
 
-        private void OnSelectedBuildingChanged(object sender, BuildingType buildingType) {
+        private void OnSelectedBuildBuildingTypeChanged(object sender, BuildingType buildingType) {
             uiData.selectedBuilding = buildingType.ToString();
         }
 
@@ -47,6 +55,30 @@ namespace Manager {
             uiData.maxSettlerAmount = Mgr.settlerManager.GetMaxSettlerAmount();
             uiData.currentSettlerAmount = Mgr.settlerManager.GetCurrentSettlerAmount();
         }
+
+        public void OnSelectedEntityChanged(object sender, Entity entity) {
+            BuildingButtonSpawner.Instance.SetInspectorEntity(entity);
+
+            if (entity == Entity.Null) {
+                uiData.currentBuildingName = "No Selection";
+                BuildingButtonSpawner.Instance.SetInspectorVisible(false);
+                return;
+            }
+
+            BuildingButtonSpawner.Instance.SetInspectorVisible(true);
+            if (entityManager.HasComponent<BuildingComponent>(entity)) {
+                BuildingComponent buildingComponent = entityManager.GetComponentData<BuildingComponent>(entity);
+                uiData.currentBuildingName = buildingComponent.buildingType.ToString();
+            } 
+            else if (entityManager.HasComponent<ResourceComponent>(entity)) {
+                ResourceComponent resourceComponent = entityManager.GetComponentData<ResourceComponent>(entity);
+                uiData.currentBuildingName = resourceComponent.resourceType.ToString();
+            } else {
+                uiData.currentBuildingName = "Unknown Type";
+            }
+        }
+
+        
 
         /// <summary>
         /// Check if the cursor is over UI-Elements
@@ -87,5 +119,7 @@ namespace Manager {
                 return false;
             }
         }
+
+
     }
 }

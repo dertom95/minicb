@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6033029395702835527}
   - component: {fileID: 6518063428026145700}
   - component: {fileID: 5943781802529161218}
+  - component: {fileID: 4310098041067218791}
   m_Layer: 3
   m_Name: res_tree
   m_TagString: Untagged
@@ -97,6 +98,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: MiniCB::IterationsComponentAuthoring
   amountIterations: 3
   destroyEntityOnNoIterationsLeft: 1
+--- !u!114 &4310098041067218791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2497032533202971339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28ed3acfc8e8aed47b96534e76e32042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::JobTargetComponentAuthoring
 --- !u!1001 &4146760910219306511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -151,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 94309522d6b970645a4d4b5669fb7c24, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

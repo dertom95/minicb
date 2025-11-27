@@ -118,6 +118,17 @@ namespace Manager {
             return newBuildingEntity;
         }
 
+        /// <summary>
+        /// Enable/Disable building 
+        /// </summary>
+        /// <param name="buildingEntity"></param>
+        /// <param name="enabled"></param>
+        public void SetBuildingEnabled(Entity buildingEntity, bool enabled) {
+            Assert.IsTrue(buildingEntity != Entity.Null);
+
+
+        }
+
 
         public void Update(float dt) {
         }

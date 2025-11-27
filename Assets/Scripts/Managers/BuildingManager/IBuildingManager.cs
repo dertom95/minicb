@@ -29,5 +29,12 @@ namespace Manager {
         /// <param name="buildingType"></param>
         /// <returns></returns>
         Entity SpawnPreviewBuilding(BuildingType buildingType, bool removePhysicsOnToplevelEntity=true);
+
+        /// <summary>
+        /// Enable/Disable building 
+        /// </summary>
+        /// <param name="buildingEntity"></param>
+        /// <param name="enabled"></param>
+        void SetBuildingEnabled(Entity buildingEntity,  bool enabled);
     }
 }

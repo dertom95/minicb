@@ -21,8 +21,8 @@ public class StateMachine<TStateEnum,TContext> {
 
     private TContext context;
 
-    public StateMachine(TContext context, TStateEnum defaultState, object defaultUserData=null) {
-        this.context = context;
+    public StateMachine(TContext initialContext, TStateEnum defaultState, object defaultUserData=null) {
+        this.context = initialContext;
         stateRegistry = new Dictionary<TStateEnum, IState<TContext>>();
     }
 
@@ -48,14 +48,14 @@ public class StateMachine<TStateEnum,TContext> {
 
     public void Update() {
         if (currentStateLogic != null && currentStateLogic is IUpdatableState<TContext> updatable) {
-            bool keepRunning = updatable.OnUpdate(context);
+            bool keepRunning = updatable.OnUpdate(ref context);
             if (!keepRunning) {
                 ChangeState(defaultState,defaultUserData);
             }
         }
     }
 
-    public TContext GetContext() => context;
+    public ref TContext GetContext() => ref context;
 }
 
 public interface IState<TContext> {
@@ -69,5 +69,5 @@ public interface IUpdatableState<TContext> {
     /// </summary>
     /// <param name="ctx"></param>
     /// <returns></returns>
-    bool OnUpdate(TContext ctx);
+    bool OnUpdate(ref TContext ctx);
 }

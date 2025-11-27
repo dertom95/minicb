@@ -13,4 +13,6 @@ public class UIData : ScriptableObject {
     public int maxSettlerAmount = 0;
 
     public string selectedBuilding;
+
+    public string currentBuildingName = "";
 }

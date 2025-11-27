@@ -55,7 +55,7 @@ namespace Manager {
             UpdatePreviewEntity(ctx.world);
         }
 
-        public bool OnUpdate(InputManagerContext ctx) {
+        public bool OnUpdate(ref InputManagerContext ctx) {
             UnityEngine.Debug.Log("BUILDMODE-UPDATE");
             UpdatePreviewEntity(ctx.world);
             bool keepRunning = HandleInput();

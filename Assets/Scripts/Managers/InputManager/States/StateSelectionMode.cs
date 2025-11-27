@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 using static Manager.InputManager;
 
 
@@ -16,8 +17,11 @@ namespace Manager {
         private EntityManager em;
         private IPhysicsManager physicsManager;
 
-        private Entity previewEntity;
-        public Entity PreviewEntity => previewEntity;
+        CollisionFilter filter = new CollisionFilter {
+            BelongsTo = ~0u,               // Belongs to all layers
+            CollidesWith = 1<<Config.LAYER_BUILDINGS | 1<<Config.LAYER_RESOURCE,       
+            GroupIndex = 0
+        };
 
         public void OnStateEnter(InputManagerContext ctx, object input) {
         }
@@ -25,9 +29,16 @@ namespace Manager {
         public void OnStateExit() {
         }
 
-        public bool OnUpdate(InputManagerContext ctx) {
-            if (ctx.physicsManager.TryToPickRaycast(out Unity.Physics.RaycastHit hit)) {
-                //UnityEngine.Debug.Log("SelectionMode: Picked: " + hit.Entity);
+        public bool OnUpdate(ref InputManagerContext ctx) {
+            bool clicked = Mgr.inputManager.IsMouseButtonDown(0);
+            if (clicked) {
+                if (ctx.physicsManager.TryToPickRaycast(out Unity.Physics.RaycastHit hit, filter)) {
+                    ctx.selectedEntity = hit.Entity;
+                    ctx.inputManager.TriggerSelectedEntityChanged();
+                } else {
+                    ctx.selectedEntity = Entity.Null;
+                    ctx.inputManager.TriggerSelectedEntityChanged();
+                }
             }
             return true; // keep running
         }

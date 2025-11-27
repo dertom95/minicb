@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6484508742108930280}
   - component: {fileID: -6353844991913730}
   - component: {fileID: -6861478390764538421}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: building_woodworker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,6 +173,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a2ed2bc1d49178d4bbb85411da086ba0, type: 3}
       propertyPath: m_Name
       value: building_woodworker
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a2ed2bc1d49178d4bbb85411da086ba0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

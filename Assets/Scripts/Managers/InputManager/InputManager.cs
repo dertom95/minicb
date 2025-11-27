@@ -8,11 +8,13 @@ namespace Manager {
     using Unity.Physics;
     using Unity.Transforms;
     using UnityEngine;
+    using UnityEngine.Assertions;
     using UnityEngine.InputSystem;
 
     public class InputManager : IManagerUpdateable, IInputManager {
 
-        public event EventHandler<BuildingType> EventSelectedBuildingChanged;
+        public event EventHandler<BuildingType> EventSelectedBuildBuildingChanged;
+        public event EventHandler<Entity> EventSelectedEntityChanged;
 
         public enum InputMode {
             Selection, BuildMode
@@ -20,6 +22,7 @@ namespace Manager {
 
         public struct InputManagerContext {
             public InputMode mode;
+            public Entity selectedEntity;
             public IPhysicsManager physicsManager;
             public InputManager inputManager;
             public World world;
@@ -27,23 +30,24 @@ namespace Manager {
 
         public StateMachine<InputMode, InputManagerContext> stateMachine;
 
-        private InputManagerContext ctx;
-
         private EntityManager entityManager;
+        private ref InputManagerContext CTX => ref stateMachine.GetContext();
 
+        public Entity CurrentSelectedEntity => CTX.selectedEntity;
 
         public InputManager() {
         }
 
         public void Init() {
             World world = World.DefaultGameObjectInjectionWorld;
-            ctx = new InputManagerContext {
+            InputManagerContext initialContext = new InputManagerContext {
                 world = world,
-                physicsManager = Mgr.physicsManager
+                physicsManager = Mgr.physicsManager,
+                inputManager = this
             };
 
             entityManager = world.EntityManager;
-            stateMachine = new StateMachine<InputMode,InputManagerContext>(ctx, InputMode.Selection);
+            stateMachine = new StateMachine<InputMode,InputManagerContext>(initialContext, InputMode.Selection);
             stateMachine.RegisterState(InputMode.Selection, new StateSelectionMode());
             stateMachine.RegisterState(InputMode.BuildMode, new StateBuildMode());
             stateMachine.ChangeState(InputMode.Selection);
@@ -70,7 +74,13 @@ namespace Manager {
         public void StartBuildMode(BuildingType buildingType) {
             stateMachine.ChangeState(InputMode.BuildMode, buildingType);
 
-            EventSelectedBuildingChanged?.Invoke(this, buildingType);
+            EventSelectedBuildBuildingChanged?.Invoke(this, buildingType);
+        }
+
+        public void TriggerSelectedEntityChanged() {
+            Assert.AreEqual(InputMode.Selection, CTX.mode);
+
+            EventSelectedEntityChanged?.Invoke(this, CTX.selectedEntity);
         }
     }
 
