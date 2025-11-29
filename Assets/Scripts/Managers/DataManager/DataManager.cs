@@ -129,6 +129,10 @@ namespace Manager {
                 radius,
                 1u << Config.LAYER_RESOURCE,
                 (em, entity) => {
+                    if (em.IsComponentEnabled<GrowingComponent>(entity)) {
+                        // this entity is not finished grown, yet
+                        return false;
+                    }
                     if (em.HasComponent<ResourceComponent>(entity)) {
                         Assert.IsTrue(em.HasComponent<IterationsComponent>(entity), "Each resource component must have an IterationsComponent!");
 

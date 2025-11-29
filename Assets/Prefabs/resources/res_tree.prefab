@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6518063428026145700}
   - component: {fileID: 5943781802529161218}
   - component: {fileID: 4310098041067218791}
+  - component: {fileID: -7065785997690299180}
   m_Layer: 3
   m_Name: res_tree
   m_TagString: Untagged
@@ -110,6 +111,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ed3acfc8e8aed47b96534e76e32042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MiniCB::JobTargetComponentAuthoring
+--- !u!114 &-7065785997690299180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2497032533202971339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7938e1fb7948a1842b0e77b19a54d393, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MiniCB::GrowAuthoring
+  initialAge: 0.1
+  growAmountPerSecond: 0.05
 --- !u!1001 &4146760910219306511
 PrefabInstance:
   m_ObjectHideFlags: 0
